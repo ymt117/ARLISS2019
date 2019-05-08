@@ -1,3 +1,10 @@
+/*
+ * References:
+ *  - https://github.com/pololu/lsm6-arduino
+ *  - https://github.com/pololu/lis3mdl-arduino
+ *  - https://github.com/pololu/lps-arduino
+ */
+
 #include <Wire.h>
 #include <LSM6.h>
 #include <LPS.h>

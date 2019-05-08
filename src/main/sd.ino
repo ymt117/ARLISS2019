@@ -1,3 +1,8 @@
+/*
+ * References:
+ *  - https://github.com/greiman/SdFat
+ */
+
 #include <SPI.h>
 #include "SdFat.h"
 SdFat SD;
