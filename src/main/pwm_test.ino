@@ -1,5 +1,5 @@
 static const int pwm1 = PB0;
-static const int pwm2 = PA7;
+static const int pwm2 = PA5;
 
 void pwm_init(){
   pinMode(pwm1, OUTPUT);

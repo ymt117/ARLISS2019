@@ -5,32 +5,58 @@
  * Sensor: LSM6, LPS, LIS3MDL, GPS
  */
 
-#include "spdef.h"
+#include "cansat_define.h"
+
+// State transition of CanSat
+enum MyState{
+  State_test = 0,
+  State_exit
+};
+MyState s = State_test;
+
+void _exit(){
+  s = State_exit;
+}
 
 void setup() {
   Serial.begin(9600);
   Serial.println("Start CanSat Program!!!");
 
   // Initialize the sensor
-  imu_init();
-  gps_init();
-  sd_init();
-  writeFile("/hello.txt", "Hello CanSat!!!");
+  //imu_init();
+  //gps_init();
+  //sd_init();
+  //writeFile("/hello.txt", "Hello CanSat!!!");
 
-  pwm_init();
+  //pwm_init();
+  led_init();
+  pinMode(cds, INPUT);
 
   // Set button
-  pinMode(PA4, INPUT_PULLUP);
+  //pinMode(PC13, INPUT_PULLUP);
+  attachInterrupt(PC13, _exit, RISING);
 
   beep(BOOT_UP);
   delay(100);
 }
 
 void loop() {
-  if(!digitalRead(PA4)){
-    beep(SHUT_DOWN);
+  switch(s){
+    
+    case State_test:
+      //imu_read();
+      //gps_read();
+      //pwm_test();
+      Serial.println(analogRead(cds));
+      delay(100);
+      break;
+    case State_exit:
+      Serial.println("Goodbye~~");
+      beep(SHUT_DOWN);
+      exit(0);
+      break;
+    default:
+      // code block
+      break;
   }
-  imu_read();
-  gps_read();
-  pwm_test();
 }
