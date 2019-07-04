@@ -1,4 +1,3 @@
-static const uint8_t sp = PB12;
 
 // BOOT_UP
 float mm1[] = {mE*4, mA*4, mB*4, mA*4, mE*2, mE*4, mB*4};

@@ -1,6 +1,4 @@
-/*
- * Speaker
- */
+// Speaker
 #define mC 261.626
 #define mD 293.665
 #define mE 329.628
@@ -16,16 +14,15 @@
 #define SHUT_DOWN 2
 #define CLANNAD   3
 
-/*
- * LED
- */
-#define ON 1
-#define OFF 0
+static const uint8_t sp = PB12;
 
-static const uint8_t led1 = PB1;
-static const uint8_t led2 = PB15;
+// LED
+static const uint8_t led1 = PB13;
+static const uint8_t led2 = PB14;
 
-/*
- * CdS
- */
+// CdS
 static const uint8_t cds = PA0;
+
+// Switch
+static const uint8_t sw = PC13;
+int switch_counter = 0;

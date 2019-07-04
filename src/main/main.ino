@@ -15,7 +15,9 @@ enum MyState{
 MyState s = State_test;
 
 void _exit(){
-  s = State_exit;
+  switch_counter++;
+  if(switch_counter >= 2)
+    s = State_exit;
 }
 
 void setup() {
@@ -23,18 +25,19 @@ void setup() {
   Serial.println("Start CanSat Program!!!");
 
   // Initialize the sensor
-  //imu_init();
+  imu_init();
   //gps_init();
-  //sd_init();
-  //writeFile("/hello.txt", "Hello CanSat!!!");
 
-  //pwm_init();
+  // Initialize the microSD Card
+  sd_init();
+  writeFile("/hello.txt", "Hello CanSat!!!");
+
   led_init();
   pinMode(cds, INPUT);
 
   // Set button
-  //pinMode(PC13, INPUT_PULLUP);
-  attachInterrupt(PC13, _exit, RISING);
+  pinMode(sw, INPUT_PULLUP);
+  attachInterrupt(sw, _exit, RISING);
 
   beep(BOOT_UP);
   delay(100);
@@ -44,10 +47,9 @@ void loop() {
   switch(s){
     
     case State_test:
-      //imu_read();
+      imu_plot();
       //gps_read();
-      //pwm_test();
-      Serial.println(analogRead(cds));
+      //Serial.println(analogRead(cds));
       delay(100);
       break;
     case State_exit:

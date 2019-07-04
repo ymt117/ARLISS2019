@@ -7,7 +7,7 @@
 #include "SdFat.h"
 SdFat SD;
 
-#define SD_CS_PIN PA15
+#define SD_CS_PIN PB6
 File file;
 
 void sd_init(){

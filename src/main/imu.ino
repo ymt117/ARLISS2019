@@ -59,3 +59,25 @@ void imu_read(){
 
   delay(100);
 }
+
+void imu_plot(){
+  imu.read();
+  mag.read();
+  float pressure = ps.readPressureMillibars();
+  float temperature = ps.readTemperatureC();
+
+  snprintf(report, sizeof(report), "%6d\t%6d\t%6d\t%6d\t%6d\t%6d\t%6d\t%6d\t%6d",
+    imu.a.x, imu.a.y, imu.a.z,
+    imu.g.x, imu.g.y, imu.g.z,
+    mag.m.x, mag.m.y, mag.m.z);
+  Serial.print(report);
+  
+  //Serial.print("\t");
+  //Serial.print(pressure);
+  //Serial.print("\t");
+  //Serial.print(temperature);
+
+  Serial.println("");
+
+  delay(100);
+}
