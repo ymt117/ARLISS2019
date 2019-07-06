@@ -5,7 +5,7 @@ void static_load(){
   imu.read();
   unsigned long _millis = millis();
 
-  float a = calc_a(imu.a.x, imu.a.y, imu.a.z);
+  float a = calc_g_force(imu.a.x, imu.a.y, imu.a.z);
   Serial.print(_millis); Serial.print("\t\t");
   Serial.print(a);
 
