@@ -14,9 +14,9 @@ enum MyState{
 };
 MyState s = State_test;
 
-void _exit(){
-  switch_counter++;
-  if(switch_counter >= 2)
+void _sw_pushed(){
+  sw_counter++;
+  if(sw_counter >= 2)
     s = State_exit;
 }
 
@@ -36,7 +36,10 @@ void setup() {
 
   // Set button
   pinMode(sw, INPUT_PULLUP);
-  attachInterrupt(sw, _exit, RISING);
+  attachInterrupt(sw, _sw_pushed, RISING);
+
+  // Timer init
+  timer_init();
 
   // Initialize the sensor
   imu_init();

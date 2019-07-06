@@ -25,4 +25,4 @@ static const uint8_t cds = PA0;
 
 // Switch
 static const uint8_t sw = PC13;
-int switch_counter = 0;
+volatile uint16_t sw_counter = 0;
