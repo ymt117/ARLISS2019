@@ -14,15 +14,15 @@
 #define SHUT_DOWN 2
 #define CLANNAD   3
 
-static const uint8_t sp = PB12;
+static const uint8_t sp = PB12; // Pin connected to the Speaker
 
 // LED
-static const uint8_t led1 = PB13;
-static const uint8_t led2 = PB14;
+static const uint8_t led1 = PB13; // Pin connected to the LED1
+static const uint8_t led2 = PB14; // Pin connected to the LED2
 
 // CdS
-static const uint8_t cds = PA0;
+static const uint8_t cds = PA0; // Pin connected to the CdS
 
 // Switch
-static const uint8_t sw = PC13;
-volatile uint16_t sw_counter = 0;
+static const uint8_t sw = PC13; // Pin connected to the Switch
+volatile uint16_t press_counter = 0;
