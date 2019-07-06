@@ -14,10 +14,9 @@ enum MyState{
 };
 MyState s = State_test;
 
+// Intterupt function called when the button is pressed.
 void _sw_pushed(){
-  sw_counter++;
-  if(sw_counter >= 2)
-    s = State_exit;
+  press_counter++;
 }
 
 void setup() {
@@ -34,7 +33,7 @@ void setup() {
   speaker_init();
   pinMode(cds, INPUT);
 
-  // Set button
+  // Initialize Push Switch
   pinMode(sw, INPUT_PULLUP);
   attachInterrupt(sw, _sw_pushed, RISING);
 
@@ -53,7 +52,7 @@ void loop() {
   switch(s){
     
     case State_test:
-      static_load();
+      //static_load();
       //imu_plot();
       //gps_read();
       //Serial.println(analogRead(cds));
@@ -61,10 +60,11 @@ void loop() {
       //blink();
       break;
     case State_exit:
+      // End processing and enter infinite loop...
       Serial.println("Goodbye~~");
       led_off();
       beep(SHUT_DOWN);
-      exit(0);
+      while(1);
       break;
     default:
       // code block
