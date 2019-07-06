@@ -66,9 +66,18 @@ void imu_plot(){
   float pressure = ps.readPressureMillibars();
   float temperature = ps.readTemperatureC();
 
-  snprintf(report, sizeof(report), "%6d\t%6d\t%6d\t%6d\t%6d\t%6d\t%6d\t%6d\t%6d",
-    imu.a.x, imu.a.y, imu.a.z,
-    imu.g.x, imu.g.y, imu.g.z,
+  // Show acceleration
+  snprintf(report, sizeof(report), "%6d\t%6d\t%6d\t",
+    imu.a.x, imu.a.y, imu.a.z);
+  Serial.print(report);
+
+  // Show gyro
+  snprintf(report, sizeof(report), "6d\t%6d\t%6d\t",
+    imu.g.x, imu.g.y, imu.g.z);
+  Serial.print(report);
+
+  // Show geomagnetism
+  snprintf(report, sizeof(report), "6d\t%6d\t%6d\t",
     mag.m.x, mag.m.y, mag.m.z);
   Serial.print(report);
   
@@ -82,37 +91,8 @@ void imu_plot(){
   delay(100);
 }
 
-float ax_g(){
-  imu.read();
-
-  // X軸にかかるGを求める
-  float ax_g = imu.a.x * 16;
-  ax_g /= 32768;
-
-  return ax_g;
-}
-
-float ay_g(){
-  imu.read();
-
-  // Y軸にかかるGを求める
-  float ay_g = imu.a.y * 16;
-  ay_g /= 32768;
-
-  return ay_g;
-}
-
-float az_g(){
-  imu.read();
-
-  // Z軸にかかるGを求める
-  float az_g = imu.a.z * 16;
-  az_g /= 32768;
-
-  return az_g;
-}
-
-float calc_a(float ax, float ay, float az){
+// Calculate G-force
+float calc_g_force(float ax, float ay, float az){
   ax *= 16;
   ax /= 32768;
   ay *= 16;
