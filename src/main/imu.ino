@@ -81,3 +81,44 @@ void imu_plot(){
 
   delay(100);
 }
+
+float ax_g(){
+  imu.read();
+
+  // X軸にかかるGを求める
+  float ax_g = imu.a.x * 16;
+  ax_g /= 32768;
+
+  return ax_g;
+}
+
+float ay_g(){
+  imu.read();
+
+  // Y軸にかかるGを求める
+  float ay_g = imu.a.y * 16;
+  ay_g /= 32768;
+
+  return ay_g;
+}
+
+float az_g(){
+  imu.read();
+
+  // Z軸にかかるGを求める
+  float az_g = imu.a.z * 16;
+  az_g /= 32768;
+
+  return az_g;
+}
+
+float calc_a(float ax, float ay, float az){
+  ax *= 16;
+  ax /= 32768;
+  ay *= 16;
+  ay /= 32768;
+  az *= 16;
+  az /= 32768;
+
+  return sqrt(ax*ax + ay*ay + az*az);
+}

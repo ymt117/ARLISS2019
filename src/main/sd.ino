@@ -7,6 +7,8 @@
 #include "SdFat.h"
 SdFat SD;
 
+//#define MYSD_SERIAL_DEBUG
+
 #define SD_CS_PIN PB6
 File file;
 
@@ -21,16 +23,26 @@ void sd_init(){
 }
 
 void writeFile(const char * path, const char * message){
-  Serial.print("Writing file: "); Serial.println(path);
+  #ifdef MYSD_SERIAL_DEBUG
+    Serial.print("Writing file: "); Serial.println(path);
+  #endif
 
   file = SD.open(path, FILE_WRITE);
 
   if(file){
-    Serial.print("Writing to "); Serial.print(path);
-    file.println(message);
+    #ifdef MYSD_SERIAL_DEBUG
+      Serial.print("Writing to "); Serial.print(path);
+    #endif
+    
+    file.print(message);
     file.close();
-    Serial.println(" done.");
+    
+    #ifdef MYSD_SERIAL_DEBUG
+      Serial.println(" done.");
+    #endif
   }else{
-    Serial.println("error opening"); Serial.print(path);
+    #ifdef MYSD_SERIAL_DEBUG
+      Serial.println("error opening"); Serial.print(path);
+    #endif
   }
 }
