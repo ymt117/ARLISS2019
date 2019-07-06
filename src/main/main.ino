@@ -24,20 +24,21 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Start CanSat Program!!!");
 
-  // Initialize the sensor
-  imu_init();
-  //gps_init();
-
   // Initialize the microSD Card
   sd_init();
   writeFile("/hello.txt", "Hello CanSat!!!");
 
   led_init();
+  speaker_init();
   pinMode(cds, INPUT);
 
   // Set button
   pinMode(sw, INPUT_PULLUP);
   attachInterrupt(sw, _exit, RISING);
+
+  // Initialize the sensor
+  //imu_init();
+  //gps_init();
 
   beep(BOOT_UP);
   delay(100);
@@ -47,13 +48,15 @@ void loop() {
   switch(s){
     
     case State_test:
-      imu_plot();
+      //imu_plot();
       //gps_read();
       //Serial.println(analogRead(cds));
-      delay(100);
+      //delay(100);
+      blink();
       break;
     case State_exit:
       Serial.println("Goodbye~~");
+      led_off();
       beep(SHUT_DOWN);
       exit(0);
       break;

@@ -21,19 +21,19 @@ void imu_init(){
   
   if(!imu.init()){
     Serial.println("Failed to detect and initialize IMU!");
-    while(1);
+    while(1) led1_blink_fast();
   }
   imu.enableDefault();
 
   if(!ps.init()){
     Serial.println("Failed to autodetect pressure sensor!");
-    while(1);
+    while(1) led1_blink_fast();
   }
   ps.enableDefault();
 
   if(!mag.init()){
     Serial.println("Failed to detect and initialize magnetometer!");
-    while(1);
+    while(1) led1_blink_fast();
   }
   mag.enableDefault();
 }

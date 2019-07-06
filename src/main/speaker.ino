@@ -11,6 +11,10 @@ float mm3[] = {mE*4, mD*4, mG*4, nn, mG*4, mG*4, mA*4, nn,
                mE*4, mD*4, mG*4, nn, mG*4, mG*4, mA*4, nn,
                mA*4, mA*4, mB*4, mB*4, mG*4};
 
+void speaker_init(){
+  pinMode(sp, OUTPUT);
+}
+
 void _beep(float *mm, int m_size, int b_time){
   
   for(int i=0; i<m_size; i++){
