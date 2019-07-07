@@ -26,3 +26,12 @@ static const uint8_t cds = PA0; // Pin connected to the CdS
 // Switch
 static const uint8_t sw = PC13; // Pin connected to the Switch
 volatile uint16_t press_counter = 0;
+
+// Motor
+static const uint8_t ain1 = PC7; // Pin connected to the AIN1
+static const uint8_t ain2 = PC8; // Pin connected to the AIN2
+static const uint8_t pwma = PB5; // Pin connected to the PWMA
+
+static const uint8_t bin1 = PB4; // Pin connected to the BIN1
+static const uint8_t bin2 = PB10; // Pin connected to the BIN2
+static const uint8_t pwmb = PA8; // Pin connected to the PWMB
