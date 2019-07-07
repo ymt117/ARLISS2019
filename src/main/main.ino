@@ -29,8 +29,10 @@ void setup() {
   writeFile("/hello.txt", "Hello CanSat!!!");
   writeFile("acc_g.csv", "millis,raw_ax,raw_ay,raw_az,ax_g,ay_g,az_g,a\n");
 
+  // Initialize the I/O
   led_init();
   speaker_init();
+  motor_init();
   pinMode(cds, INPUT);
 
   // Initialize Push Switch
@@ -52,9 +54,10 @@ void loop() {
   switch(s){
     
     case State_test:
+      //test_run();
       //static_load();
       //imu_plot();
-      //gps_read();
+      gps_read();
       //Serial.println(analogRead(cds));
       //delay(100);
       //blink();
@@ -63,7 +66,9 @@ void loop() {
       // End processing and enter infinite loop...
       Serial.println("Goodbye~~");
       led_off();
+      motor_stop();
       beep(SHUT_DOWN);
+      delay(1000);
       while(1);
       break;
     default:

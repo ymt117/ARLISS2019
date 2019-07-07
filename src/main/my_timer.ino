@@ -11,9 +11,9 @@ static void _exit(stimer_t *htim){
   // Count while button is pressed.
   if(!digitalRead(sw) && press_old_state == 1){
     press_time++;
-    //digitalWrite(led2, !digitalRead(led2));
+    digitalWrite(led2, !digitalRead(led2));
     //Serial.println(press_time);
-    if(press_time > 50) s = State_exit;
+    if(press_time > 30) s = State_exit;
   }
   else if(!digitalRead(sw)){
     press_old_state = 1;
