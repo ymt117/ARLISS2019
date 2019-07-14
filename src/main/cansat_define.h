@@ -86,6 +86,15 @@ int SENSOR_SIGN[9] = {1,1,1,-1,-1,-1,1,1,1}; //Correct directions x,y,z - gyro, 
 #define Kp_YAW 1.2
 #define Ki_YAW 0.00002
 
+/*For debugging purposes*/
+//OUTPUTMODE=1 will print the corrected data,
+//OUTPUTMODE=0 will print uncorrected data of the gyros (with drift)
+#define OUTPUTMODE 1
+
+#define PRINT_DCM 0     //Will print the whole direction cosine matrix
+#define PRINT_ANALOGS 0 //Will print the analog raw data
+#define PRINT_EULER 1   //Will print the Euler angles Roll, Pitch and Yaw
+
 float G_Dt=0.02;    // Integration time (DCM algorithm)  We will run the integration loop at 50Hz if possible
 
 long timer=0;   //general purpuse timer

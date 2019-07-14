@@ -112,9 +112,9 @@ void Read_Gyro(){
 void Read_Accel(){
   imu.read();
 
-  AN[3] = imu.a.x >> 8; // shift right 4 bits to use 12-bit representation (1 g = 256)
-  AN[4] = imu.a.y >> 8;
-  AN[5] = imu.a.z >> 8;
+  AN[3] = imu.a.x;
+  AN[4] = imu.a.y;
+  AN[5] = imu.a.z;
 
   accel_x = SENSOR_SIGN[3] * (AN[3] - AN_OFFSET[3]);
   accel_y = SENSOR_SIGN[4] * (AN[4] - AN_OFFSET[4]);
@@ -164,7 +164,7 @@ void imu_test(){
     Euler_angles();
     // ***
 
-    Serial.print("ANG:");
+    //Serial.print("ANG:");
     Serial.print(ToDeg(roll));
     Serial.print("\t");
     Serial.print(ToDeg(pitch));
