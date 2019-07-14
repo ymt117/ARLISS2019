@@ -11,6 +11,9 @@ float mm3[] = {mE*4, mD*4, mG*4, nn, mG*4, mG*4, mA*4, nn,
                mE*4, mD*4, mG*4, nn, mG*4, mG*4, mA*4, nn,
                mA*4, mA*4, mB*4, mB*4, mG*4};
 
+// CANSAT_ERROR
+float mm4[] = {mB*2, mA, mE*2, mA*2};
+
 void speaker_init(){
   pinMode(sp, OUTPUT);
 }
@@ -36,6 +39,10 @@ void beep(int mode){
   else if(mode == CLANNAD){
     int m_size = sizeof(mm3)/sizeof(float);
     _beep(mm3, m_size, 200);
+  }
+  else if(mode == CANSAT_ERROR){
+    int m_size = sizeof(mm4)/sizeof(float);
+    _beep(mm4, m_size, 150);
   }
   else{
     // do nothing

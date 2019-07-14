@@ -10,9 +10,10 @@
 
 #define BEAT_TIME 200
 
-#define BOOT_UP   1
-#define SHUT_DOWN 2
-#define CLANNAD   3
+#define BOOT_UP       1
+#define SHUT_DOWN     2
+#define CLANNAD       3
+#define CANSAT_ERROR  4
 
 static const uint8_t sp = PB12; // Pin connected to the Speaker
 
@@ -35,3 +36,6 @@ static const uint8_t pwma = PB5; // Pin connected to the PWMA
 static const uint8_t bin1 = PB4; // Pin connected to the BIN1
 static const uint8_t bin2 = PB10; // Pin connected to the BIN2
 static const uint8_t pwmb = PA8; // Pin connected to the PWMB
+
+// Math
+#define RAD2DEG 57.29577951307855

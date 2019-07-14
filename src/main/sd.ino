@@ -17,6 +17,7 @@ void sd_init(){
 
   if(!SD.begin(SD_CS_PIN)){
     Serial.println("initialization failed!");
+    beep(CANSAT_ERROR);
     return;
   }
   Serial.println("initialization done.");
