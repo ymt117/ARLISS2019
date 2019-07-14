@@ -2,9 +2,10 @@
  * ARLISS2019 CanSat
  * 
  * Author: ymt
- * Sensor: LSM6, LPS, LIS3MDL, GPS
+ * Sensor: LSM6, LPS, LIS3MDL, GPS, CdS
  */
 
+// Read CanSat definition file
 #include "cansat_define.h"
 
 // State transition of CanSat
@@ -28,12 +29,17 @@ void setup() {
   sd_init();
   writeFile("/hello.txt", "Hello CanSat!!!");
   writeFile("acc_g.csv", "millis,raw_ax,raw_ay,raw_az,ax_g,ay_g,az_g,a\n");
+  writeFile("mag.csv", "millis,mx,my,mz\n");
+
+  delay(20);
 
   // Initialize the I/O
   led_init();
   speaker_init();
   motor_init();
   pinMode(cds, INPUT);
+
+  delay(20);
 
   // Initialize Push Switch
   pinMode(sw, INPUT_PULLUP);
@@ -46,18 +52,28 @@ void setup() {
   imu_init();
   gps_init();
 
+  delay(20);
+
+  imu_offset();
+  
   beep(BOOT_UP);
-  delay(100);
+  delay(20);
+
+  timer=millis();
+  delay(20);
+  counter=0;
 }
 
 void loop() {
   switch(s){
     
     case State_test:
+      imu_test();
+      //mag_calibrate();
       //test_run();
       //static_load();
       //imu_plot();
-      gps_read();
+      //gps_read();
       //Serial.println(analogRead(cds));
       //delay(100);
       //blink();
