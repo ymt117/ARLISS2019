@@ -125,8 +125,8 @@ void Read_Compass(){
   mag.read();
 
   magnetom_x = SENSOR_SIGN[6] * mag.m.x;
-  magnetom_y = SENSOR_SIGN[7] * mag.m.x;
-  magnetom_z = SENSOR_SIGN[8] * mag.m.x;
+  magnetom_y = SENSOR_SIGN[7] * mag.m.y;
+  magnetom_z = SENSOR_SIGN[8] * mag.m.z;
 }
 
 void imu_test(){
