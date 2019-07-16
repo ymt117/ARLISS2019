@@ -29,7 +29,8 @@ void setup() {
   sd_init();
   writeFile("/hello.txt", "Hello CanSat!!!");
   writeFile("acc_g.csv", "millis,raw_ax,raw_ay,raw_az,ax_g,ay_g,az_g,a\n");
-  writeFile("mag.csv", "millis,mx,my,mz\n");
+  writeFile("mag.csv", "mx_raw,my_raw,mz_raw,mx,my,mz\n");
+  writeFile("mag_offset.csv", "mx_max,mx_min,my_max,my_min,mz_max,mz_min\n");
 
   delay(20);
 
@@ -45,9 +46,6 @@ void setup() {
   pinMode(sw, INPUT_PULLUP);
   attachInterrupt(sw, _sw_pushed, RISING);
 
-  // Timer init
-  timer_init();
-
   // Initialize the sensor
   imu_init();
   gps_init();
@@ -59,16 +57,21 @@ void setup() {
   beep(BOOT_UP);
   delay(20);
 
+  //compass_calibrate();
+
   timer=millis();
   delay(20);
   counter=0;
+
+  // Timer init
+  timer_init();
 }
 
 void loop() {
   switch(s){
     
     case State_test:
-      imu_test();
+      //imu_test();
       //mag_calibrate();
       //test_run();
       //static_load();

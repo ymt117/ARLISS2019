@@ -96,6 +96,8 @@ void imu_plot(){
 
 /***************************************************************
  * Function: Read Gyro, Accel and Compass
+ **************************************************************
+ * ReadGyro
  **************************************************************/
 void Read_Gyro(){
   imu.read();
@@ -108,7 +110,9 @@ void Read_Gyro(){
   gyro_y = SENSOR_SIGN[1] * (AN[1] - AN_OFFSET[1]);
   gyro_z = SENSOR_SIGN[2] * (AN[2] - AN_OFFSET[2]);
 }
-
+/***************************************************************
+ * Read Accel
+ **************************************************************/
 void Read_Accel(){
   imu.read();
 
@@ -120,59 +124,32 @@ void Read_Accel(){
   accel_y = SENSOR_SIGN[4] * (AN[4] - AN_OFFSET[4]);
   accel_z = SENSOR_SIGN[5] * (AN[5] - AN_OFFSET[5]);
 }
-
+/***************************************************************
+ * Read Compass
+ **************************************************************/
 void Read_Compass(){
   mag.read();
+  char buf[1024];
 
-  magnetom_x = SENSOR_SIGN[6] * mag.m.x;
-  magnetom_y = SENSOR_SIGN[7] * mag.m.y;
-  magnetom_z = SENSOR_SIGN[8] * mag.m.z;
+  magnetom_x = (SENSOR_SIGN[6] * mag.m.x) - MAG_OFFSET[6];
+  magnetom_y = (SENSOR_SIGN[7] * mag.m.y) - MAG_OFFSET[7];
+  magnetom_z = (SENSOR_SIGN[8] * mag.m.z) - MAG_OFFSET[8];
+
+  String str = "";
+  str += mag.m.x;       str += ",";
+  str += mag.m.y;       str += ",";
+  str += mag.m.z;       str += ",";
+  str += magnetom_x;    str += ",";
+  str += magnetom_y;    str += ",";
+  str += magnetom_z;    str += ",";
+  str += "\n";
+
+  int len = str.length();
+  str.toCharArray(buf, len+1);
+
+  writeFile("mag.csv", buf);
 }
 
-void imu_test(){
-  if((millis()-timer)>=20)  // Main loop runs at 50Hz
-  {
-    counter++;
-    timer_old = timer;
-    timer=millis();
-    if (timer>timer_old)
-    {
-      G_Dt = (timer-timer_old)/1000.0;    // Real time of loop run. We use this on the DCM algorithm (gyro integration time)
-      if (G_Dt > 0.2)
-        G_Dt = 0; // ignore integration times over 200 ms
-    }
-    else
-      G_Dt = 0;
-      
-
-    // *** DCM algorithm
-    // Data adquisition
-    Read_Gyro();   // This read gyro data
-    Read_Accel();     // Read I2C accelerometer
-
-    if (counter > 5)  // Read compass data at 10Hz... (5 loop runs)
-    {
-      counter=0;
-      Read_Compass();    // Read I2C magnetometer
-      Compass_Heading(); // Calculate magnetic heading
-    }
-
-    // Calculations...
-    Matrix_update();
-    Normalize();
-    Drift_correction();
-    Euler_angles();
-    // ***
-
-    //Serial.print("ANG:");
-    Serial.print(ToDeg(roll));
-    Serial.print("\t");
-    Serial.print(ToDeg(pitch));
-    Serial.print("\t");
-    Serial.print(ToDeg(yaw));
-    Serial.println();
-  }
-}
 
 /***************************************************************
  * Calculate G-force
@@ -189,27 +166,41 @@ float calc_g_force(float ax, float ay, float az){
 /***************************************************************
  * Geomagnetic sensor calibration
  **************************************************************/
-void mag_calibrate(){
+void compass_calibrate(){
   char buf[1024];
   unsigned long _millis = millis();
 
-  while(millis() - _millis < 10000){
+  digitalWrite(led1, HIGH);
+
+  while(millis() - _millis < 30000){
     mag.read();
-    turn_left(100);
-    
-    String str = "";
-    str += millis();   str += ",";
-    str += mag.m.x;   str += ",";
-    str += mag.m.y;   str += ",";
-    str += mag.m.z;   str += ",";
-    str += "\n";
-
-    int len = str.length();
-    str.toCharArray(buf, len+1);
-
-    writeFile("mag.csv", buf);
-  }
   
-  //motor_stop();
-  //delay(1000);
+    MAG_OFFSET[1] = _min(MAG_OFFSET[1], mag.m.x);
+    MAG_OFFSET[3] = _min(MAG_OFFSET[3], mag.m.y);
+    MAG_OFFSET[5] = _min(MAG_OFFSET[5], mag.m.z);
+
+    MAG_OFFSET[0] = _max(MAG_OFFSET[0], mag.m.x);
+    MAG_OFFSET[2] = _max(MAG_OFFSET[2], mag.m.y);
+    MAG_OFFSET[4] = _max(MAG_OFFSET[4], mag.m.z);
+  }
+
+  MAG_OFFSET[6] = (MAG_OFFSET[0] + MAG_OFFSET[1]) / 2; // (mx_max - mx_min) / 2
+  MAG_OFFSET[7] = (MAG_OFFSET[2] + MAG_OFFSET[3]) / 2;
+  MAG_OFFSET[8] = (MAG_OFFSET[4] + MAG_OFFSET[5]) / 2;
+
+  String str = "";
+  str += MAG_OFFSET[0];   str += ",";
+  str += MAG_OFFSET[1];   str += ",";
+  str += MAG_OFFSET[2];   str += ",";
+  str += MAG_OFFSET[3];   str += ",";
+  str += MAG_OFFSET[4];   str += ",";
+  str += MAG_OFFSET[5];   str += ",";
+  str += "\n";
+
+  int len = str.length();
+  str.toCharArray(buf, len+1);
+
+  writeFile("mag_offset.csv", buf);
+
+  digitalWrite(led1, LOW);
 }

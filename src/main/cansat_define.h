@@ -45,6 +45,7 @@ static const uint8_t bin1 = PB4; // Pin connected to the BIN1
 static const uint8_t bin2 = PB10; // Pin connected to the BIN2
 static const uint8_t pwmb = PA8; // Pin connected to the PWMB
 
+
 /***************************************************************
  * IMU
  **************************************************************/
@@ -95,13 +96,15 @@ int SENSOR_SIGN[9] = {1,1,1,-1,-1,-1,1,1,1}; //Correct directions x,y,z - gyro, 
 #define PRINT_ANALOGS 0 //Will print the analog raw data
 #define PRINT_EULER 1   //Will print the Euler angles Roll, Pitch and Yaw
 
-float G_Dt=0.02;    // Integration time (DCM algorithm)  We will run the integration loop at 50Hz if possible
+volatile float G_Dt=0.02;    // Integration time (DCM algorithm)  We will run the integration loop at 50Hz if possible
 
 long timer=0;   //general purpuse timer
 long timer_old;
 long timer24=0; //Second timer used to print
 int AN[6]; //array that stores the gyro and accelerometer data
 int AN_OFFSET[6]={0,0,0,0,0,0}; //Array that stores the Offset of the sensors
+int MAG_OFFSET[9] = {4300,-1800,2100,-4000,11000,4400,1250,-950,7700}; // x_max,x_min,y_max,y_min,z_max,z_min
+//int MAG_OFFSET[9] = {-32768,32767,-32768,32767,-32768,32767,0,0,0}; // x_max,x_min,y_max,y_min,z_max,z_min,offsetX,offsetY,offsetZ
 
 int gyro_x;
 int gyro_y;
@@ -132,7 +135,7 @@ float yaw;
 float errorRollPitch[3]= {0,0,0};
 float errorYaw[3]= {0,0,0};
 
-unsigned int counter=0;
+volatile unsigned int counter=0;
 byte gyro_sat=0;
 
 float DCM_Matrix[3][3]= {
