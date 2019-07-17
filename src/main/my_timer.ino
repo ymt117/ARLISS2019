@@ -8,7 +8,7 @@ volatile int my_timer_counter = 0;
 static void _call_func(stimer_t *htim){
   UNUSED(htim);
   //Serial.println(my_timer_counter++);
-  imu_test();
+  //imu_test();
 }
 
 void timer_init(){
