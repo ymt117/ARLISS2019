@@ -65,12 +65,15 @@ void setup() {
 
   // Timer init
   timer_init();
+
+  madgwick_init();
 }
 
 void loop() {
   switch(s){
     
     case State_test:
+      test_madgwick();
       //imu_test();
       //mag_calibrate();
       //test_run();
