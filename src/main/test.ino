@@ -98,3 +98,36 @@ void turn_north(){
   }
   motor_stop();
 }
+
+// 電熱線のテスト
+void heat_test(){
+  digitalWrite(heat1, HIGH);
+  delay(5000);
+  digitalWrite(heat1, LOW);
+  delay(1000);
+  digitalWrite(heat2, HIGH);
+  delay(5000);
+  digitalWrite(heat2, LOW);
+  delay(1000);
+  while(1);
+}
+
+// テスト走行
+void test_run(){
+  turn_right(150);
+  delay(4000);
+  motor_stop();
+  delay(2000);
+  turn_right(255);
+  delay(4000);
+  motor_stop();
+  delay(2000);
+  forward(150);
+  delay(4000);
+  motor_stop();
+  delay(2000);
+  forward(255);
+  delay(4000);
+  motor_stop();
+  delay(2000);
+}

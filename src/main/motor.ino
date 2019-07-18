@@ -73,13 +73,6 @@ void motor_stop(){
   digitalWrite(pwmb, LOW);
 }
 
-void test_run(){
-  forward(150);
-  delay(4000);
-  motor_stop();
-  delay(2000);
-}
-
 void roll_over_return(){
   right_cw(255);
   delay(2000);

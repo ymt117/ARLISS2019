@@ -45,6 +45,12 @@ static const uint8_t bin1 = PB4; // Pin connected to the BIN1
 static const uint8_t bin2 = PB10; // Pin connected to the BIN2
 static const uint8_t pwmb = PA8; // Pin connected to the PWMB
 
+/***************************************************************
+ * Heating Pin
+ **************************************************************/
+ static const uint8_t heat1 = PA11; // Pin connected to the Heat1
+ static const uint8_t heat2 = PA12; // Pin connected to the Heat2
+
 
 /***************************************************************
  * IMU

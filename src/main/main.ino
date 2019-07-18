@@ -46,6 +46,12 @@ void setup() {
   pinMode(sw, INPUT_PULLUP);
   attachInterrupt(sw, _sw_pushed, RISING);
 
+  // Initialize Heat Pin
+  pinMode(heat1, OUTPUT);
+  digitalWrite(heat1, LOW);
+  pinMode(heat2, OUTPUT);
+  digitalWrite(heat2, LOW);
+
   // Initialize the sensor
   imu_init();
   gps_init();
@@ -73,10 +79,11 @@ void loop() {
   switch(s){
     
     case State_test:
-      test_madgwick();
+      //heat_test();
+      //test_madgwick();
       //imu_test();
       //mag_calibrate();
-      //test_run();
+      test_run();
       //static_load();
       //imu_plot();
       //gps_read();
