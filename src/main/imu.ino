@@ -25,27 +25,33 @@ void imu_init(){
   
   if(!imu.init()){
     Serial.println("Failed to detect and initialize IMU!");
-    while(1) led1_blink_fast();
+    beep(CANSAT_ERROR2);
+    return;
+    //while(1) led1_blink_fast();
   }
   imu.enableDefault();
 
   if(!ps.init()){
     Serial.println("Failed to autodetect pressure sensor!");
-    while(1) led1_blink_fast();
+    //while(1) led1_blink_fast();
   }
   ps.enableDefault();
 
   if(!mag.init()){
     Serial.println("Failed to detect and initialize magnetometer!");
-    while(1) led1_blink_fast();
+    //while(1) led1_blink_fast();
   }
   mag.enableDefault();
+
+  imu_status = 1;
 }
 
 /***************************************************************
  * Set IMU Offset
  **************************************************************/
  void imu_offset(){
+  if(imu_status == 0) return;
+  
   for(int i=0;i<32;i++)    // We take some readings...
     {
     Read_Gyro();
@@ -135,6 +141,7 @@ void Read_Compass(){
   magnetom_y = (SENSOR_SIGN[7] * mag.m.y) - MAG_OFFSET[7];
   magnetom_z = (SENSOR_SIGN[8] * mag.m.z) - MAG_OFFSET[8];
 
+/*
   String str = "";
   str += mag.m.x;       str += ",";
   str += mag.m.y;       str += ",";
@@ -148,6 +155,7 @@ void Read_Compass(){
   str.toCharArray(buf, len+1);
 
   writeFile("mag.csv", buf);
+*/
 }
 
 
@@ -203,4 +211,57 @@ void compass_calibrate(){
   writeFile("mag_offset.csv", buf);
 
   digitalWrite(led1, LOW);
+}
+
+
+/***************************************************************
+ * IMU_TEST_CODE
+ **************************************************************/
+void imu_test(){
+  if((millis()-timer)>=20)  // Main loop runs at 50Hz
+  {
+    counter++;
+    timer_old = timer;
+    timer=millis();
+    if (timer>timer_old)
+    {
+      G_Dt = (timer-timer_old)/1000.0;    // Real time of loop run. We use this on the DCM algorithm (gyro integration time)
+      if (G_Dt > 0.2)
+        G_Dt = 0; // ignore integration times over 200 ms
+    }
+    else
+      G_Dt = 0;
+      
+
+    // *** DCM algorithm
+    // Data adquisition
+    Read_Gyro();   // This read gyro data
+    Read_Accel();     // Read I2C accelerometer
+
+    if (counter > 5)  // Read compass data at 10Hz... (5 loop runs)
+    {
+      counter=0;
+      Read_Compass();    // Read I2C magnetometer
+      Compass_Heading(); // Calculate magnetic heading
+    }
+
+    // Calculations...
+    Matrix_update();
+    Normalize();
+    Drift_correction();
+    Euler_angles();
+    // ***
+
+    
+    //Serial.print("ANG:");
+    Serial.print(ToDeg(roll));
+    Serial.print("\t");
+    Serial.print(ToDeg(pitch));
+    Serial.print("\t");
+    Serial.print(ToDeg(yaw));
+    Serial.println();
+    
+
+    //printdata();
+  }
 }

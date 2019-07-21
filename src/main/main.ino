@@ -20,6 +20,9 @@ void _sw_pushed(){
   press_counter++;
 }
 
+/***************************************************************
+ * SETUP
+ **************************************************************/
 void setup() {
   delay(1000);
   Serial.begin(115200);
@@ -75,15 +78,18 @@ void setup() {
   madgwick_init();
 }
 
+
+/***************************************************************
+ * MAIN LOOP
+ **************************************************************/
 void loop() {
   switch(s){
     
     case State_test:
-      //heat_test();
-      //test_madgwick();
+      madgwick_update();
       //imu_test();
       //mag_calibrate();
-      test_run();
+      //test_run();
       //static_load();
       //imu_plot();
       //gps_read();

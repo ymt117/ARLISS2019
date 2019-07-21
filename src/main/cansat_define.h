@@ -14,6 +14,8 @@
 #define SHUT_DOWN     2
 #define CLANNAD       3
 #define CANSAT_ERROR  4
+#define PUSHED        5
+#define CANSAT_ERROR2 6
 
 static const uint8_t sp = PB12; // Pin connected to the Speaker
 
@@ -55,6 +57,9 @@ static const uint8_t pwmb = PA8; // Pin connected to the PWMB
 /***************************************************************
  * IMU
  **************************************************************/
+// IMU Initialize failed: 0, successful: 1
+int imu_status = 0;
+ 
 // Uncomment the below line to use this axis definition:
    // X axis pointing forward
    // Y axis pointing to the right

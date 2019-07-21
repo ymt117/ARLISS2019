@@ -101,15 +101,18 @@ void turn_north(){
 
 // 電熱線のテスト
 void heat_test(){
-  digitalWrite(heat1, HIGH);
-  delay(5000);
-  digitalWrite(heat1, LOW);
-  delay(1000);
-  digitalWrite(heat2, HIGH);
-  delay(5000);
-  digitalWrite(heat2, LOW);
-  delay(1000);
-  while(1);
+  if(!digitalRead(sw)){
+    beep(PUSHED);
+    digitalWrite(heat1, HIGH);
+    delay(5000);
+    digitalWrite(heat1, LOW);
+    delay(1000);
+    digitalWrite(heat2, HIGH);
+    delay(5000);
+    digitalWrite(heat2, LOW);
+    delay(1000);
+  }
+  
 }
 
 // テスト走行

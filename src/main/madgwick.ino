@@ -1,20 +1,21 @@
 #include <MadgwickAHRS.h>
+#define MADGWICK_PRINT
 
 Madgwick filter;
 
 void madgwick_init(){
-  filter.begin(10);
+  filter.begin(100);
 }
 
-void test_madgwick(){
+void madgwick_update(){
+  //long m_time = millis();
   float ax, ay, az;
   float gx, gy, gz;
   float mx, my, mz;
-  float madgwick_roll, madgwick_pitch, madgwick_heading;
   
   Read_Gyro();
   Read_Accel();
-  Read_Compass();
+  //Read_Compass();
 
   gx = (gyro_x * 16.0) / 32768.0;
   gy = (gyro_y * 16.0) / 32768.0;
@@ -33,18 +34,18 @@ void test_madgwick(){
     ax, ay, az,
     mx, my, mz);
 
-  madgwick_roll = filter.getRoll();
-  madgwick_pitch = filter.getPitch();
-  madgwick_heading = filter.getYaw();
+  roll = filter.getRoll();
+  pitch = filter.getPitch();
+  yaw = filter.getYaw();
 
-  //Serial.print(mx); Serial.print("\t");
-  //Serial.print(my); Serial.print("\t");
-  //Serial.println(mz);
-
+#ifdef MADGWICK_PRINT
   Serial.print("Orientation: ");
-  Serial.print(madgwick_heading);
+  Serial.print(yaw);
   Serial.print(" ");
-  Serial.print(madgwick_pitch);
+  Serial.print(pitch);
   Serial.print(" ");
-  Serial.println(madgwick_roll);
+  Serial.println(roll);
+#endif
+
+  //Serial.println(millis() - m_time);
 }
