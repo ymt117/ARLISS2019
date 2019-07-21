@@ -1,3 +1,5 @@
+#include "cansat_define.h"
+#include "cansat_prototype.h"
 
 // 静荷重試験用プログラム
 void static_load(){

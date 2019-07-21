@@ -87,4 +87,13 @@ void gps_plain_text();
 void sd_init();
 void writeFile(const char*, const char*);
 
+/***************************************************************
+ * Test Code: test.ino
+ **************************************************************/
+void static_laod();
+void printdata();
+void turn_north();
+void heat_test();
+void test_run();
+
 #endif
