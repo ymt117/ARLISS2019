@@ -56,6 +56,10 @@ void setup() {
   pinMode(heat2, OUTPUT);
   digitalWrite(heat2, LOW);
 
+  // Initialize TWE-Lite Sleep Pin
+  pinMode(twe_lite_sleep, OUTPUT);
+  digitalWrite(twe_lite_sleep, HIGH);
+
   // Initialize the sensor
   imu_init();
   gps_init();
@@ -87,15 +91,19 @@ void loop() {
   switch(s){
     
     case State_test:
+      if(!digitalRead(sw)){
+        beep(PUSHED);
+        digitalWrite(twe_lite_sleep, !digitalRead(twe_lite_sleep));
+      }
       //madgwick_update();
       //imu_test();
       //mag_calibrate();
-      test_run();
+      //test_run();
       //static_load();
       //imu_plot();
       //gps_read();
-      //Serial.println(analogRead(cds));
-      //delay(100);
+      Serial.println(analogRead(cds));
+      delay(100);
       //blink();
       break;
     case State_exit:

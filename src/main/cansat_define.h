@@ -23,6 +23,11 @@
 static const uint8_t sp = PB12; // Pin connected to the Speaker
 
 /***************************************************************
+ * TWE-Lite
+ **************************************************************/
+static const uint8_t twe_lite_sleep = PA15; // Pin connected to the TWE-Lite M3(LOW: Sleep)
+
+/***************************************************************
  * LED
  **************************************************************/
 static const uint8_t led1 = PB13; // Pin connected to the LED1
