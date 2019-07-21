@@ -3,6 +3,8 @@
  *  - https://github.com/pololu/minimu-9-ahrs-arduino/blob/master/MinIMU9AHRS/Compass.ino
  */
 
+#include "cansat_define.h"
+
 void Compass_Heading()
 {
   float MAG_X;

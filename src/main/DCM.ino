@@ -3,6 +3,9 @@
  *  - https://github.com/pololu/minimu-9-ahrs-arduino/blob/master/MinIMU9AHRS/DCM.ino
  */
 
+#include "cansat_define.h"
+#include "cansat_prototype.h"
+
 void Normalize(void)
 {
   float error=0;

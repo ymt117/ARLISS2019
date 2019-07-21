@@ -7,6 +7,7 @@
 
 // Read CanSat definition file
 #include "cansat_define.h"
+#include "cansat_prototype.h"
 
 // State transition of CanSat
 enum MyState{
@@ -86,10 +87,10 @@ void loop() {
   switch(s){
     
     case State_test:
-      madgwick_update();
+      //madgwick_update();
       //imu_test();
       //mag_calibrate();
-      //test_run();
+      test_run();
       //static_load();
       //imu_plot();
       //gps_read();

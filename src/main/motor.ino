@@ -1,3 +1,5 @@
+#include "cansat_define.h"
+
 // Initialize function for motor pin
 void motor_init(){
   pinMode(ain1, OUTPUT);
@@ -16,8 +18,6 @@ void motor_init(){
   digitalWrite(bin2, LOW);
   digitalWrite(pwmb, LOW);
 }
-
-
 
 void left_cw(int pwm){
   digitalWrite(ain2, LOW);
@@ -73,7 +73,7 @@ void motor_stop(){
   digitalWrite(pwmb, LOW);
 }
 
-void roll_over_return(){
+void rollover_return(){
   right_cw(255);
   delay(2000);
   right_ccw(255);

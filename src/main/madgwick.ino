@@ -1,6 +1,9 @@
 #include <MadgwickAHRS.h>
 #define MADGWICK_PRINT
 
+#include "cansat_define.h"
+#include "cansat_prototype.h"
+
 Madgwick filter;
 
 void madgwick_init(){

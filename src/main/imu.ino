@@ -10,6 +10,9 @@
 #include <LPS.h>
 #include <LIS3MDL.h>
 
+#include "cansat_define.h"
+#include "cansat_prototype.h"
+
 LSM6 imu;
 LPS ps;
 LIS3MDL mag;
