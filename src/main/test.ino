@@ -136,3 +136,21 @@ void test_run(){
   motor_stop();
   delay(2000);
 }
+
+// TWE-Liteのスリープテスト
+void twe_lite_sleep_test(){
+
+  if(!digitalRead(sw)){
+    beep(PUSHED);
+    digitalWrite(twe_lite_sleep, !digitalRead(twe_lite_sleep));
+  }
+
+  Serial.println(analogRead(cds));
+      delay(100);
+}
+
+// バッテリ電圧の監視
+float battery_voltage(){
+  
+  return 3.3 / 1024 * 2 * analogRead(batt1);
+}

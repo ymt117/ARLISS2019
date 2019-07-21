@@ -50,6 +50,10 @@ void setup() {
   pinMode(sw, INPUT_PULLUP);
   attachInterrupt(sw, _sw_pushed, RISING);
 
+  // Initialize Monitor Battery voltage
+  pinMode(batt1, INPUT_PULLUP);
+  pinMode(batt2, INPUT_PULLUP);
+
   // Initialize Heat Pin
   pinMode(heat1, OUTPUT);
   digitalWrite(heat1, LOW);
@@ -88,13 +92,10 @@ void setup() {
  * MAIN LOOP
  **************************************************************/
 void loop() {
+
   switch(s){
     
     case State_test:
-      if(!digitalRead(sw)){
-        beep(PUSHED);
-        digitalWrite(twe_lite_sleep, !digitalRead(twe_lite_sleep));
-      }
       //madgwick_update();
       //imu_test();
       //mag_calibrate();
@@ -102,8 +103,8 @@ void loop() {
       //static_load();
       //imu_plot();
       //gps_read();
-      Serial.println(analogRead(cds));
-      delay(100);
+      //Serial.println(analogRead(cds));
+      //delay(100);
       //blink();
       break;
     case State_exit:

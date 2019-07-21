@@ -45,6 +45,12 @@ static const uint8_t sw = PC13; // Pin connected to the Switch
 volatile uint16_t press_counter = 0;
 
 /***************************************************************
+ * Battery
+ **************************************************************/
+static const uint8_t batt1 = PA4; // Pin to monitor battery voltage(Microcomputer and so on)
+static const uint8_t batt2 = PB0; // Pin to monitor battery voltage(Motor and Heating wire)
+
+/***************************************************************
  * Motor
  **************************************************************/
 static const uint8_t ain1 = PC7; // Pin connected to the AIN1
