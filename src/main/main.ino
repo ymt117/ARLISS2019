@@ -32,9 +32,9 @@ void setup() {
   // Initialize the microSD Card
   sd_init();
   writeFile("/hello.txt", "Hello CanSat!!!");
-  writeFile("acc_g.csv", "millis,raw_ax,raw_ay,raw_az,ax_g,ay_g,az_g,a\n");
-  writeFile("mag.csv", "mx_raw,my_raw,mz_raw,mx,my,mz\n");
-  writeFile("mag_offset.csv", "mx_max,mx_min,my_max,my_min,mz_max,mz_min\n");
+  writeFile("/acc_g.csv", "millis,raw_ax,raw_ay,raw_az,ax_g,ay_g,az_g,a\n");
+  writeFile("/mag.csv", "mx_raw,my_raw,mz_raw,mx,my,mz\n");
+  writeFile("/mag_offset.csv", "mx_max,mx_min,my_max,my_min,mz_max,mz_min\n");
 
   delay(20);
 
@@ -71,9 +71,6 @@ void setup() {
   delay(20);
 
   imu_offset();
-  
-  beep(BOOT_UP);
-  delay(20);
 
   //compass_calibrate();
 
@@ -85,6 +82,9 @@ void setup() {
   timer_init();
 
   madgwick_init();
+
+  beep(BOOT_UP);
+  delay(20);
 }
 
 

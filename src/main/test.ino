@@ -146,11 +146,11 @@ void twe_lite_sleep_test(){
   }
 
   Serial.println(analogRead(cds));
-      delay(100);
+  delay(100);
 }
 
 // バッテリ電圧の監視
-float battery_voltage(){
+float battery_voltage(uint8_t pin){
   
-  return 3.3 / 1024 * 2 * analogRead(batt1);
+  return 3.3 / 1024 * 2 * analogRead(pin);
 }

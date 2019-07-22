@@ -95,5 +95,7 @@ void printdata();
 void turn_north();
 void heat_test();
 void test_run();
+void twe_lite_sleep_test();
+float battery_voltage(uint8_t);
 
 #endif
