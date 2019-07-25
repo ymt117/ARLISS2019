@@ -92,10 +92,21 @@ void setup() {
  * MAIN LOOP
  **************************************************************/
 void loop() {
+  float lng1 = 130.543952;
+  float lat1 = 31.568171;
+  float lng2 = 130.542494;
+  float lat2 = 31.568353;
 
   switch(s){
     
     case State_test:
+      Serial.print(distance(lng1, lat1, lng2, lat2));
+      Serial.print('\t');
+      Serial.println(direction(lng1, lat1, lng2, lat2));
+
+      Serial.print(distance(130.543426, 31.567485, 130.543343, 31.568532));
+      Serial.print('\t');
+      Serial.println(direction(130.543426, 31.567485, 130.543343, 31.568532));
       //madgwick_update();
       //imu_test();
       //mag_calibrate();

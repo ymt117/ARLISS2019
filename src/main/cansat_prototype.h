@@ -97,5 +97,7 @@ void heat_test();
 void test_run();
 void twe_lite_sleep_test();
 float battery_voltage(uint8_t);
+double distance(float, float, float, float);
+double direction(float, float, float, float);
 
 #endif
