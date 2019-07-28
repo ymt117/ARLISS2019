@@ -1,5 +1,5 @@
 #include <MadgwickAHRS.h>
-#define MADGWICK_PRINT
+//#define MADGWICK_PRINT
 
 #include "cansat_define.h"
 #include "cansat_prototype.h"
@@ -18,7 +18,7 @@ void madgwick_update(){
   
   Read_Gyro();
   Read_Accel();
-  //Read_Compass();
+  Read_Compass();
 
   gx = (gyro_x * 16.0) / 32768.0;
   gy = (gyro_y * 16.0) / 32768.0;

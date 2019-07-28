@@ -87,6 +87,10 @@ void gps_plain_text();
 void sd_init();
 void writeFile(const char*, const char*);
 
+void writeIMU();
+void writeLPS();
+void writeGPS();
+
 /***************************************************************
  * Test Code: test.ino
  **************************************************************/
@@ -94,10 +98,12 @@ void static_laod();
 void printdata();
 void turn_north();
 void heat_test();
+void heat_test2();
 void test_run();
 void twe_lite_sleep_test();
 float battery_voltage(uint8_t);
 double distance(float, float, float, float);
 double direction(float, float, float, float);
+void dd_test();
 
 #endif

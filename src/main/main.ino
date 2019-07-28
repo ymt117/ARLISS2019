@@ -31,10 +31,9 @@ void setup() {
 
   // Initialize the microSD Card
   sd_init();
-  writeFile("/hello.txt", "Hello CanSat!!!");
-  writeFile("/acc_g.csv", "millis,raw_ax,raw_ay,raw_az,ax_g,ay_g,az_g,a\n");
-  writeFile("/mag.csv", "mx_raw,my_raw,mz_raw,mx,my,mz\n");
-  writeFile("/mag_offset.csv", "mx_max,mx_min,my_max,my_min,mz_max,mz_min\n");
+  writeFile("/imu.csv", "millis,ax,ay,az,gx,gy,gz,mx,my,mz\n");
+  writeFile("/lps.csv", "millis,pressure,altitude,temperature\n");
+  writeFile("/gps.csv", "millis,lat,lng\n");
 
   delay(20);
 
@@ -72,18 +71,16 @@ void setup() {
 
   imu_offset();
 
-  //compass_calibrate();
-
   timer=millis();
   delay(20);
   counter=0;
 
-  // Timer init
-  timer_init();
-
   madgwick_init();
 
   beep(BOOT_UP);
+
+  // Timer init
+  timer_init();
   delay(20);
 }
 
@@ -92,31 +89,13 @@ void setup() {
  * MAIN LOOP
  **************************************************************/
 void loop() {
-  float lng1 = 130.543952;
-  float lat1 = 31.568171;
-  float lng2 = 130.542494;
-  float lat2 = 31.568353;
 
   switch(s){
     
     case State_test:
-      Serial.print(distance(lng1, lat1, lng2, lat2));
-      Serial.print('\t');
-      Serial.println(direction(lng1, lat1, lng2, lat2));
-
-      Serial.print(distance(130.543426, 31.567485, 130.543343, 31.568532));
-      Serial.print('\t');
-      Serial.println(direction(130.543426, 31.567485, 130.543343, 31.568532));
-      //madgwick_update();
-      //imu_test();
-      //mag_calibrate();
-      //test_run();
-      //static_load();
-      //imu_plot();
-      //gps_read();
-      //Serial.println(analogRead(cds));
-      //delay(100);
-      //blink();
+      // test code
+      dd_test();
+      //heat_test2();
       break;
     case State_exit:
       // End processing and enter infinite loop...

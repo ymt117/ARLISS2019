@@ -117,6 +117,44 @@ void heat_test(){
   
 }
 
+void _heat1(){
+  beep(PUSHED);
+  digitalWrite(heat1, HIGH);
+  delay(3000);
+  digitalWrite(heat1, LOW);
+  delay(1000);
+}
+
+void _heat2(){
+  beep(PUSHED);
+  beep(PUSHED);
+  digitalWrite(heat2, HIGH);
+  delay(3000);
+  digitalWrite(heat2, LOW);
+  delay(1000);
+}
+
+// 電熱線のテスト（無線からON/OFF）
+void heat_test2(){
+  int val = 0;
+
+  if(Serial.available() > 0){
+    val = Serial.read();
+    Serial.println(val);
+
+    if(val == 97) _heat1();
+    if(val == 98) _heat2();
+    if(val == 99) {
+      beep(PUSHED);
+      beep(PUSHED);
+      beep(PUSHED);
+      forward(100);
+      delay(1000);
+      motor_stop();
+    }
+  }
+}
+
 // テスト走行
 void test_run(){
   turn_right(150);
@@ -215,4 +253,25 @@ double direction(float lng1, float lat1, float lng2, float lat2){
   if(phi < 0) phi += 360;
 
   return phi;
+}
+
+// 現在地とゴールの距離，方位の計算テスト
+void dd_test(){
+  while(hs.available() > 0)
+    gps.encode(hs.read());
+
+  if(gps.location.isUpdated()){
+    Serial.print("Distance: ");
+    Serial.print(distance(g_lng, g_lat, gps.location.lng(), gps.location.lat()));
+    Serial.print("\t");
+    Serial.print("Direction: ");
+    Serial.print(direction(g_lng, g_lat, gps.location.lng(), gps.location.lat()));
+    Serial.print("\t");
+  }
+  Serial.print("yaw: ");
+  Serial.print(yaw);
+  Serial.println();
+
+  writeGPS();
+  writeIMU();
 }

@@ -138,27 +138,10 @@ void Read_Accel(){
  **************************************************************/
 void Read_Compass(){
   mag.read();
-  char buf[1024];
 
   magnetom_x = (SENSOR_SIGN[6] * mag.m.x) - MAG_OFFSET[6];
   magnetom_y = (SENSOR_SIGN[7] * mag.m.y) - MAG_OFFSET[7];
   magnetom_z = (SENSOR_SIGN[8] * mag.m.z) - MAG_OFFSET[8];
-
-/*
-  String str = "";
-  str += mag.m.x;       str += ",";
-  str += mag.m.y;       str += ",";
-  str += mag.m.z;       str += ",";
-  str += magnetom_x;    str += ",";
-  str += magnetom_y;    str += ",";
-  str += magnetom_z;    str += ",";
-  str += "\n";
-
-  int len = str.length();
-  str.toCharArray(buf, len+1);
-
-  writeFile("mag.csv", buf);
-*/
 }
 
 
