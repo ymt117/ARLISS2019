@@ -94,7 +94,7 @@ void loop() {
     
     case State_test:
       // test code
-      dd_test();
+      //dd_test();
       //heat_test2();
       break;
     case State_exit:

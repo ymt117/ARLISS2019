@@ -89,8 +89,8 @@ int imu_status = 0;
 // Positive yaw : clockwise
 int SENSOR_SIGN[9] = {1,1,1,-1,-1,-1,1,1,1}; //Correct directions x,y,z - gyro, accelerometer, magnetometer
 
-// accelerometer: 16 g sensitivity
-// 3.9 mg/digit; 1 g = 2048
+// accelerometer: 8 g sensitivity
+// 3.9 mg/digit; 1 g = 256
 #define GRAVITY 2048  //this equivalent to 1G in the raw data coming from the accelerometer
 
 
@@ -127,7 +127,8 @@ int SENSOR_SIGN[9] = {1,1,1,-1,-1,-1,1,1,1}; //Correct directions x,y,z - gyro, 
 #define PRINT_ANALOGS 0 //Will print the analog raw data
 #define PRINT_EULER 1   //Will print the Euler angles Roll, Pitch and Yaw
 
-volatile float G_Dt=0.02;    // Integration time (DCM algorithm)  We will run the integration loop at 50Hz if possible
+//volatile float G_Dt=0.02;    // Integration time (DCM algorithm)  We will run the integration loop at 50Hz if possible
+volatile float G_Dt=0.1;
 
 long timer=0;   //general purpuse timer
 long timer_old;

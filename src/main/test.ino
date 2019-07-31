@@ -266,11 +266,12 @@ void dd_test(){
     Serial.print("\t");
     Serial.print("Direction: ");
     Serial.print(direction(g_lng, g_lat, gps.location.lng(), gps.location.lat()));
-    Serial.print("\t");
+    Serial.println();
   }
-  Serial.print("yaw: ");
-  Serial.print(yaw);
-  Serial.println();
+  //Serial.print("yaw: ");
+  //Serial.print(yaw);
+
+  //Serial.println();
 
   writeGPS();
   writeIMU();

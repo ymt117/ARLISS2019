@@ -100,9 +100,9 @@ void writeGPS(){
   char buf[512];
 
   String str = "";
-  str += millis();            str += ",";
-  str += gps.location.lat();  str += ",";
-  str += gps.location.lng();  str += ",";
+  str += millis();                       str += ",";
+  str += String(gps.location.lat(), 6);  str += ",";
+  str += String(gps.location.lng(), 6);  str += ",";
   str += "\n";
 
   int len = str.length();

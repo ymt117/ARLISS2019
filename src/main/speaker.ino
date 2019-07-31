@@ -1,5 +1,7 @@
 #include "cansat_define.h"
 
+#define BEEP_OFF
+
 // BOOT_UP
 float mm1[] = {mE*4, mA*4, mB*4, mA*4, mE*2, mE*4, mB*4};
 
@@ -37,6 +39,10 @@ void _beep(float *mm, int m_size, int b_time){
 }
 
 void beep(int mode){
+#ifdef BEEP_OFF
+  return;
+#endif
+
   if(mode == BOOT_UP){
     int m_size = sizeof(mm1)/sizeof(float);
     _beep(mm1, m_size, 150);

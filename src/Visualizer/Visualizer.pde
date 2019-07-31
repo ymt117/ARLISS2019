@@ -56,9 +56,9 @@ void draw()
 
   // Print values to console
   print(roll);
-  print("\t");
+  print("\t\t");
   print(pitch);
-  print("\t");
+  print("\t\t");
   print(yaw);
   println();
 }
