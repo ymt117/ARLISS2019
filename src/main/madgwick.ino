@@ -1,5 +1,5 @@
 #include <MadgwickAHRS.h>
-#define MADGWICK_PRINT
+//#define MADGWICK_PRINT
 //#define AAAA
 
 #include "cansat_define.h"
@@ -8,7 +8,7 @@
 Madgwick filter;
 
 void madgwick_init(){
-  filter.begin(10);
+  filter.begin(20);
 }
 
 void madgwick_update(){
@@ -43,14 +43,13 @@ void madgwick_update(){
   //mx = (mag.m.x * 4.0) / 32768.0;
   //my = (mag.m.y * 4.0) / 32768.0;
   //mz = (mag.m.z * 4.0) / 32768.0;
-  mx = mag.m.x / 6842;
-  my = mag.m.y / 6842;
-  mz = mag.m.z / 6842;
+  //mx = mag.m.x / 6842;
+  //my = mag.m.y / 6842;
+  //mz = mag.m.z / 6842;
   
-  filter.update(
+  filter.updateIMU(
     gx, gy, gz,
-    ax, ay, az,
-    mx, my, mz);
+    ax, ay, az);
 
   roll = filter.getRoll();
   pitch = filter.getPitch();
@@ -69,9 +68,9 @@ void madgwick_update(){
   Serial.print(gx); Serial.print("\t\t");
   Serial.print(gy); Serial.print("\t\t");
   Serial.print(gz); Serial.print("\t\t");
-  //Serial.print(ax); Serial.print("\t\t");
-  //Serial.print(ay); Serial.print("\t\t");
-  //Serial.print(az); Serial.print("\t\t");
+  Serial.print(ax); Serial.print("\t\t");
+  Serial.print(ay); Serial.print("\t\t");
+  Serial.print(az); Serial.print("\t\t");
   //Serial.print(mag.m.x); Serial.print("\t");
   //Serial.print(mag.m.y); Serial.print("\t");
   //Serial.print(mag.m.z); Serial.print("\t");

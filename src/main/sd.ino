@@ -57,18 +57,20 @@ void writeIMU(){
   //Read_Gyro();
   //Read_Accel();
   //Read_Compass();
+  imu.read();
+  mag.read();
 
   String str = "";
-  str += millis();      str += ",";
-  str += accel_x;       str += ",";
-  str += accel_y;       str += ",";
-  str += accel_z;       str += ",";
-  str += gyro_x;        str += ",";
-  str += gyro_y;        str += ",";
-  str += gyro_z;        str += ",";
-  str += magnetom_x;    str += ",";
-  str += magnetom_y;    str += ",";
-  str += magnetom_z;    str += ",";
+  str += millis();    str += ",";
+  str += imu.a.x;     str += ",";
+  str += imu.a.y;     str += ",";
+  str += imu.a.z;     str += ",";
+  str += imu.g.x;     str += ",";
+  str += imu.g.y;     str += ",";
+  str += imu.g.z;     str += ",";
+  str += mag.m.x;     str += ",";
+  str += mag.m.y;     str += ",";
+  str += mag.m.z;     str += ",";
   str += "\n";
 
   int len = str.length();
@@ -101,6 +103,12 @@ void writeGPS(){
 
   String str = "";
   str += millis();                       str += ",";
+  str += gps.date.year();                str += ",";
+  str += gps.date.month();               str += ",";
+  str += gps.date.day();                 str += ",";
+  str += gps.time.hour();                str += ",";
+  str += gps.time.minute();              str += ",";
+  str += gps.time.second();              str += ",";
   str += String(gps.location.lat(), 6);  str += ",";
   str += String(gps.location.lng(), 6);  str += ",";
   str += "\n";
@@ -109,4 +117,80 @@ void writeGPS(){
   str.toCharArray(buf, len+1);
 
   writeFile("gps.csv", buf);
+}
+
+void writeCdS(){
+  char buf[256];
+
+  String str = "";
+  str += millis();                str += ",";
+  str += String(analogRead(cds)); str += ",";
+  str += "\n";
+
+  int len = str.length();
+  str.toCharArray(buf, len+1);
+
+  writeFile("cds.csv", buf);
+}
+
+void writeBattery(){
+  char buf[256];
+
+  String str = "";
+  str += millis();                        str += ",";
+  str += String(battery_voltage(batt1));  str += ",";
+  str += String(battery_voltage(batt2));  str += ",";
+  str += "\n";
+
+  int len = str.length();
+  str.toCharArray(buf, len+1);
+
+  writeFile("battery.csv", buf);
+}
+
+void writeAll(){
+  float time = millis();
+  char buf[1024];
+
+  imu.read();
+  mag.read();
+
+  float pressure = ps.readPressureMillibars();
+  float altitude = ps.pressureToAltitudeMeters(pressure);
+  float temperature = ps.readTemperatureC();
+
+  String str = "";
+  str += millis();                       str += ",";
+  str += gps.date.year();                str += ",";
+  str += gps.date.month();               str += ",";
+  str += gps.date.day();                 str += ",";
+  str += gps.time.hour();                str += ",";
+  str += gps.time.minute();              str += ",";
+  str += gps.time.second();              str += ",";
+  str += String(gps.location.lat(), 6);  str += ",";
+  str += String(gps.location.lng(), 6);  str += ",";
+  str += imu.a.x;                        str += ",";
+  str += imu.a.y;                        str += ",";
+  str += imu.a.z;                        str += ",";
+  str += imu.g.x;                        str += ",";
+  str += imu.g.y;                        str += ",";
+  str += imu.g.z;                        str += ",";
+  str += mag.m.x;                        str += ",";
+  str += mag.m.y;                        str += ",";
+  str += mag.m.z;                        str += ",";
+  str += pressure;                       str += ",";
+  str += altitude;                       str += ",";
+  str += temperature;                    str += ",";
+  str += String(analogRead(cds));        str += ",";
+  str += String(battery_voltage(batt1)); str += ",";
+  str += String(battery_voltage(batt2)); str += ",";
+  str += "\n";
+
+  int len = str.length();
+  str.toCharArray(buf, len+1);
+
+  writeFile("log.csv", buf);
+  
+  time = millis() - time;
+  Serial.println(time);
 }

@@ -14,6 +14,6 @@ void timer_init(){
   // Set TIMx instance.
   TimHandle.timer = MY_TIMER;
   // Timer set to 10ms=10000
-  TimerHandleInit(&TimHandle, 100000 - 1, ((uint32_t)(getTimerClkFreq(MY_TIMER) / (1000000)) - 1));
+  TimerHandleInit(&TimHandle, 50000 - 1, ((uint32_t)(getTimerClkFreq(MY_TIMER) / (1000000)) - 1));
   attachIntHandle(&TimHandle, _call_func);
 }

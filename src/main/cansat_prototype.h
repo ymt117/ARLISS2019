@@ -90,6 +90,10 @@ void writeFile(const char*, const char*);
 void writeIMU();
 void writeLPS();
 void writeGPS();
+void writeCdS();
+void writeBattery();
+
+void writeAll();
 
 /***************************************************************
  * Test Code: test.ino
@@ -105,5 +109,6 @@ float battery_voltage(uint8_t);
 double distance(float, float, float, float);
 double direction(float, float, float, float);
 void dd_test();
+void power_test();
 
 #endif

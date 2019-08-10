@@ -1,6 +1,6 @@
 #include "cansat_define.h"
 
-#define BEEP_OFF
+//#define BEEP_OFF
 
 // BOOT_UP
 float mm1[] = {mE*4, mA*4, mB*4, mA*4, mE*2, mE*4, mB*4};

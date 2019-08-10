@@ -23,8 +23,8 @@ void left_cw(int pwm){
   if(pwm > 255) pwm = 255;
   if(pwm < 0) pwm = 0;
 
-  digitalWrite(ain2, LOW);
-  digitalWrite(ain1, HIGH);
+  digitalWrite(ain1, LOW);
+  digitalWrite(ain2, HIGH);
   analogWrite(pwma, pwm);
 }
 
@@ -32,8 +32,8 @@ void left_ccw(int pwm){
   if(pwm > 255) pwm = 255;
   if(pwm < 0) pwm = 0;
 
-  digitalWrite(ain1, LOW);
-  digitalWrite(ain2, HIGH);
+  digitalWrite(ain2, LOW);
+  digitalWrite(ain1, HIGH);
   analogWrite(pwma, pwm);
 }
 
@@ -41,8 +41,8 @@ void right_cw(int pwm){
   if(pwm > 255) pwm = 255;
   if(pwm < 0) pwm = 0;
 
-  digitalWrite(bin2, LOW);
-  digitalWrite(bin1, HIGH);
+  digitalWrite(bin1, LOW);
+  digitalWrite(bin2, HIGH);
   analogWrite(pwmb, pwm);
 }
 
@@ -50,8 +50,8 @@ void right_ccw(int pwm){
   if(pwm > 255) pwm = 255;
   if(pwm < 0) pwm = 0;
 
-  digitalWrite(bin1, LOW);
-  digitalWrite(bin2, HIGH);
+  digitalWrite(bin2, LOW);
+  digitalWrite(bin1, HIGH);
   analogWrite(pwmb, pwm);
 }
 

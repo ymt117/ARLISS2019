@@ -19,6 +19,10 @@ MyState s = State_test;
 // Intterupt function called when the button is pressed.
 void _sw_pushed(){
   press_counter++;
+  beep(PUSHED);
+  if(press_counter > 2){
+    s = State_exit;
+  }
 }
 
 /***************************************************************
@@ -31,9 +35,14 @@ void setup() {
 
   // Initialize the microSD Card
   sd_init();
-  writeFile("/imu.csv", "millis,ax,ay,az,gx,gy,gz,mx,my,mz\n");
-  writeFile("/lps.csv", "millis,pressure,altitude,temperature\n");
-  writeFile("/gps.csv", "millis,lat,lng\n");
+  writeFile("/hello.txt", "Hello CanSat!!!\n");
+  writeFile("/log.csv",
+            "millis,year,month,day,hour,minute,second,lat,lng,ax,ay,az,gx,gy,gz,mx,my,mz,pressure,altitude,temperature,cds,batt1,batt2\n");
+  //writeFile("/imu.csv", "millis,ax,ay,az,gx,gy,gz,mx,my,mz\n");
+  //writeFile("/lps.csv", "millis,pressure,altitude,temperature\n");
+  //writeFile("/gps.csv", "millis,year,month,day,hour,minute,second,lat,lng\n");
+  //writeFile("/cds.csv", "millis,cds\n");
+  //writeFile("/battery.csv", "Li-Po1,Li-Po2\n");
 
   delay(20);
 
@@ -80,7 +89,7 @@ void setup() {
   beep(BOOT_UP);
 
   // Timer init
-  timer_init();
+  //timer_init();
   delay(20);
 }
 
@@ -89,13 +98,13 @@ void setup() {
  * MAIN LOOP
  **************************************************************/
 void loop() {
+  int val;
 
   switch(s){
     
     case State_test:
       // test code
-      //dd_test();
-      //heat_test2();
+      power_test();
       break;
     case State_exit:
       // End processing and enter infinite loop...

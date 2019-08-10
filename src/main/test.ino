@@ -134,24 +134,35 @@ void _heat2(){
   delay(1000);
 }
 
+void _motor_test(){
+  beep(PUSHED);
+  beep(PUSHED);
+  beep(PUSHED);
+  forward(100);
+  delay(1000);
+  motor_stop();
+  delay(100);
+}
+
 // 電熱線のテスト（無線からON/OFF）
+// 加振機のテストにも利用可
 void heat_test2(){
   int val = 0;
+
+  Read_Accel();
+  Read_Gyro();
+  Read_Compass();
+  writeIMU();
+  writeCdS();
 
   if(Serial.available() > 0){
     val = Serial.read();
     Serial.println(val);
 
-    if(val == 97) _heat1();
-    if(val == 98) _heat2();
-    if(val == 99) {
-      beep(PUSHED);
-      beep(PUSHED);
-      beep(PUSHED);
-      forward(100);
-      delay(1000);
-      motor_stop();
-    }
+    if(val == 120) _heat1();// 120 = x
+    if(val == 121) _heat2();// 121 = y
+    if(val == 122) _motor_test();// 122 = z
+      
   }
 }
 
@@ -188,7 +199,7 @@ void twe_lite_sleep_test(){
 }
 
 // バッテリ電圧の監視
-float battery_voltage(uint8_t pin){
+float battery_voltage(uint8_t pin){// batt1 or batt2
   
   return 3.3 / 1024 * 2 * analogRead(pin);
 }
@@ -275,4 +286,14 @@ void dd_test(){
 
   writeGPS();
   writeIMU();
+}
+
+// 電力テスト
+void power_test(){
+  forward(255);
+  while(1){
+    writeAll();
+    gps_read();
+    delay(100);
+  }
 }
