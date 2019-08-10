@@ -96,6 +96,12 @@ void writeBattery();
 void writeAll();
 
 /***************************************************************
+ * Distance and Direction: distance.ino, direction.ino
+ **************************************************************/
+double distance(float, float, float, float);
+double direction(float, float, float, float);
+
+/***************************************************************
  * Test Code: test.ino
  **************************************************************/
 void static_laod();
@@ -106,8 +112,6 @@ void heat_test2();
 void test_run();
 void twe_lite_sleep_test();
 float battery_voltage(uint8_t);
-double distance(float, float, float, float);
-double direction(float, float, float, float);
 void dd_test();
 void power_test();
 

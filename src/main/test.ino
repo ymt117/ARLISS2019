@@ -204,68 +204,6 @@ float battery_voltage(uint8_t pin){// batt1 or batt2
   return 3.3 / 1024 * 2 * analogRead(pin);
 }
 
-// 2点の緯度/経度から距離を計算
-// https://keisan.casio.jp/exec/system/1257670779
-double distance(float lng1, float lat1, float lng2, float lat2){// x1, y1, x2, y2
-  double x1, y1, x2, y2;
-  double d;
-  double sin_y1, sin_y2, cos_y1, cos_y2, cos_dx, arc_cos;
-  double delta_x;
-  double r = 6378137;
-
-  x1 = ToRad(lng1);
-  y1 = ToRad(lat1);
-  x2 = ToRad(lng2);
-  y2 = ToRad(lat2);
-  delta_x = x1 - x2;
-
-  sin_y1 = sin(y1);
-  sin_y2 = sin(y2);
-  cos_y1 = cos(y1);
-  cos_y2 = cos(y2);
-  cos_dx = cos(delta_x);
-
-  arc_cos = acos(sin_y1 * sin_y2 + cos_y1 * cos_y2 * cos_dx);
-
-  d = r * arc_cos;
-
-  return d;
-}
-
-// 2点の緯度/経度から方位を計算
-// http://kwikwi.cocolog-nifty.com/blog/2005/12/delphi_2_fd2c.html
-double direction(float lng1, float lat1, float lng2, float lat2){
-  double x1, y1, x2, y2;
-  double phi;
-  double X, Y;
-  double sin_y1, sin_y2, cos_y1, cos_y2;
-  double sin_dx, cos_dx;
-  double delta_x;
-
-  x1 = ToRad(lng1);
-  y1 = ToRad(lat1);
-  x2 = ToRad(lng2);
-  y2 = ToRad(lat2);
-  delta_x = x2 - x1;
-
-  sin_y1 = sin(y1);
-  sin_y2 = sin(y2);
-  cos_y1 = cos(y1);
-  cos_y2 = cos(y2);
-  sin_dx = sin(delta_x);
-  cos_dx = cos(delta_x);
-
-  Y = cos_y2 * sin_dx;
-  X = cos_y1 * sin_y2 - sin_y1 * cos_y2 * cos_dx;
-
-  phi = atan2(Y, X);
-
-  phi = ToDeg(phi);
-  if(phi < 0) phi += 360;
-
-  return phi;
-}
-
 // 現在地とゴールの距離，方位の計算テスト
 void dd_test(){
   while(hs.available() > 0)
@@ -295,5 +233,8 @@ void power_test(){
     writeAll();
     gps_read();
     delay(100);
+    if((battery_voltage(batt1) <= 3.5) | battery_voltage(batt2) <= 3.5){
+      s = State_exit;
+    }
   }
 }
