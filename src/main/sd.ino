@@ -51,6 +51,29 @@ void writeFile(const char * path, const char * message){
   }
 }
 
+void readFile(const char * path){
+  #ifdef MYSD_SERIAL_DEBUG
+    Serial.print("Reading file: "); Serial.println(path);
+  #endif
+  
+  file = SD.open(path, FILE_READ);
+
+  if(file){
+    #ifdef MYSD_SERIAL_DEBUG
+      Serial.print("Reading to "); Serial.print(path);
+    #endif
+
+    while(file.available()){
+      Serial.write(file.read());
+    }
+    file.close();
+  }else{
+    #ifdef MYSD_SERIAL_DEBUG
+      Serial.print("error opening"); Serial.println(path);
+    #endif
+  }
+}
+
 void writeIMU(){
   char buf[1024];
 
@@ -149,7 +172,7 @@ void writeBattery(){
 }
 
 void writeAll(){
-  float time = millis();
+  //long time = millis();
   char buf[1024];
 
   imu.read();
@@ -191,6 +214,6 @@ void writeAll(){
 
   writeFile("log.csv", buf);
   
-  time = millis() - time;
-  Serial.println(time);
+  //time = millis() - time;
+  //Serial.println(time);
 }

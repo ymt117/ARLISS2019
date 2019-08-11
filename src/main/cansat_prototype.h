@@ -86,6 +86,7 @@ void gps_plain_text();
  **************************************************************/
 void sd_init();
 void writeFile(const char*, const char*);
+void readFile(const char*);
 
 void writeIMU();
 void writeLPS();
