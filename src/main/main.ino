@@ -9,13 +9,6 @@
 #include "cansat_define.h"
 #include "cansat_prototype.h"
 
-// State transition of CanSat
-enum MyState{
-  State_test = 0,
-  State_exit
-};
-MyState s = State_test;
-
 // Intterupt function called when the button is pressed.
 void _sw_pushed(){
   press_counter++;
@@ -104,7 +97,10 @@ void loop() {
     
     case State_test:
       // test code
-      power_test();
+      //power_test();
+      readFile("/aaa.txt");
+      delay(100);
+      while(1);
       break;
     case State_exit:
       // End processing and enter infinite loop...

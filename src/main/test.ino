@@ -228,13 +228,26 @@ void dd_test(){
 
 // 電力テスト
 void power_test(){
-  forward(255);
-  while(1){
-    writeAll();
-    gps_read();
-    delay(100);
-    if((battery_voltage(batt1) <= 3.5) | battery_voltage(batt2) <= 3.5){
-      s = State_exit;
+  int voltage_count = 0;
+  long time = millis();
+
+  while(s == State_test){
+
+    // Send GPS values every minute
+    if((millis() - time) > 60000){
+      time = millis();
+      gps_read();
     }
+
+    // Stop when 3.5V or less
+    if((battery_voltage(batt1) <= 3.5) | battery_voltage(batt2) <= 3.5){
+      voltage_count++;
+      if(voltage_count > 10) s = State_exit;
+    }
+
+    forward(150);
+
+    writeAll();
+    delay(100);
   }
 }
