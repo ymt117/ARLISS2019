@@ -74,6 +74,38 @@ void readFile(const char * path){
   }
 }
 
+void deleteFile(const char * path){
+  #ifdef MYSD_SERIAL_DEBUG
+    Serial.print("Deleting file: "); Serial.println(path);
+  #endif
+
+  SD.remove(path);
+
+  if(SD.exists(path)){
+    #ifdef MYSD_SERIAL_DEBUG
+      Serial.print(path); Serial.println(" exists");
+    #endif
+  }else{
+    #ifdef MYSD_SERIAL_DEBUG
+      Serial.print(path); Serial.println(" doesn't exist");
+    #endif
+  }
+}
+
+void writeStatus(){
+  char buf[32];
+
+  deleteFile("status.txt");
+
+  String str = "";
+  str += s;
+
+  int len = str.length();
+  str.toCharArray(buf, len+1);
+  
+  writeFile("status.txt", buf);
+}
+
 void writeIMU(){
   char buf[1024];
 
