@@ -71,8 +71,13 @@ float _max(float, float);
 /***************************************************************
  * Timer: my_timer.ino
  **************************************************************/
-static void _call_func(stimer_t *);
-void timer_init();
+// TIM3
+static void _call_func_3(stimer_t *);
+void timer_init_3();
+
+// TIM4
+static void _call_func_4(stimer_t *);
+void timer_init_4();
 
 /***************************************************************
  * GPS: gps.ino
@@ -87,7 +92,9 @@ void gps_plain_text();
 void sd_init();
 void writeFile(const char*, const char*);
 void readFile(const char*);
+void deleteFile(const char*);
 
+void writeStatus();
 void writeIMU();
 void writeLPS();
 void writeGPS();

@@ -31,11 +31,7 @@ void setup() {
   writeFile("/hello.txt", "Hello CanSat!!!\n");
   writeFile("/log.csv",
             "millis,year,month,day,hour,minute,second,lat,lng,ax,ay,az,gx,gy,gz,mx,my,mz,pressure,altitude,temperature,cds,batt1,batt2\n");
-  //writeFile("/imu.csv", "millis,ax,ay,az,gx,gy,gz,mx,my,mz\n");
-  //writeFile("/lps.csv", "millis,pressure,altitude,temperature\n");
-  //writeFile("/gps.csv", "millis,year,month,day,hour,minute,second,lat,lng\n");
-  //writeFile("/cds.csv", "millis,cds\n");
-  //writeFile("/battery.csv", "Li-Po1,Li-Po2\n");
+  writeStatus();
 
   delay(20);
 
@@ -82,7 +78,10 @@ void setup() {
   beep(BOOT_UP);
 
   // Timer init
-  //timer_init();
+  timer_init_3();
+  timer_init_4();
+
+  s = State_test;
   delay(20);
 }
 
@@ -98,9 +97,7 @@ void loop() {
     case State_test:
       // test code
       //power_test();
-      readFile("/aaa.txt");
-      delay(100);
-      while(1);
+      
       break;
     case State_exit:
       // End processing and enter infinite loop...

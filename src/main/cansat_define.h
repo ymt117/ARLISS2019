@@ -12,10 +12,11 @@ static const float g_lat = 31.570618;
  **************************************************************/
 // State transition of CanSat
 enum MyState{
-  State_test = 0,
+  State_init = 0,
+  State_test,
   State_exit
 };
-MyState s = State_test;
+MyState s = State_init;
 
 /***************************************************************
  * Speaker
