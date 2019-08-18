@@ -1,5 +1,5 @@
 #include <MadgwickAHRS.h>
-//#define MADGWICK_PRINT
+#define MADGWICK_PRINT
 //#define AAAA
 
 #include "cansat_define.h"

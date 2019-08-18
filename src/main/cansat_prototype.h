@@ -94,6 +94,7 @@ void writeFile(const char*, const char*);
 void readFile(const char*);
 void deleteFile(const char*);
 
+int readStatus(const char*);
 void writeStatus();
 void writeIMU();
 void writeLPS();
@@ -122,5 +123,6 @@ void twe_lite_sleep_test();
 float battery_voltage(uint8_t);
 void dd_test();
 void power_test();
+void read_write_test();
 
 #endif

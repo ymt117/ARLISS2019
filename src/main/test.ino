@@ -251,3 +251,44 @@ void power_test(){
     delay(100);
   }
 }
+
+// ファイルの書き込み読み込みテスト
+void read_write_test(){
+
+  int read_status = -2;
+
+  // -2
+  Serial.print("read_status: ");
+  Serial.println(read_status);
+
+  read_status = readStatus("status.txt");
+  Serial.print("read_status: ");
+  Serial.println(read_status);
+  
+
+  delay(100);
+
+  Serial.println("Writing status.txt");
+  writeStatus();
+
+  delay(100);
+
+  // 1
+  read_status = readStatus("status.txt");
+  Serial.print("read_status: ");
+  Serial.println(read_status);
+
+  delay(100);
+
+  Serial.println("Writing status.txt");
+  writeStatus();
+
+  delay(100);
+
+  // 1
+  read_status = readStatus("status.txt");
+  Serial.print("read_status: ");
+  Serial.println(read_status);
+
+  delay(100);
+}

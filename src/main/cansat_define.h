@@ -14,6 +14,7 @@ static const float g_lat = 31.570618;
 enum MyState{
   State_init = 0,
   State_test,
+  State_test2,
   State_exit
 };
 MyState s = State_init;

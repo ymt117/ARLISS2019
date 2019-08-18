@@ -11,6 +11,7 @@
 
 // Intterupt function called when the button is pressed.
 void _sw_pushed(){
+  Serial.println("USR Pushed!!!");
   press_counter++;
   beep(PUSHED);
   if(press_counter > 2){
@@ -31,6 +32,11 @@ void setup() {
   writeFile("/hello.txt", "Hello CanSat!!!\n");
   writeFile("/log.csv",
             "millis,year,month,day,hour,minute,second,lat,lng,ax,ay,az,gx,gy,gz,mx,my,mz,pressure,altitude,temperature,cds,batt1,batt2\n");
+  
+  // If the previous exit status is non-zero, the previous status is assigned to variable s
+  int old_status = readStatus("status.txt");
+  if(old_status == (int)State_init || old_status == (int)State_exit){ s = State_test; }
+  else{ s = (MyState)old_status; }
   writeStatus();
 
   delay(20);
@@ -78,10 +84,9 @@ void setup() {
   beep(BOOT_UP);
 
   // Timer init
-  timer_init_3();
-  timer_init_4();
+  //timer_init_3();
+  //timer_init_4();
 
-  s = State_test;
   delay(20);
 }
 
@@ -90,16 +95,26 @@ void setup() {
  * MAIN LOOP
  **************************************************************/
 void loop() {
-  int val;
 
   switch(s){
     
     case State_test:
       // test code
-      //power_test();
-      
+      writeStatus();
+
+      imu_plot();
+      Serial.println("State_test");
       break;
+
+    case State_test2:
+      writeStatus();
+
+      Serial.println("State_test2");
+      break;
+
     case State_exit:
+      writeStatus();
+
       // End processing and enter infinite loop...
       Serial.println("Goodbye~~");
       led_off();
@@ -108,8 +123,11 @@ void loop() {
       delay(1000);
       while(1);
       break;
+
     default:
       // code block
+
+      Serial.println("default");
       break;
   }
 }

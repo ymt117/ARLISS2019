@@ -92,6 +92,34 @@ void deleteFile(const char * path){
   }
 }
 
+int readStatus(const char * path){
+
+  int my_status = -1;
+
+  #ifdef MYSD_SERIAL_DEBUG
+    Serial.print("Reading file: "); Serial.println(path);
+  #endif
+  
+  file = SD.open(path, FILE_READ);
+
+  if(file){
+    #ifdef MYSD_SERIAL_DEBUG
+      Serial.print("Reading to "); Serial.print(path);
+    #endif
+
+    if(file.available()){
+      my_status = file.parseInt();
+    }
+    file.close();
+  }else{
+    #ifdef MYSD_SERIAL_DEBUG
+      Serial.print("error opening"); Serial.println(path);
+    #endif
+  }
+
+  return my_status;
+}
+
 void writeStatus(){
   char buf[32];
 
