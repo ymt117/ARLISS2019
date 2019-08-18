@@ -89,12 +89,12 @@ void imu_plot(){
   Serial.print(report);
 
   // Show gyro
-  snprintf(report, sizeof(report), "6d\t%6d\t%6d\t",
+  snprintf(report, sizeof(report), "%6d\t%6d\t%6d\t",
     imu.g.x, imu.g.y, imu.g.z);
   Serial.print(report);
 
   // Show geomagnetism
-  snprintf(report, sizeof(report), "6d\t%6d\t%6d\t",
+  snprintf(report, sizeof(report), "%6d\t%6d\t%6d\t",
     mag.m.x, mag.m.y, mag.m.z);
   Serial.print(report);
 

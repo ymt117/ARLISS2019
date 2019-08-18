@@ -35,8 +35,11 @@ void setup() {
   
   // If the previous exit status is non-zero, the previous status is assigned to variable s
   int old_status = readStatus("status.txt");
-  if(old_status == (int)State_init || old_status == (int)State_exit){ s = State_test; }
-  else{ s = (MyState)old_status; }
+  Serial.print("old_status: "); Serial.println(old_status);
+  if(old_status == (int)State_test)  s = State_test;
+  else if(old_status == (int)State_test2) s = State_test2;
+  else if(old_status == (int)State_exit)  s = State_exit;
+  else {                                  s = State_test; }
   writeStatus();
 
   delay(20);
@@ -103,7 +106,6 @@ void loop() {
       writeStatus();
 
       imu_plot();
-      Serial.println("State_test");
       break;
 
     case State_test2:
@@ -126,7 +128,7 @@ void loop() {
 
     default:
       // code block
-
+      writeStatus();
       Serial.println("default");
       break;
   }
