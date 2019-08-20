@@ -1,3 +1,5 @@
+#include "cansat_define.h"
+
 // 2点の緯度/経度から方位を計算
 // http://kwikwi.cocolog-nifty.com/blog/2005/12/delphi_2_fd2c.html
 double direction(float lng1, float lat1, float lng2, float lat2){

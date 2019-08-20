@@ -1,3 +1,5 @@
+#include "cansat_define.h"
+
 // 2点の緯度/経度から距離を計算
 // https://keisan.casio.jp/exec/system/1257670779
 double distance(float lng1, float lat1, float lng2, float lat2){// x1, y1, x2, y2
