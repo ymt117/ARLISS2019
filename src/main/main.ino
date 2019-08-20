@@ -70,8 +70,8 @@ void setup() {
   digitalWrite(heat2, LOW);
 
   // Initialize TWE-Lite Sleep Pin
-  pinMode(twe_lite_sleep, OUTPUT);
-  digitalWrite(twe_lite_sleep, HIGH);
+  pinMode(twe_lite_sleep_pin, OUTPUT);
+  twe_lite_wakeup();
 
   // Initialize the sensor
   imu_init();

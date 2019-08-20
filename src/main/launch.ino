@@ -1,33 +1,42 @@
 #include "cansat_define.h"
 
-#define NUM_MOVING_AVERAGE 3
+// Macro for calc_altitude function
+#define NUM_MOVING_AVERAGE 3 // Number used for moving average
 
-// altitude_offset
-float pressure;
-float altitud;
+// Valiable for altitude_offset function
 float temperature;
-int al_offset_cnt = 0;
+int altitude_offset_count = 0;
 float offset_a[50] = {0.0};
 float average_altitude_offset = 0.0;       //基準の高さの平均 
 float sum_offset = 0.0;       //基準の高さの合計
 int repeat_num = 50;          //基準の高さを求めるのに取るデータの数
 
+// Valiable for launch_detect function
+int launch_count = 0;
 
+// Valiable for drop_detect function
+int drop_count_pressure = 0;
+int drop_count_gyro = 0;
+int drop_flag = 0;
+
+
+// Calculate altitude from barometer value
 float calc_altitude(){
     float altitude[NUM_MOVING_AVERAGE];
     float sum_altitude = 0.0;
 
+    // Use moving average
     for(int i=0; i<NUM_MOVING_AVERAGE; i++){
         altitude[i] = ps.pressureToAltitudeMeters(ps.readPressureMillibars());
         Serial.print("altitude: "); Serial.println(altitude[i] - average_altitude_offset);
     }
-
     for(int i=0; i<NUM_MOVING_AVERAGE; i++){
         sum_altitude += altitude[i];
     }
 
     float average_altitude = sum_altitude / NUM_MOVING_AVERAGE;
 
+    // Subtract offset value
     return average_altitude - average_altitude_offset;
 }
 
@@ -35,21 +44,18 @@ void altitude_offset(){
     Serial.println("altitude_offset");
 
     //最初に測った高度を基準とする --->複数の値から基準を求める
-    while(al_offset_cnt < repeat_num) {
+    while(altitude_offset_count < repeat_num) {
         delay(20);
-        pressure = ps.readPressureMillibars();           //気圧
-        altitud = ps.pressureToAltitudeMeters(pressure); //高度
+        float altitude = ps.pressureToAltitudeMeters(ps.readPressureMillibars());
 
-        Serial.print("altitude="); Serial.println(altitud);
-        offset_a[al_offset_cnt] = altitud;    //測定した高度を配列offset_aの中に入れる
-        sum_offset += offset_a[al_offset_cnt]; //速度の合計sum_offsetの中に配列offset_aの値を入れる
-        al_offset_cnt++;
+        Serial.print("altitude: "); Serial.println(altitude);
+        offset_a[altitude_offset_count] = altitude;    //測定した高度を配列offset_aの中に入れる
+        sum_offset += offset_a[altitude_offset_count]; //速度の合計sum_offsetの中に配列offset_aの値を入れる
+        altitude_offset_count++;
     }
     Serial.println("finish altitude offset");
     average_altitude_offset = sum_offset / repeat_num; //基準高度を算出
 }
-
-int launch_count = 0;
 
 void launch_detect(){
     if(calc_altitude() > 5){
@@ -73,10 +79,6 @@ void release_detect(){
         s = State_drop_detect;
     }
 }
-
-int drop_count_pressure = 0;
-int drop_count_gyro = 0;
-int drop_flag = 0;
 
 void drop_detect(){
     long drop_detect_time = millis();

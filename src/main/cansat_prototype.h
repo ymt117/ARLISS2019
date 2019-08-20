@@ -120,6 +120,18 @@ void release_detect();
 void drop_detect();
 
 /***************************************************************
+ * Heating: heat.ino
+ **************************************************************/
+void _heat1();
+void _heat2();
+
+/***************************************************************
+ * TWE-Lite: twe_lite_sleep.ino
+ **************************************************************/
+void twe_lite_wakeup();
+void twe_lite_sleep();
+
+/***************************************************************
  * Test Code: test.ino
  **************************************************************/
 void static_laod();
@@ -128,7 +140,6 @@ void turn_north();
 void heat_test();
 void heat_test2();
 void test_run();
-void twe_lite_sleep_test();
 float battery_voltage(uint8_t);
 void dd_test();
 void power_test();

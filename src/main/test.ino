@@ -103,23 +103,6 @@ void heat_test(){
   
 }
 
-void _heat1(){
-  beep(PUSHED);
-  digitalWrite(heat1, HIGH);
-  delay(3000);
-  digitalWrite(heat1, LOW);
-  delay(1000);
-}
-
-void _heat2(){
-  beep(PUSHED);
-  beep(PUSHED);
-  digitalWrite(heat2, HIGH);
-  delay(3000);
-  digitalWrite(heat2, LOW);
-  delay(1000);
-}
-
 void _motor_test(){
   beep(PUSHED);
   beep(PUSHED);
@@ -174,24 +157,6 @@ void test_run(){
   delay(4000);
   motor_stop();
   delay(2000);
-}
-
-// TWE-Liteのスリープテスト
-void twe_lite_sleep_test(){
-
-  if(!digitalRead(sw)){
-    beep(PUSHED);
-    digitalWrite(twe_lite_sleep, !digitalRead(twe_lite_sleep));
-  }
-
-  Serial.println(analogRead(cds));
-  delay(100);
-}
-
-// バッテリ電圧の監視
-float battery_voltage(uint8_t pin){// batt1 or batt2
-  
-  return 3.3 / 1024 * 2 * analogRead(pin);
 }
 
 // 現在地とゴールの距離，方位の計算テスト
