@@ -1,4 +1,5 @@
 // LED
+#include "cansat_define.h"
 
 void led_init(){
   pinMode(led1, OUTPUT);

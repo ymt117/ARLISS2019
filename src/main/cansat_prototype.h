@@ -132,6 +132,16 @@ void twe_lite_wakeup();
 void twe_lite_sleep();
 
 /***************************************************************
+ * RUN to GOAL: move2goal.ino
+ **************************************************************/
+void move2goal();
+
+/***************************************************************
+ * Compass: compass.ino
+ **************************************************************/
+void Compass_Heading();
+
+/***************************************************************
  * Test Code: test.ino
  **************************************************************/
 void static_laod();
@@ -144,5 +154,6 @@ float battery_voltage(uint8_t);
 void dd_test();
 void power_test();
 void read_write_test();
+void heading_test();
 
 #endif

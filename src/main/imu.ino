@@ -168,6 +168,8 @@ void compass_calibrate(){
 
   while(millis() - _millis < 30000){
     mag.read();
+
+    turn_right(255);
   
     MAG_OFFSET[1] = _min(MAG_OFFSET[1], mag.m.x);
     MAG_OFFSET[3] = _min(MAG_OFFSET[3], mag.m.y);
@@ -178,9 +180,11 @@ void compass_calibrate(){
     MAG_OFFSET[4] = _max(MAG_OFFSET[4], mag.m.z);
   }
 
-  MAG_OFFSET[6] = (MAG_OFFSET[0] + MAG_OFFSET[1]) / 2; // (mx_max - mx_min) / 2
-  MAG_OFFSET[7] = (MAG_OFFSET[2] + MAG_OFFSET[3]) / 2;
-  MAG_OFFSET[8] = (MAG_OFFSET[4] + MAG_OFFSET[5]) / 2;
+  motor_stop();
+
+  MAG_OFFSET[6] = (MAG_OFFSET[0] + MAG_OFFSET[1]) * 0.5; // (mx_max + mx_min) / 2
+  MAG_OFFSET[7] = (MAG_OFFSET[2] + MAG_OFFSET[3]) * 0.5; // (my_max + my_min) / 2
+  MAG_OFFSET[8] = (MAG_OFFSET[4] + MAG_OFFSET[5]) * 0.5; // (my_max + my_min) / 2
 
   String str = "";
   str += MAG_OFFSET[0];   str += ",";
@@ -204,6 +208,7 @@ void compass_calibrate(){
  * IMU_TEST_CODE
  **************************************************************/
 void imu_test(){
+  long time = millis();
   if((millis()-timer)>=20)  // Main loop runs at 50Hz
   {
     counter++;
@@ -239,15 +244,20 @@ void imu_test(){
     // ***
 
     
-    //Serial.print("ANG:");
-    Serial.print(ToDeg(roll));
-    Serial.print("\t");
-    Serial.print(ToDeg(pitch));
-    Serial.print("\t");
-    Serial.print(ToDeg(yaw));
-    Serial.println();
+    Serial.print("Orientation: ");
+    Serial.print(MAG_Heading);
+    Serial.print(" ");
+    Serial.print(pitch);
+    Serial.print(" ");
+    //Serial.print(ToDeg(yaw));
+    //Serial.print(" ");
+    Serial.println(roll);
+    //Serial.println();
     
 
     //printdata();
+
+    time = millis() - time;
+    //Serial.print("\tmillis: "); Serial.println(time);
   }
 }

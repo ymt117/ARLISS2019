@@ -21,7 +21,10 @@ void _sw_pushed(){
 }
 
 /***************************************************************
+ * 
  * SETUP
+ * Called only once
+ * 
  **************************************************************/
 void setup() {
   delay(1000);
@@ -42,7 +45,7 @@ void setup() {
   else if(old_status == (int)State_drop_detect) s = State_drop_detect;
   else if(old_status == (int)State_test)  s = State_test;
   else if(old_status == (int)State_exit)  s = State_exit;
-  else {                                  s = State_launch_detect; }
+  else {                                  s = State_test; }
   writeStatus();
 
   delay(20);
@@ -64,10 +67,8 @@ void setup() {
   pinMode(batt2, INPUT_PULLUP);
 
   // Initialize Heat Pin
-  pinMode(heat1, OUTPUT);
-  digitalWrite(heat1, LOW);
-  pinMode(heat2, OUTPUT);
-  digitalWrite(heat2, LOW);
+  pinMode(heat1, OUTPUT); digitalWrite(heat1, LOW);
+  pinMode(heat2, OUTPUT); digitalWrite(heat2, LOW);
 
   // Initialize TWE-Lite Sleep Pin
   pinMode(twe_lite_sleep_pin, OUTPUT);
@@ -100,7 +101,9 @@ void setup() {
 
 
 /***************************************************************
+ * 
  * MAIN LOOP
+ * 
  **************************************************************/
 void loop() {
   Serial.println("loop");
@@ -121,10 +124,24 @@ void loop() {
       writeStatus();
       drop_detect();
       break;
+
+    case State_run_to_goal:
+      writeStatus();
+      move2goal();
+      break;
+
+    case State_goal:
+      writeStatus();
+      Serial.println("Goal!!!");
+      beep(CLANNAD);
+      delay(100);
+      while(1) blink();
+      break;
     
     case State_test:
       // test code
       writeStatus();
+      heading_test();
       break;
 
     case State_exit:

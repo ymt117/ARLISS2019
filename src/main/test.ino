@@ -177,8 +177,8 @@ void dd_test(){
 
   //Serial.println();
 
-  writeGPS();
-  writeIMU();
+  //writeGPS();
+  //writeIMU();
 }
 
 // 電力テスト
@@ -246,4 +246,18 @@ void read_write_test(){
   Serial.println(read_status);
 
   delay(100);
+}
+
+// 地磁気でHeadingのテスト
+void heading_test(){
+  compass_calibrate();
+
+  timer_init_3();
+
+  while(1){
+    //Read_Compass();
+    //Compass_Heading();
+    //Serial.print("Heading RAD: "); Serial.print(MAG_Heading);
+    //Serial.print("\tDEG: "); Serial.println(ToDeg(MAG_Heading));
+  }
 }

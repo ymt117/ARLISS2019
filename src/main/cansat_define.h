@@ -4,8 +4,8 @@
 /***************************************************************
  * GOAL Position
  **************************************************************/
-static const float g_lng = 130.545965;
-static const float g_lat = 31.570618;
+static const float g_lng = 130.543247;
+static const float g_lat = 31.567614;
 
 /***************************************************************
  * Status of CanSat
@@ -16,6 +16,8 @@ enum MyState{
   State_launch_detect,
   State_release_detect,
   State_drop_detect,
+  State_run_to_goal,
+  State_goal,
   State_test,
   State_exit
 };
@@ -132,8 +134,8 @@ int SENSOR_SIGN[9] = {1,1,1,-1,-1,-1,1,1,1}; //Correct directions x,y,z - gyro, 
 #define PRINT_ANALOGS 0 //Will print the analog raw data
 #define PRINT_EULER 1   //Will print the Euler angles Roll, Pitch and Yaw
 
-//volatile float G_Dt=0.02;    // Integration time (DCM algorithm)  We will run the integration loop at 50Hz if possible
-volatile float G_Dt=0.1;
+volatile float G_Dt=0.02;    // Integration time (DCM algorithm)  We will run the integration loop at 50Hz if possible
+//volatile float G_Dt=0.1;
 
 long timer=0;   //general purpuse timer
 long timer_old;
@@ -143,19 +145,19 @@ int AN_OFFSET[6]={0,0,0,0,0,0}; //Array that stores the Offset of the sensors
 int MAG_OFFSET[9] = {4300,-1800,2100,-4000,11000,4400,1250,-950,7700}; // x_max,x_min,y_max,y_min,z_max,z_min
 //int MAG_OFFSET[9] = {-32768,32767,-32768,32767,-32768,32767,0,0,0}; // x_max,x_min,y_max,y_min,z_max,z_min,offsetX,offsetY,offsetZ
 
-int gyro_x;
-int gyro_y;
-int gyro_z;
-int accel_x;
-int accel_y;
-int accel_z;
-int magnetom_x;
-int magnetom_y;
-int magnetom_z;
-float c_magnetom_x;
-float c_magnetom_y;
-float c_magnetom_z;
-float MAG_Heading;
+float gyro_x;
+float gyro_y;
+float gyro_z;
+float accel_x;
+float accel_y;
+float accel_z;
+float magnetom_x;
+float magnetom_y;
+float magnetom_z;
+double c_magnetom_x;
+double c_magnetom_y;
+double c_magnetom_z;
+double MAG_Heading;
 
 float Accel_Vector[3]= {0,0,0}; //Store the acceleration in a vector
 float Gyro_Vector[3]= {0,0,0};//Store the gyros turn rate in a vector
