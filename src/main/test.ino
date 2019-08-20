@@ -87,20 +87,6 @@ void printdata(void)
       
 }
 
-// 北を向くテスト
-void turn_north(){
-  Serial.println(yaw);
-  while(yaw > 30){
-    Serial.println(yaw);
-    turn_left(80);
-  }
-  while(yaw < -30){
-    Serial.println(yaw);
-    turn_right(80);
-  }
-  motor_stop();
-}
-
 // 電熱線のテスト
 void heat_test(){
   if(!digitalRead(sw)){
@@ -138,9 +124,17 @@ void _motor_test(){
   beep(PUSHED);
   beep(PUSHED);
   beep(PUSHED);
-  forward(100);
+  //forward(100);
+  right_cw(100);
+  left_ccw(100);
   delay(1000);
-  motor_stop();
+  digitalWrite(ain1, LOW);
+  digitalWrite(ain2, LOW);
+  digitalWrite(pwma, LOW);
+  digitalWrite(bin1, LOW);
+  digitalWrite(bin2, LOW);
+  digitalWrite(pwmb, LOW);
+  //motor_stop();
   delay(100);
 }
 
@@ -149,19 +143,15 @@ void _motor_test(){
 void heat_test2(){
   int val = 0;
 
-  Read_Accel();
-  Read_Gyro();
-  Read_Compass();
-  writeIMU();
-  writeCdS();
+  writeAll();
 
   if(Serial.available() > 0){
     val = Serial.read();
     Serial.println(val);
 
-    if(val == 120) _heat1();// 120 = x
-    if(val == 121) _heat2();// 121 = y
-    if(val == 122) _motor_test();// 122 = z
+    if(val == 113) _heat1();// 120 = x, 113 = q
+    if(val == 118) _heat2();// 121 = y, 118 = v
+    if(val == 119) _motor_test();// 122 = z, 119 = w
       
   }
 }
