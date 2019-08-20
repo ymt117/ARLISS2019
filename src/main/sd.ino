@@ -244,6 +244,7 @@ void writeAll(){
 
   String str = "";
   str += millis();                       str += ",";
+  str += s;                              str += ",";
   str += gps.date.year();                str += ",";
   str += gps.date.month();               str += ",";
   str += gps.date.day();                 str += ",";

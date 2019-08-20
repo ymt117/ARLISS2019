@@ -111,6 +111,15 @@ double distance(float, float, float, float);
 double direction(float, float, float, float);
 
 /***************************************************************
+ * Launch: launch.ino
+ **************************************************************/
+float calc_altitude();
+void altitude_offset();
+void launch_detect();
+void release_detect();
+void drop_detect();
+
+/***************************************************************
  * Test Code: test.ino
  **************************************************************/
 void static_laod();

@@ -20,69 +20,45 @@ void motor_init(){
 }
 
 void left_cw(int pwm){
-  if(pwm > 255) pwm = 255;
-  if(pwm < 0) pwm = 0;
-
   digitalWrite(ain1, LOW);
   digitalWrite(ain2, HIGH);
   analogWrite(pwma, pwm);
 }
 
 void left_ccw(int pwm){
-  if(pwm > 255) pwm = 255;
-  if(pwm < 0) pwm = 0;
-
   digitalWrite(ain2, LOW);
   digitalWrite(ain1, HIGH);
   analogWrite(pwma, pwm);
 }
 
 void right_cw(int pwm){
-  if(pwm > 255) pwm = 255;
-  if(pwm < 0) pwm = 0;
-
   digitalWrite(bin1, LOW);
   digitalWrite(bin2, HIGH);
   analogWrite(pwmb, pwm);
 }
 
 void right_ccw(int pwm){
-  if(pwm > 255) pwm = 255;
-  if(pwm < 0) pwm = 0;
-
   digitalWrite(bin2, LOW);
   digitalWrite(bin1, HIGH);
   analogWrite(pwmb, pwm);
 }
 
 void forward(int pwm){
-  if(pwm > 255) pwm = 255;
-  if(pwm < 0) pwm = 0;
-
   right_cw(pwm);
   left_ccw(pwm);
 }
 
 void back(int pwm){
-  if(pwm > 255) pwm = 255;
-  if(pwm < 0) pwm = 0;
-
   right_ccw(pwm);
   left_cw(pwm);
 }
 
 void turn_right(int pwm){
-  if(pwm > 255) pwm = 255;
-  if(pwm < 0) pwm = 0;
-
   right_ccw(pwm);
   left_ccw(pwm);
 }
 
 void turn_left(int pwm){
-  if(pwm > 255) pwm = 255;
-  if(pwm < 0) pwm = 0;
-  
   right_cw(pwm);
   left_cw(pwm);
 }
