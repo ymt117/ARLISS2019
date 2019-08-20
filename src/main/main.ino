@@ -34,7 +34,7 @@ void setup() {
   writeFile("/log.csv",
             "millis,state,year,month,day,hour,minute,second,lat,lng,ax,ay,az,gx,gy,gz,mx,my,mz,pressure,altitude,temperature,cds,batt1,batt2\n");
   
-  // If the previous exit status is non-zero, the previous status is assigned to variable s
+  // If the previous exit status is non-init or non-exit, the previous status is assigned to variable s.
   int old_status = readStatus("status.txt");
   Serial.print("old_status: "); Serial.println(old_status);
   if(old_status == (int)State_launch_detect) s = State_launch_detect;
