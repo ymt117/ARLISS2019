@@ -38,6 +38,7 @@ void setup() {
             "millis,state,year,month,day,hour,minute,second,lat,lng,ax,ay,az,gx,gy,gz,mx,my,mz,pressure,altitude,temperature,cds,batt1,batt2\n");
   
   // If the previous exit status is non-init or non-exit, the previous status is assigned to variable s.
+  /*
   int old_status = readStatus("status.txt");
   Serial.print("old_status: "); Serial.println(old_status);
   if(old_status == (int)State_launch_detect) s = State_launch_detect;
@@ -46,6 +47,8 @@ void setup() {
   else if(old_status == (int)State_test)  s = State_test;
   else if(old_status == (int)State_exit)  s = State_exit;
   else {                                  s = State_test; }
+  */
+  s = State_test;
   writeStatus();
 
   delay(20);
@@ -75,14 +78,14 @@ void setup() {
   twe_lite_wakeup();
 
   // Initialize the sensor
-  imu_init();
+  //imu_init();
   gps_init();
 
   delay(20);
 
   // Sensor offset
-  imu_offset();
-  altitude_offset();
+  //imu_offset();
+  //altitude_offset();
 
   timer=millis();
   delay(20);
@@ -111,23 +114,52 @@ void loop() {
   switch(s){
 
     case State_launch_detect:
+      Serial.println("State_launch_detect!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       writeStatus();
       launch_detect();
       break;
 
     case State_release_detect:
+      Serial.println("State_release_detect!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       writeStatus();
       release_detect();
       break;
 
     case State_drop_detect:
+      Serial.println("State_drop_detect!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       writeStatus();
       drop_detect();
       break;
 
-    case State_run_to_goal:
+    case State_first_fire:
+      Serial.println("State_first_fire!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       writeStatus();
+      delay(20000);
+      _heat1();
+      _heat1();
+      s = State_second_fire;
+      break;
+
+    case State_second_fire:
+    Serial.println("State_second_fire!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      writeStatus();
+      delay(20000);
+      _heat2();
+      _heat2();
+      forward(255);
+      delay(500);
+      motor_stop();
+      delay(500);
+      s = State_run_to_goal;
+      break;
+
+    case State_run_to_goal:
+      Serial.println("State_run_to_goal!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      writeStatus();
+      //move2goal_mag();
       move2goal();
+      //delay(20000);
+      //test_run();
       break;
 
     case State_goal:
@@ -141,7 +173,11 @@ void loop() {
     case State_test:
       // test code
       writeStatus();
-      heading_test();
+      //heading_test();
+      back(255);
+      delay(5000);
+      motor_stop();
+      delay(2000);
       break;
 
     case State_exit:

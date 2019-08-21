@@ -135,6 +135,7 @@ void twe_lite_sleep();
  * RUN to GOAL: move2goal.ino
  **************************************************************/
 void move2goal();
+void move2goal_mag();
 
 /***************************************************************
  * Compass: compass.ino

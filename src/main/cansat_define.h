@@ -4,8 +4,8 @@
 /***************************************************************
  * GOAL Position
  **************************************************************/
-static const float g_lng = 130.543247;
-static const float g_lat = 31.567614;
+static const float g_lng = 130.316374;
+static const float g_lat = 31.451004;
 
 /***************************************************************
  * Status of CanSat
@@ -16,6 +16,8 @@ enum MyState{
   State_launch_detect,
   State_release_detect,
   State_drop_detect,
+  State_first_fire,
+  State_second_fire,
   State_run_to_goal,
   State_goal,
   State_test,
@@ -142,7 +144,7 @@ long timer_old;
 long timer24=0; //Second timer used to print
 int AN[6]; //array that stores the gyro and accelerometer data
 int AN_OFFSET[6]={0,0,0,0,0,0}; //Array that stores the Offset of the sensors
-int MAG_OFFSET[9] = {4300,-1800,2100,-4000,11000,4400,1250,-950,7700}; // x_max,x_min,y_max,y_min,z_max,z_min
+int MAG_OFFSET[9] = {14041,-1800,2100,-6200,12000,4400,6120,-4100,8200}; // x_max,x_min,y_max,y_min,z_max,z_min
 //int MAG_OFFSET[9] = {-32768,32767,-32768,32767,-32768,32767,0,0,0}; // x_max,x_min,y_max,y_min,z_max,z_min,offsetX,offsetY,offsetZ
 
 float gyro_x;

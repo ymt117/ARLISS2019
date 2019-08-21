@@ -1,4 +1,5 @@
 #include "cansat_define.h"
+#include "cansat_prototype.h"
 
 // Macro for calc_altitude function
 #define NUM_MOVING_AVERAGE 3 // Number used for moving average
@@ -58,21 +59,28 @@ void altitude_offset(){
 }
 
 void launch_detect(){
-    if(calc_altitude() > 5){
+    writeAll();
+    Serial.print("altitude: "); Serial.println(ps.pressureToAltitudeMeters(ps.readPressureMillibars()));
+    if(calc_altitude() > 30){// Over 10m
         launch_count++;
+        Serial.print("launch_count: "); Serial.println(launch_count);
     }
 
     if(launch_count > 10){
         s = State_release_detect;
     }
+    delay(1000);
 }
 
-const int cds_threshold = 300;
+const int cds_threshold = 50;
 int release_count = 0;
 
 void release_detect(){
+    writeAll();
+    Serial.print("altitude: "); Serial.println(ps.pressureToAltitudeMeters(ps.readPressureMillibars()));
     if(analogRead(cds) < cds_threshold){
         release_count++;
+        Serial.print("release_count: "); Serial.println(release_count);
     }
 
     if(release_count > 10){
@@ -81,6 +89,7 @@ void release_detect(){
 }
 
 void drop_detect(){
+    writeAll();
     long drop_detect_time = millis();
 
     while((millis() - drop_detect_time) < 3){
@@ -108,9 +117,11 @@ void drop_detect(){
 
         // State transition
         if(drop_count_pressure > 10 && drop_count_gyro > 10){
-            s = State_test;
+            s = State_first_fire;
             digitalWrite(led1, HIGH);
             break;
         }
+
+        s = State_first_fire;
     }
 }
