@@ -42,7 +42,7 @@ void Read_Accel();
 void Read_Compass();
 float calc_g_force(float, float, float);
 void compass_calibrate();
-void imu_test();
+void imu_ahrs_update();
 
 // DCM.ino
 void Normalize(void);

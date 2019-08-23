@@ -1,6 +1,10 @@
 #include "cansat_define.h"
 #include "cansat_prototype.h"
 
+/***************************************************************
+ * Run to GOAL
+ * Use [GPS]
+ **************************************************************/
 void move2goal(){
 
     timer_start_3();
@@ -85,6 +89,11 @@ void move2goal(){
     delay(20);
 }
 
+
+/***************************************************************
+ * Run to GOAL
+ * Use [GPS] and [MAG]
+ **************************************************************/
 void move2goal_mag(){
     // Timer start: imu_init function is called every 20ms
     timer_start_3();

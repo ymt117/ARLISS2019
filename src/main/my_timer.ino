@@ -17,7 +17,7 @@ volatile long old_millis_4 = 0;
  **************************************************************/
 static void _call_func_3(stimer_t *htim){
   UNUSED(htim);
-  imu_test();
+  imu_ahrs_update();
 }
 
 static void _call_func_4(stimer_t *htim){

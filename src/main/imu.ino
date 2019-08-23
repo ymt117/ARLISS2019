@@ -203,9 +203,10 @@ void compass_calibrate(){
 
 
 /***************************************************************
- * IMU_TEST_CODE
+ * IMU AHRS UPDATE
+ * Runs at 50Hz(Called every 20ms)
  **************************************************************/
-void imu_test(){
+void imu_ahrs_upadate(){
 
   if((millis()-timer)>=20)  // Main loop runs at 50Hz
   {
