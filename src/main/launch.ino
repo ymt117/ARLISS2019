@@ -4,124 +4,141 @@
 // Macro for calc_altitude function
 #define NUM_MOVING_AVERAGE 3 // Number used for moving average
 
-// Valiable for altitude_offset function
-float temperature;
-int altitude_offset_count = 0;
-float offset_a[50] = {0.0};
-float average_altitude_offset = 0.0;       //基準の高さの平均 
-float sum_offset = 0.0;       //基準の高さの合計
-int repeat_num = 50;          //基準の高さを求めるのに取るデータの数
-
-// Valiable for launch_detect function
-int launch_count = 0;
-
-// Valiable for drop_detect function
-int drop_count_pressure = 0;
-int drop_count_gyro = 0;
-int drop_flag = 0;
-
-
 // Calculate altitude from barometer value
 float calc_altitude(){
-    float altitude[NUM_MOVING_AVERAGE];
-    float sum_altitude = 0.0;
+    float altitude = 0.0;
 
     // Use moving average
     for(int i=0; i<NUM_MOVING_AVERAGE; i++){
-        altitude[i] = ps.pressureToAltitudeMeters(ps.readPressureMillibars());
-        Serial.print("altitude: "); Serial.println(altitude[i] - average_altitude_offset);
+        altitude += ps.pressureToAltitudeMeters(ps.readPressureMillibars());
+        delay(20);
     }
-    for(int i=0; i<NUM_MOVING_AVERAGE; i++){
-        sum_altitude += altitude[i];
-    }
+    altitude = altitude / NUM_MOVING_AVERAGE;
+    altitude -= altitude_offset_value;
 
-    float average_altitude = sum_altitude / NUM_MOVING_AVERAGE;
-
-    // Subtract offset value
-    return average_altitude - average_altitude_offset;
+    Serial.print("Altitude:\t\t"); Serial.print(altitude); Serial.println("\t\t[m]");
+    
+    return altitude;
 }
 
 void altitude_offset(){
-    Serial.println("altitude_offset");
 
-    //最初に測った高度を基準とする --->複数の値から基準を求める
-    while(altitude_offset_count < repeat_num) {
+    // Measure altitude 50 times
+    for(int i=0; i<50; i++){
+        altitude_offset_value += ps.pressureToAltitudeMeters(ps.readPressureMillibars());
         delay(20);
-        float altitude = ps.pressureToAltitudeMeters(ps.readPressureMillibars());
-
-        Serial.print("altitude: "); Serial.println(altitude);
-        offset_a[altitude_offset_count] = altitude;    //測定した高度を配列offset_aの中に入れる
-        sum_offset += offset_a[altitude_offset_count]; //速度の合計sum_offsetの中に配列offset_aの値を入れる
-        altitude_offset_count++;
     }
-    Serial.println("finish altitude offset");
-    average_altitude_offset = sum_offset / repeat_num; //基準高度を算出
+    altitude_offset_value = altitude_offset_value / 50;
+
+    Serial.print("Altitude OFFSET value:\t\t"); Serial.println(altitude_offset_value);
 }
 
+/***************************************************************
+ * State: Launch detection
+ *        Judgment based on [Altitude]
+ **************************************************************/
 void launch_detect(){
-    writeAll();
-    Serial.print("altitude: "); Serial.println(ps.pressureToAltitudeMeters(ps.readPressureMillibars()));
-    if(calc_altitude() > 30){// Over 10m
-        launch_count++;
-        Serial.print("launch_count: "); Serial.println(launch_count);
+    int launch_count = 0;
+    int launch_altitude_threshold = 5;
+    
+    while(launch_count < 10){// 10 times or more until reaching [launch_altitude] meters
+
+        writeAll();
+
+        // Judge based on Altitude
+        if(calc_altitude() > launch_altitude_threshold){// If the altitude exceeds [launch_altitude_threshold] meters
+            launch_count++;
+            Serial.print("launch_count:\t\t"); Serial.print(launch_count); Serial.println("\t\t[times]");
+        }
     }
 
-    if(launch_count > 10){
-        s = State_release_detect;
-    }
-    delay(1000);
+    beep(LAUNCH_COMPLETE);
+    s = State_release_detect;
 }
 
-const int cds_threshold = 50;
-int release_count = 0;
-
+/***************************************************************
+ * State: Release detection
+ *        Judgment based on [CdS] and [Time]
+ **************************************************************/
 void release_detect(){
-    writeAll();
-    Serial.print("altitude: "); Serial.println(ps.pressureToAltitudeMeters(ps.readPressureMillibars()));
-    if(analogRead(cds) < cds_threshold){
-        release_count++;
-        Serial.print("release_count: "); Serial.println(release_count);
-    }
+    int release_count = 0;
+    const int release_cds_threshold = 50;
+    unsigned long release_time = millis();
+    unsigned long release_wait = 18000;
 
-    if(release_count > 10){
-        s = State_drop_detect;
-    }
-}
+    while(release_count < 10){
 
-void drop_detect(){
-    writeAll();
-    long drop_detect_time = millis();
+        writeAll();
 
-    while((millis() - drop_detect_time) < 3){
-        // pressure
-        if(calc_altitude() < 1){
-            drop_count_pressure++;
-            Serial.print("drop_count_pressure: "); Serial.println(drop_count_pressure);
+        // Judge based on CdS
+        Serial.print("CdS value:\t\t"); Serial.println(analogRead(cds));
+        if(analogRead(cds) < release_cds_threshold){
+            release_count++;
+            Serial.print("release_count:\t\t"); Serial.print(release_count); Serial.println("\t\t[times]");
         }
 
-        // gyro
-        imu.read();
-
-        float gx = imu.g.x * 2; gx = gx / 32768;
-        float gy = imu.g.y * 2; gy = gy / 32768;
-        float gz = imu.g.z * 2; gz = gz / 32768;
-
-        Serial.print("gx: "); Serial.print(gx);
-        Serial.print("\tgy: "); Serial.print(gy);
-        Serial.print("\tgz: "); Serial.println(gz);
-
-        if(gx > -0.06 && gx < 0.06 && gy > -0.06 && gy < 0.06 && gz > -0.06 && gz < 0.06){
-            drop_count_gyro++;
-            Serial.print("drop_count_gyro: "); Serial.println(drop_count_gyro);
-        }
-
-        // State transition
-        if(drop_count_pressure > 10 && drop_count_gyro > 10){
-            s = State_first_fire;
-            digitalWrite(led1, HIGH);
+        // Judge based on Time
+        if((millis() - release_time) > release_wait){// When [release_wait] minutes have passed
+            beep(RELEASE_COMPLETE);
             break;
         }
 
-        s = State_first_fire;
+        delay(20);
     }
+
+    beep(RELEASE_COMPLETE);
+    s = State_drop_detect;
+}
+
+/***************************************************************
+ * State: Drop detection
+ *        Judgment based on [Altitude] and [Gyro] and [Time]
+ **************************************************************/
+void drop_detect(){
+
+    int drop_count_gyro = 0;
+    int drop_count_altitude = 0;
+    int drop_altitude_threshold = 1;
+    int gyro_flag = 0;
+    int altitude_flag = 0;
+    unsigned long drop_time = millis();
+    unsigned long drop_wait = 18000;
+
+    while(gyro_flag == 0 || altitude_flag == 0){
+        
+        writeAll();
+
+        // Judge based on Altitude
+        if(calc_altitude() < drop_altitude_threshold){
+            drop_count_altitude++;
+            Serial.print("drop_count_altitude:\t\t"); Serial.print(drop_count_altitude); Serial.println("\t\t[times]");
+            if(drop_count_altitude > 10) altitude_flag = 1;
+        }
+
+        // Judge based on Gyro
+        imu.read();
+        float gx = imu.g.x * 16; gx = gx / 32768;
+        float gy = imu.g.y * 16; gy = gy / 32768;
+        float gz = imu.g.z * 16; gz = gz / 32768;
+        Serial.print("Gyro\t\tX: "); Serial.print(gx);
+        Serial.print("\t\tY:"); Serial.print(gy);
+        Serial.print("\t\tZ: "); Serial.println(gz);
+
+        if(gx > -0.06 && gx < 0.06 && gy > -0.06 && gy < 0.06 && gz > -0.06 && gz < 0.06){
+            drop_count_gyro++;
+            Serial.print("drop_count_gyro:\t\t"); Serial.print(drop_count_gyro); Serial.println("\t\t[times]");
+            if(drop_count_gyro > 10) gyro_flag = 1;
+        }
+
+        // Judge based on Time
+        if((millis() - drop_time) > drop_wait){
+            beep(DROP_COMPLETE);
+            break;
+        }
+
+        delay(20);
+    }
+
+    beep(DROP_COMPLETE);
+    s = State_first_fire;
 }

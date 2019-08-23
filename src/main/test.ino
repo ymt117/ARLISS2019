@@ -31,93 +31,13 @@ void static_load(){
   writeFile("acc_g.csv", buf);
 }
 
-void printdata(void)
-{   
-      Serial.print("!");
-
-      #if PRINT_EULER == 1
-      Serial.print("ANG:");
-      Serial.print(ToDeg(roll));
-      Serial.print(",");
-      Serial.print(ToDeg(pitch));
-      Serial.print(",");
-      Serial.print(ToDeg(yaw));
-      #endif      
-      #if PRINT_ANALOGS==1
-      Serial.print(",AN:");
-      Serial.print(AN[0]);  //(int)read_adc(0)
-      Serial.print(",");
-      Serial.print(AN[1]);
-      Serial.print(",");
-      Serial.print(AN[2]);  
-      Serial.print(",");
-      Serial.print(AN[3]);
-      Serial.print (",");
-      Serial.print(AN[4]);
-      Serial.print (",");
-      Serial.print(AN[5]);
-      Serial.print(",");
-      Serial.print(c_magnetom_x);
-      Serial.print (",");
-      Serial.print(c_magnetom_y);
-      Serial.print (",");
-      Serial.print(c_magnetom_z);
-      #endif
-      #if PRINT_DCM == 1
-      Serial.print (",DCM:");
-      Serial.print(DCM_Matrix[0][0]);
-      Serial.print (",");
-      Serial.print(DCM_Matrix[0][1]);
-      Serial.print (",");
-      Serial.print(DCM_Matrix[0][2]);
-      Serial.print (",");
-      Serial.print(DCM_Matrix[1][0]);
-      Serial.print (",");
-      Serial.print(DCM_Matrix[1][1]);
-      Serial.print (",");
-      Serial.print(DCM_Matrix[1][2]);
-      Serial.print (",");
-      Serial.print(DCM_Matrix[2][0]);
-      Serial.print (",");
-      Serial.print(DCM_Matrix[2][1]);
-      Serial.print (",");
-      Serial.print(DCM_Matrix[2][2]);
-      #endif
-      Serial.println();
-      
-}
-
-// 電熱線のテスト
-void heat_test(){
-  if(!digitalRead(sw)){
-    beep(PUSHED);
-    digitalWrite(heat1, HIGH);
-    delay(5000);
-    digitalWrite(heat1, LOW);
-    delay(1000);
-    digitalWrite(heat2, HIGH);
-    delay(5000);
-    digitalWrite(heat2, LOW);
-    delay(1000);
-  }
-  
-}
-
 void _motor_test(){
   beep(PUSHED);
   beep(PUSHED);
   beep(PUSHED);
-  //forward(100);
-  right_cw(100);
-  left_ccw(100);
+  forward(100);
   delay(1000);
-  digitalWrite(ain1, LOW);
-  digitalWrite(ain2, LOW);
-  digitalWrite(pwma, LOW);
-  digitalWrite(bin1, LOW);
-  digitalWrite(bin2, LOW);
-  digitalWrite(pwmb, LOW);
-  //motor_stop();
+  motor_stop();
   delay(100);
 }
 
@@ -172,13 +92,6 @@ void dd_test(){
     Serial.print(direction(g_lng, g_lat, gps.location.lng(), gps.location.lat()));
     Serial.println();
   }
-  //Serial.print("yaw: ");
-  //Serial.print(yaw);
-
-  //Serial.println();
-
-  //writeGPS();
-  //writeIMU();
 }
 
 // 電力テスト
@@ -216,7 +129,7 @@ void read_write_test(){
   Serial.print("read_status: ");
   Serial.println(read_status);
 
-  read_status = readStatus("status.txt");
+  read_status = readStatus();
   Serial.print("read_status: ");
   Serial.println(read_status);
   
@@ -229,7 +142,7 @@ void read_write_test(){
   delay(100);
 
   // 1
-  read_status = readStatus("status.txt");
+  read_status = readStatus();
   Serial.print("read_status: ");
   Serial.println(read_status);
 
@@ -241,7 +154,7 @@ void read_write_test(){
   delay(100);
 
   // 1
-  read_status = readStatus("status.txt");
+  read_status = readStatus();
   Serial.print("read_status: ");
   Serial.println(read_status);
 
@@ -252,7 +165,7 @@ void read_write_test(){
 void heading_test(){
   compass_calibrate();
 
-  timer_init_3();
+  timer_start_3();
 
   while(1){
     //Read_Compass();

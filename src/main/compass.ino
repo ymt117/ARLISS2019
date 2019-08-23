@@ -19,24 +19,10 @@ void Compass_Heading()
   cos_pitch = cos(pitch);
   sin_pitch = sin(pitch);
   
-  // adjust for LSM303 compass axis offsets/sensitivity differences by scaling to +/-0.5 range
-  //c_magnetom_x = (float)(magnetom_x - SENSOR_SIGN[6]*M_X_MIN) / (M_X_MAX - M_X_MIN) - SENSOR_SIGN[6]*0.5;
-  //c_magnetom_y = (float)(magnetom_y - SENSOR_SIGN[7]*M_Y_MIN) / (M_Y_MAX - M_Y_MIN) - SENSOR_SIGN[7]*0.5;
-  //c_magnetom_z = (float)(magnetom_z - SENSOR_SIGN[8]*M_Z_MIN) / (M_Z_MAX - M_Z_MIN) - SENSOR_SIGN[8]*0.5;
-  //c_magnetom_x = (float)(magnetom_x - SENSOR_SIGN[6]*MAG_OFFSET[1]) / (MAG_OFFSET[0] - MAG_OFFSET[1]) - SENSOR_SIGN[6]*0.5;
-  //c_magnetom_y = (float)(magnetom_y - SENSOR_SIGN[7]*MAG_OFFSET[3]) / (MAG_OFFSET[2] - MAG_OFFSET[3]) - SENSOR_SIGN[7]*0.5;
-  //c_magnetom_z = (float)(magnetom_z - SENSOR_SIGN[8]*MAG_OFFSET[5]) / (MAG_OFFSET[4] - MAG_OFFSET[5]) - SENSOR_SIGN[8]*0.5;
-  //c_magnetom_x = magnetom_x;
-  //c_magnetom_y = magnetom_y;
-  //c_magnetom_z = magnetom_z;
-  c_magnetom_x = magnetom_x - MAG_OFFSET[6];
-  c_magnetom_y = magnetom_y - MAG_OFFSET[7];
-  c_magnetom_z = magnetom_z - MAG_OFFSET[8];
-  
   // Tilt compensated Magnetic filed X:
-  MAG_X = c_magnetom_x*cos_pitch+c_magnetom_y*sin_roll*sin_pitch+c_magnetom_z*cos_roll*sin_pitch;
+  MAG_X = magnetom_x*cos_pitch+magnetom_y*sin_roll*sin_pitch+magnetom_z*cos_roll*sin_pitch;
   // Tilt compensated Magnetic filed Y:
-  MAG_Y = c_magnetom_y*cos_roll-c_magnetom_z*sin_roll;
+  MAG_Y = magnetom_y*cos_roll-magnetom_z*sin_roll;
   // Magnetic Heading
   MAG_Heading = atan2(-MAG_Y,MAG_X);
 }

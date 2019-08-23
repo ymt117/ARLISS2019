@@ -5,7 +5,6 @@
  * Speaker: speaker.ino
  **************************************************************/
 void speaker_init();
-void _beep(float *, int, int);
 void beep(int);
 
 /***************************************************************
@@ -72,12 +71,9 @@ float _max(float, float);
  * Timer: my_timer.ino
  **************************************************************/
 // TIM3
-static void _call_func_3(stimer_t *);
-void timer_init_3();
-
+void timer_start_3();
 // TIM4
-static void _call_func_4(stimer_t *);
-void timer_init_4();
+void timer_start_4();
 
 /***************************************************************
  * GPS: gps.ino
@@ -94,13 +90,8 @@ void writeFile(const char*, const char*);
 void readFile(const char*);
 void deleteFile(const char*);
 
-int readStatus(const char*);
+int readStatus();
 void writeStatus();
-void writeIMU();
-void writeLPS();
-void writeGPS();
-void writeCdS();
-void writeBattery();
 
 void writeAll();
 
@@ -122,6 +113,7 @@ void drop_detect();
 /***************************************************************
  * Heating: heat.ino
  **************************************************************/
+void heat_init();
 void _heat1();
 void _heat2();
 

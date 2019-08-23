@@ -16,7 +16,6 @@
 LSM6 imu;
 LPS ps;
 LIS3MDL mag;
-LIS3MDL::vector<int16_t> mag_min = {32767, 32767, 32767}, mag_max = {-32768, -32768, -32768};
 
 char report[80];
 
@@ -30,19 +29,18 @@ void imu_init(){
     Serial.println("Failed to detect and initialize IMU!");
     beep(CANSAT_ERROR2);
     return;
-    //while(1) led1_blink_fast();
   }
   imu.enableDefault();
 
   if(!ps.init()){
     Serial.println("Failed to autodetect pressure sensor!");
-    //while(1) led1_blink_fast();
+    return;
   }
   ps.enableDefault();
 
   if(!mag.init()){
     Serial.println("Failed to detect and initialize magnetometer!");
-    //while(1) led1_blink_fast();
+    return;
   }
   mag.enableDefault();
 
@@ -52,17 +50,17 @@ void imu_init(){
 /***************************************************************
  * Set IMU Offset
  **************************************************************/
- void imu_offset(){
-  if(imu_status == 0) return;
+void imu_offset(){
+  // Returns if initialization fails
+  if(imu_status == -1) return;
   
-  for(int i=0;i<32;i++)    // We take some readings...
-    {
+  for(int i=0;i<32;i++){// We take some readings...
     Read_Gyro();
     Read_Accel();
-    for(int y=0; y<6; y++)   // Cumulate values
+    for(int y=0; y<6; y++)// Cumulate values
       AN_OFFSET[y] += AN[y];
     delay(20);
-    }
+  }
 
   for(int y=0; y<6; y++)
     AN_OFFSET[y] = AN_OFFSET[y]/32;
@@ -70,8 +68,8 @@ void imu_init(){
   AN_OFFSET[5]-=GRAVITY*SENSOR_SIGN[5];
 
   //Serial.println("Offset:");
-  for(int y=0; y<6; y++)
-    Serial.println(AN_OFFSET[y]);
+  //for(int y=0; y<6; y++)
+    //Serial.println(AN_OFFSET[y]);
  }
 
 /***************************************************************
@@ -208,7 +206,7 @@ void compass_calibrate(){
  * IMU_TEST_CODE
  **************************************************************/
 void imu_test(){
-  long time = millis();
+
   if((millis()-timer)>=20)  // Main loop runs at 50Hz
   {
     counter++;
@@ -244,19 +242,10 @@ void imu_test(){
     // ***
     
     Serial.print("Orientation: ");
-    Serial.print(MAG_Heading);
+    Serial.print(ToDeg(MAG_Heading));
     Serial.print(" ");
-    Serial.print(pitch);
+    Serial.print(ToDeg(pitch));
     Serial.print(" ");
-    //Serial.print(ToDeg(yaw));
-    //Serial.print(" ");
-    Serial.println(roll);
-    //Serial.println();
-    
-
-    //printdata();
-
-    time = millis() - time;
-    //Serial.print("\tmillis: "); Serial.println(time);
+    Serial.println(ToDeg(roll));
   }
 }

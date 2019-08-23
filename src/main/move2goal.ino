@@ -3,7 +3,7 @@
 
 void move2goal(){
 
-    timer_init_3();
+    timer_start_3();
     unsigned long m_start = millis();
     unsigned int forward_time = 5000;
     Serial.println("move2goal");
@@ -87,7 +87,7 @@ void move2goal(){
 
 void move2goal_mag(){
     // Timer start: imu_init function is called every 20ms
-    timer_init_3();
+    timer_start_3();
 
     // Update GPS value
     while(hs.available() > 0)

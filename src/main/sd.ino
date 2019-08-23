@@ -92,7 +92,7 @@ void deleteFile(const char * path){
   }
 }
 
-int readStatus(const char * path){
+int readStatus(){
 
   int my_status = -1;
 
@@ -100,7 +100,7 @@ int readStatus(const char * path){
     Serial.print("Reading file: "); Serial.println(path);
   #endif
   
-  file = SD.open(path, FILE_READ);
+  file = SD.open("/status.txt", FILE_READ);
 
   if(file){
     #ifdef MYSD_SERIAL_DEBUG
@@ -134,103 +134,6 @@ void writeStatus(){
   writeFile("status.txt", buf);
 }
 
-void writeIMU(){
-  char buf[1024];
-
-  //Read_Gyro();
-  //Read_Accel();
-  //Read_Compass();
-  imu.read();
-  mag.read();
-
-  String str = "";
-  str += millis();    str += ",";
-  str += imu.a.x;     str += ",";
-  str += imu.a.y;     str += ",";
-  str += imu.a.z;     str += ",";
-  str += imu.g.x;     str += ",";
-  str += imu.g.y;     str += ",";
-  str += imu.g.z;     str += ",";
-  str += mag.m.x;     str += ",";
-  str += mag.m.y;     str += ",";
-  str += mag.m.z;     str += ",";
-  str += "\n";
-
-  int len = str.length();
-  str.toCharArray(buf, len+1);
-
-  writeFile("imu.csv", buf);
-}
-
-void writeLPS(){
-  char buf[512];
-  float pressure = ps.readPressureMillibars();
-  float altitude = ps.pressureToAltitudeMeters(pressure);
-  float temperature = ps.readTemperatureC();
-
-  String str = "";
-  str += millis();    str += ",";
-  str += pressure;    str += ",";
-  str += altitude;    str += ",";
-  str += temperature; str += ",";
-  str += "\n";
-
-  int len = str.length();
-  str.toCharArray(buf, len+1);
-
-  writeFile("lps.csv", buf);
-}
-
-void writeGPS(){
-  char buf[512];
-
-  String str = "";
-  str += millis();                       str += ",";
-  str += gps.date.year();                str += ",";
-  str += gps.date.month();               str += ",";
-  str += gps.date.day();                 str += ",";
-  str += gps.time.hour();                str += ",";
-  str += gps.time.minute();              str += ",";
-  str += gps.time.second();              str += ",";
-  str += String(gps.location.lat(), 6);  str += ",";
-  str += String(gps.location.lng(), 6);  str += ",";
-  str += "\n";
-
-  int len = str.length();
-  str.toCharArray(buf, len+1);
-
-  writeFile("gps.csv", buf);
-}
-
-void writeCdS(){
-  char buf[256];
-
-  String str = "";
-  str += millis();                str += ",";
-  str += String(analogRead(cds)); str += ",";
-  str += "\n";
-
-  int len = str.length();
-  str.toCharArray(buf, len+1);
-
-  writeFile("cds.csv", buf);
-}
-
-void writeBattery(){
-  char buf[256];
-
-  String str = "";
-  str += millis();                        str += ",";
-  str += String(battery_voltage(batt1));  str += ",";
-  str += String(battery_voltage(batt2));  str += ",";
-  str += "\n";
-
-  int len = str.length();
-  str.toCharArray(buf, len+1);
-
-  writeFile("battery.csv", buf);
-}
-
 void writeAll(){
   //long time = millis();
   char buf[1024];
@@ -238,10 +141,9 @@ void writeAll(){
   imu.read();
   mag.read();
 
-  Serial.println(imu.a.y);
-
   float pressure = ps.readPressureMillibars();
   float altitude = ps.pressureToAltitudeMeters(pressure);
+  altitude = altitude - altitude_offset_value;
   float temperature = ps.readTemperatureC();
 
   String str = "";

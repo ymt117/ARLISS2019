@@ -6,13 +6,10 @@
  **************************************************************/
 static const float g_lng = 130.543375;
 static const float g_lat = 31.567613;
-//static const float g_lng = 130.316374; // kinpou
-//static const float g_lat = 31.451004; // kinpou
 
 /***************************************************************
  * Status of CanSat
  **************************************************************/
-// State transition of CanSat
 enum MyState{
   State_init = 0,
   State_launch_detect,
@@ -30,12 +27,15 @@ MyState s = State_init;
 /***************************************************************
  * Speaker
  **************************************************************/
-#define BOOT_UP       1
-#define SHUT_DOWN     2
-#define CLANNAD       3
-#define CANSAT_ERROR  4
-#define PUSHED        5
-#define CANSAT_ERROR2 6
+#define BOOT_UP          1
+#define SHUT_DOWN        2
+#define CLANNAD          3
+#define CANSAT_ERROR     4
+#define PUSHED           5
+#define CANSAT_ERROR2    6
+#define LAUNCH_COMPLETE  7
+#define RELEASE_COMPLETE 8
+#define DROP_COMPLETE    9
 
 static const uint8_t sp = PB12; // Pin connected to the Speaker
 
@@ -88,8 +88,10 @@ static const uint8_t pwmb = PA8; // Pin connected to the PWMB
 /***************************************************************
  * IMU
  **************************************************************/
-// IMU Initialize failed: 0, successful: 1
-int imu_status = 0;
+// IMU Initialize failed: -1, successful: 1
+int imu_status = -1;
+
+float altitude_offset_value = 0.0;
  
 // Uncomment the below line to use this axis definition:
    // X axis pointing forward
@@ -147,7 +149,6 @@ long timer24=0; //Second timer used to print
 int AN[6]; //array that stores the gyro and accelerometer data
 int AN_OFFSET[6]={0,0,0,0,0,0}; //Array that stores the Offset of the sensors
 int MAG_OFFSET[9] = {14041,-1800,2100,-6200,12000,4400,6120,-4100,8200}; // x_max,x_min,y_max,y_min,z_max,z_min
-//int MAG_OFFSET[9] = {-32768,32767,-32768,32767,-32768,32767,0,0,0}; // x_max,x_min,y_max,y_min,z_max,z_min,offsetX,offsetY,offsetZ
 
 float gyro_x;
 float gyro_y;
