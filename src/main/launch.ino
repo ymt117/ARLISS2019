@@ -16,7 +16,7 @@ float calc_altitude(){
     altitude = altitude / NUM_MOVING_AVERAGE;
     altitude -= altitude_offset_value;
 
-    Serial.print("Altitude:\t\t"); Serial.print(altitude); Serial.println("\t\t[m]");
+    Serial.print("Altitude:\t\t"); Serial.print(altitude); Serial.println(" [m]");
     
     return altitude;
 }
@@ -48,7 +48,7 @@ void launch_detect(){
         // Judge based on Altitude
         if(calc_altitude() > launch_altitude_threshold){// If the altitude exceeds [launch_altitude_threshold] meters
             launch_count++;
-            Serial.print("launch_count:\t\t"); Serial.print(launch_count); Serial.println("\t\t[times]");
+            Serial.print("launch_count:\t\t"); Serial.print(launch_count); Serial.println(" [times]");
         }
     }
 
@@ -74,7 +74,7 @@ void release_detect(){
         Serial.print("CdS value:\t\t"); Serial.println(analogRead(cds));
         if(analogRead(cds) < release_cds_threshold){
             release_count++;
-            Serial.print("release_count:\t\t"); Serial.print(release_count); Serial.println("\t\t[times]");
+            Serial.print("release_count:\t\t"); Serial.print(release_count); Serial.println(" [times]");
         }
 
         // Judge based on Time
@@ -111,7 +111,7 @@ void drop_detect(){
         // Judge based on Altitude
         if(calc_altitude() < drop_altitude_threshold){
             drop_count_altitude++;
-            Serial.print("drop_count_altitude:\t\t"); Serial.print(drop_count_altitude); Serial.println("\t\t[times]");
+            Serial.print("drop_count_altitude:\t\t"); Serial.print(drop_count_altitude); Serial.println(" [times]");
             if(drop_count_altitude > 10) altitude_flag = 1;
         }
 
@@ -120,13 +120,13 @@ void drop_detect(){
         float gx = imu.g.x * 16; gx = gx / 32768;
         float gy = imu.g.y * 16; gy = gy / 32768;
         float gz = imu.g.z * 16; gz = gz / 32768;
-        Serial.print("Gyro\t\tX: "); Serial.print(gx);
-        Serial.print("\t\tY:"); Serial.print(gy);
-        Serial.print("\t\tZ: "); Serial.println(gz);
+        Serial.print("Gyro\tX: "); Serial.print(gx, 4);
+        Serial.print("\tY:"); Serial.print(gy, 4);
+        Serial.print("\tZ: "); Serial.println(gz, 4);
 
         if(gx > -0.06 && gx < 0.06 && gy > -0.06 && gy < 0.06 && gz > -0.06 && gz < 0.06){
             drop_count_gyro++;
-            Serial.print("drop_count_gyro:\t\t"); Serial.print(drop_count_gyro); Serial.println("\t\t[times]");
+            Serial.print("drop_count_gyro:\t\t"); Serial.print(drop_count_gyro); Serial.println(" [times]");
             if(drop_count_gyro > 10) gyro_flag = 1;
         }
 
