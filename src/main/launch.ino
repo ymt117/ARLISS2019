@@ -4,7 +4,9 @@
 // Macro for calc_altitude function
 #define NUM_MOVING_AVERAGE 3 // Number used for moving average
 
-// Calculate altitude from barometer value
+/***************************************************************
+ * Calculate altitude from barometer value
+ **************************************************************/
 float calc_altitude(){
     float altitude = 0.0;
 
@@ -21,6 +23,9 @@ float calc_altitude(){
     return altitude;
 }
 
+/***************************************************************
+ * OFFSET for Altitude
+ **************************************************************/
 void altitude_offset(){
 
     // Measure altitude 50 times
