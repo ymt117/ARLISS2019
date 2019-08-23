@@ -78,14 +78,14 @@ void setup() {
   twe_lite_wakeup();
 
   // Initialize the sensor
-  //imu_init();
+  imu_init();
   gps_init();
 
   delay(20);
 
   // Sensor offset
-  //imu_offset();
-  //altitude_offset();
+  imu_offset();
+  altitude_offset();
 
   timer=millis();
   delay(20);
@@ -109,7 +109,8 @@ void setup() {
  * 
  **************************************************************/
 void loop() {
-  Serial.println("loop");
+  //Serial.println("loop");
+  long time = millis();
 
   switch(s){
 
@@ -127,6 +128,7 @@ void loop() {
 
     case State_drop_detect:
       Serial.println("State_drop_detect!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      delay(20000);
       writeStatus();
       drop_detect();
       break;
@@ -173,11 +175,15 @@ void loop() {
     case State_test:
       // test code
       writeStatus();
+      writeAll();
+      //Serial.println(millis() - time);
+      //gost(10000);
+      //sw_motor();
       //heading_test();
-      back(255);
-      delay(5000);
-      motor_stop();
-      delay(2000);
+      //back(255);
+      //delay(5000);
+      //motor_stop();
+      //delay(2000);
       break;
 
     case State_exit:

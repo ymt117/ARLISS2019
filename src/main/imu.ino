@@ -242,7 +242,6 @@ void imu_test(){
     Drift_correction();
     Euler_angles();
     // ***
-
     
     Serial.print("Orientation: ");
     Serial.print(MAG_Heading);

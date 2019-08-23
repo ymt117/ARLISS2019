@@ -4,8 +4,10 @@
 /***************************************************************
  * GOAL Position
  **************************************************************/
-static const float g_lng = 130.316374;
-static const float g_lat = 31.451004;
+static const float g_lng = 130.543375;
+static const float g_lat = 31.567613;
+//static const float g_lng = 130.316374; // kinpou
+//static const float g_lat = 31.451004; // kinpou
 
 /***************************************************************
  * Status of CanSat

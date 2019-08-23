@@ -238,6 +238,8 @@ void writeAll(){
   imu.read();
   mag.read();
 
+  Serial.println(imu.a.y);
+
   float pressure = ps.readPressureMillibars();
   float altitude = ps.pressureToAltitudeMeters(pressure);
   float temperature = ps.readTemperatureC();
