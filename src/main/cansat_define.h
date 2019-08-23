@@ -84,6 +84,11 @@ static const uint8_t pwmb = PA8; // Pin connected to the PWMB
  static const uint8_t heat1 = PA11; // Pin connected to the Heat1
  static const uint8_t heat2 = PA12; // Pin connected to the Heat2
 
+/***************************************************************
+ * Madgwick
+ **************************************************************/
+unsigned long microsPerReading;
+unsigned long microsPrevious;
 
 /***************************************************************
  * IMU
@@ -119,12 +124,12 @@ int SENSOR_SIGN[9] = {1,1,1,-1,-1,-1,1,1,1}; //Correct directions x,y,z - gyro, 
 #define Gyro_Scaled_Y(x) ((x)*ToRad(Gyro_Gain_Y)) //Return the scaled ADC raw data of the gyro in radians for second
 #define Gyro_Scaled_Z(x) ((x)*ToRad(Gyro_Gain_Z)) //Return the scaled ADC raw data of the gyro in radians for second
 
-#define M_X_MIN -1000
-#define M_Y_MIN -1000
-#define M_Z_MIN -1000
-#define M_X_MAX +1000
-#define M_Y_MAX +1000
-#define M_Z_MAX +1000
+#define M_X_MIN -1800
+#define M_Y_MIN -6200
+#define M_Z_MIN +4400
+#define M_X_MAX +14041
+#define M_Y_MAX +2100
+#define M_Z_MAX +12000
 
 #define Kp_ROLLPITCH 0.02
 #define Ki_ROLLPITCH 0.00002

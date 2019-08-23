@@ -5,15 +5,9 @@
  * Run to GOAL
  * Use [GPS]
  **************************************************************/
-void move2goal(){
+void run2goal(){
 
     timer_start_3();
-    unsigned long m_start = millis();
-    unsigned int forward_time = 5000;
-    Serial.println("move2goal");
-    // Update GPS value
-    while(hs.available() > 0)
-        gps.encode(hs.read());
 
     while(distance(g_lng, g_lat, gps.location.lng(), gps.location.lat()) > 5){// Until the distance from the goal is 5 meters or less,
 
@@ -34,20 +28,8 @@ void move2goal(){
             Serial.print(direction(g_lng, g_lat, gps.location.lng(), gps.location.lat()));
             Serial.println();
 
-            if(direction(g_lng, g_lat, gps.location.lng(), gps.location.lat()) < 20){
-                // Reduce time to advance when below 20m
-                forward_time = 2500;
-            }
-
             Serial.println("\tforward");
-            m_start = millis();
-            while((millis() - m_start) < forward_time){
-                // Move forward if forward_time is not
-                
-                //forward(255);
-                right_cw(150);
-                left_ccw(220);
-            }
+            go_straight(10000);
             motor_stop();
             delay(2000);
 
@@ -94,7 +76,7 @@ void move2goal(){
  * Run to GOAL
  * Use [GPS] and [MAG]
  **************************************************************/
-void move2goal_mag(){
+void run2goal_mag(){
     // Timer start: imu_init function is called every 20ms
     timer_start_3();
 

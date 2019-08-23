@@ -107,7 +107,7 @@ void imu_plot(){
  * ReadGyro
  **************************************************************/
 void Read_Gyro(){
-  imu.read();
+  imu.readGyro();
   
   AN[0] = imu.g.x;
   AN[1] = imu.g.y;
@@ -121,7 +121,7 @@ void Read_Gyro(){
  * Read Accel
  **************************************************************/
 void Read_Accel(){
-  imu.read();
+  imu.readAcc();
 
   AN[3] = imu.a.x;
   AN[4] = imu.a.y;
@@ -137,9 +137,9 @@ void Read_Accel(){
 void Read_Compass(){
   mag.read();
 
-  magnetom_x = (SENSOR_SIGN[6] * mag.m.x) - MAG_OFFSET[6];
-  magnetom_y = (SENSOR_SIGN[7] * mag.m.y) - MAG_OFFSET[7];
-  magnetom_z = (SENSOR_SIGN[8] * mag.m.z) - MAG_OFFSET[8];
+  magnetom_x = SENSOR_SIGN[6] * mag.m.x;
+  magnetom_y = SENSOR_SIGN[7] * mag.m.y;
+  magnetom_z = SENSOR_SIGN[8] * mag.m.z;
 }
 
 
@@ -206,7 +206,7 @@ void compass_calibrate(){
  * IMU AHRS UPDATE
  * Runs at 50Hz(Called every 20ms)
  **************************************************************/
-void imu_ahrs_upadate(){
+void imu_ahrs_update(){
 
   if((millis()-timer)>=20)  // Main loop runs at 50Hz
   {
@@ -243,7 +243,7 @@ void imu_ahrs_upadate(){
     // ***
     
     Serial.print("Orientation: ");
-    Serial.print(ToDeg(MAG_Heading));
+    Serial.print(ToDeg(yaw));
     Serial.print(" ");
     Serial.print(ToDeg(pitch));
     Serial.print(" ");

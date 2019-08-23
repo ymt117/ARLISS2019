@@ -1,6 +1,5 @@
 #include <MadgwickAHRS.h>
 #define MADGWICK_PRINT
-//#define AAAA
 
 #include "cansat_define.h"
 #include "cansat_prototype.h"
@@ -8,74 +7,57 @@
 Madgwick filter;
 
 void madgwick_init(){
-  filter.begin(20);
+  filter.begin(50);
 }
 
 void madgwick_update(){
   //long m_time = millis();
+
   float ax, ay, az;
   float gx, gy, gz;
   float mx, my, mz;
+  unsigned long microsNow;
   
-  //imu.read();
-  //mag.read();
-  Read_Gyro();
-  Read_Accel();
-  Read_Compass();
+  // Check if it's time to read data and update the filter
+  microsNow = micros();
+  if(microsNow - microsPrevious >= microsPerReading){
 
-  // +-2000dps; 16bits; 70 mdps/LSB?
-  //gx = (imu.g.x * 2000.0); gx /= 32768.0;
-  //gy = (imu.g.y * 2000.0); gy /= 32768.0;
-  //gz = (imu.g.z * 2000.0); gz /= 32768.0;
-  gx = gyro_x; gx *= 2000.0; gx /= 32768.0;
-  gy = gyro_y; gy *= 2000.0; gy /= 32768.0;
-  gz = gyro_z; gz *= 2000.0; gz /= 32768.0;
+    // Read data from IMU
+    Read_Gyro();
+    Read_Accel();
+    // Read data from MAG
+    Read_Compass();
 
-  // +-16g; 16bits
-  //ax = (imu.a.x * 16.0); ax /= 32768.0;
-  //ay = (imu.a.y * 16.0); ay /= 32768.0;
-  //az = (imu.a.z * 16.0); az /= 32768.0;
-  ax = accel_x; ax *= 16.0; ax /= 32768.0;
-  ay = accel_y; ay *= 16.0; ay /= 32768.0;
-  az = accel_z; az *= 16.0; az /= 32768.0;
+    // Convert to gravity units
+    ax = accel_x * 0.000488;
+    ay = accel_y * 0.000488;
+    az = accel_z * 0.000488;
+    // Convert to degrees/second units
+    gx = gyro_x * 0.07;
+    gy = gyro_y * 0.07;
+    gz = gyro_z * 0.07;
+    // Convert to gauss
+    mx = (magnetom_x - MAG_OFFSET[6]) * 0.000146;
+    my = (magnetom_y - MAG_OFFSET[7]) * 0.000146;
+    mz = (magnetom_z - MAG_OFFSET[8]) * 0.000146;
 
-  // +-4gauss; 16bits
-  //mx = (mag.m.x * 4.0) / 32768.0;
-  //my = (mag.m.y * 4.0) / 32768.0;
-  //mz = (mag.m.z * 4.0) / 32768.0;
-  //mx = mag.m.x / 6842;
-  //my = mag.m.y / 6842;
-  //mz = mag.m.z / 6842;
-  
-  filter.updateIMU(
-    gx, gy, gz,
-    ax, ay, az);
+    // update the filter, which computes orientation
+    filter.update(gx, gy, gz, ax, ay, az, mx, my, mz);
 
-  roll = filter.getRoll();
-  pitch = filter.getPitch();
-  yaw = filter.getYaw();
+    // print the heading, pitch and roll
+    roll = filter.getRoll();
+    pitch = filter.getPitch();
+    yaw = filter.getYaw();
+    Serial.print("Orientation: ");
+    Serial.print(yaw);
+    Serial.print(" ");
+    Serial.print(pitch);
+    Serial.print(" ");
+    Serial.println(roll);
 
-#ifdef MADGWICK_PRINT
-  Serial.print("Orientation: ");
-  Serial.print(yaw);
-  Serial.print(" ");
-  Serial.print(pitch);
-  Serial.print(" ");
-  Serial.println(roll);
-#endif
-
-#ifdef AAAA
-  Serial.print(gx); Serial.print("\t\t");
-  Serial.print(gy); Serial.print("\t\t");
-  Serial.print(gz); Serial.print("\t\t");
-  Serial.print(ax); Serial.print("\t\t");
-  Serial.print(ay); Serial.print("\t\t");
-  Serial.print(az); Serial.print("\t\t");
-  //Serial.print(mag.m.x); Serial.print("\t");
-  //Serial.print(mag.m.y); Serial.print("\t");
-  //Serial.print(mag.m.z); Serial.print("\t");
-  Serial.println();
-#endif
+    // increment pervious time, so we keep proper pace
+    microsPrevious = microsPrevious + microsPerReading;
+  }
 
   //Serial.println(millis() - m_time);
 }

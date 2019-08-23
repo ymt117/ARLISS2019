@@ -47,7 +47,7 @@ void setup() {
   else if(old_status == (int)State_exit)  s = State_exit;
   else {                                  s = State_test; }
   */
-  s = State_launch_detect;
+  s = State_run_to_goal;
   writeStatus();
 
   delay(20);
@@ -83,7 +83,7 @@ void setup() {
   imu_offset();
   altitude_offset();
 
-  //madgwick_init();
+  madgwick_init();
 
   beep(BOOT_UP);
 
@@ -94,6 +94,9 @@ void setup() {
   timer=millis();
   delay(20);
   counter=0;
+
+  microsPerReading = 1000000 / 50;
+  microsPrevious = micros();
 }
 
 
@@ -149,8 +152,8 @@ void loop() {
     case State_run_to_goal:
       Serial.println("[State: Run to GOAL]");
       writeStatus();
-      //move2goal_mag();
-      move2goal();
+      //run2goal_mag();
+      run2goal();
       break;
 
     case State_goal:
@@ -165,6 +168,7 @@ void loop() {
       // test code
       writeStatus();
       Serial.println("[State: Test mode]");
+      heading_test();
       break;
 
     case State_exit:
