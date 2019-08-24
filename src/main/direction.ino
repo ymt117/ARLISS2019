@@ -2,7 +2,7 @@
 
 // 2点の緯度/経度から方位を計算
 // http://kwikwi.cocolog-nifty.com/blog/2005/12/delphi_2_fd2c.html
-double direction(float lng1, float lat1, float lng2, float lat2){
+double direction(double lng1, double lat1, double lng2, double lat2){
   double x1, y1, x2, y2;
   double phi;
   double X, Y;

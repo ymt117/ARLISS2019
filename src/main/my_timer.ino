@@ -37,6 +37,15 @@ void timer_start_3(){
   // Timer set to 10ms=10000
   TimerHandleInit(&TimHandle_3, 20000 - 1, ((uint32_t)(getTimerClkFreq(MY_TIMER_3) / (1000000)) - 1));
   attachIntHandle(&TimHandle_3, _call_func_3);
+
+  Serial.println("[!] Tim3 start");
+}
+
+void timer_stop_3(){
+  TimHandle_3.timer = MY_TIMER_3;
+  TimerHandleDeinit(&TimHandle_3);
+
+  Serial.println("[!] Tim3 stop");
 }
 
 /***************************************************************

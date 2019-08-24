@@ -72,6 +72,7 @@ float _max(float, float);
  **************************************************************/
 // TIM3
 void timer_start_3();
+void timer_stop_3();
 // TIM4
 void timer_start_4();
 
@@ -98,8 +99,8 @@ void writeAll();
 /***************************************************************
  * Distance and Direction: distance.ino, direction.ino
  **************************************************************/
-double distance(float, float, float, float);
-double direction(float, float, float, float);
+double distance(double, double, double, double);
+double direction(double, double, double, double);
 
 /***************************************************************
  * Launch: launch.ino
