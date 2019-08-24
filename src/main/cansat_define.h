@@ -27,15 +27,17 @@ MyState s = State_init;
 /***************************************************************
  * Speaker
  **************************************************************/
-#define BOOT_UP          1
-#define SHUT_DOWN        2
-#define CLANNAD          3
-#define CANSAT_ERROR     4
-#define PUSHED           5
-#define CANSAT_ERROR2    6
-#define LAUNCH_COMPLETE  7
-#define RELEASE_COMPLETE 8
-#define DROP_COMPLETE    9
+#define BOOT_UP           1
+#define SHUT_DOWN         2
+#define CLANNAD           3
+#define CANSAT_ERROR      4
+#define PUSHED            5
+#define CANSAT_ERROR2     6
+#define LAUNCH_COMPLETE   7
+#define RELEASE_COMPLETE  8
+#define DROP_COMPLETE     9
+#define GPS_POSITIONING  10
+#define DD_CALCLATION    11
 
 static const uint8_t sp = PB12; // Pin connected to the Speaker
 

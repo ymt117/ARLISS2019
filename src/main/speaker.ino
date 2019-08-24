@@ -26,12 +26,16 @@ float mm4[] = {mB*4, mB*4, mB*4, mB*4};
 float mm5[] = {mD*4};
 // CANSAT_ERROR2: Failed initialize IMU ♪ララララ
 float mm6[] = {mA*4, mA*4, mA*4, mA*4};
-// LAUNCH_COMPLETE: complete launch detection ♪ド レ ミ
+// LAUNCH_COMPLETE: complete launch detection ♪ド レ ミ(低音)
 float mm7[] = {mC*2, mD*2, mE*2};
-// RELEASE_COMPLETE: complete release detection ♪ミ ファ ソ
+// RELEASE_COMPLETE: complete release detection ♪ミ ファ ソ(低音)
 float mm8[] = {mE*2, mF*2, mG*2};
 // DROP_COMPLETE: complete drop detection ♪ソ ラ シ
 float mm9[] = {mG*2, mA*2, mB*2};
+// GPS_POSITIONING: GPS sensor positioning ♪ド レ ミ(高音)
+float mm10[] = {mC*4, mD*4, mE*4};
+// DD_CALCLATION: distance and direction calclation ♪ミ ファ ソ(高音)
+float mm11[] = {mE*4, mF*4, mG*4};
 
 void speaker_init(){
   pinMode(sp, OUTPUT);
@@ -86,6 +90,14 @@ void beep(int mode){
   else if(mode == DROP_COMPLETE){
     int m_size = sizeof(mm9)/sizeof(float);
     _beep(mm9, m_size, 150);
+  }
+  else if(mode == GPS_POSITIONING){
+    int m_size = sizeof(mm10)/sizeof(float);
+    _beep(mm10, m_size, 100);
+  }
+  else if(mode == DD_CALCLATION){
+    int m_size = sizeof(mm11)/sizeof(float);
+    _beep(mm11, m_size, 100);
   }
   else{
     // do nothing
