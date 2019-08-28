@@ -93,11 +93,11 @@ void beep(int mode){
   }
   else if(mode == GPS_POSITIONING){
     int m_size = sizeof(mm10)/sizeof(float);
-    _beep(mm10, m_size, 100);
+    _beep(mm10, m_size, 150);
   }
-  else if(mode == DD_CALCLATION){
+  else if(mode == DD_CALCULATION){
     int m_size = sizeof(mm11)/sizeof(float);
-    _beep(mm11, m_size, 100);
+    _beep(mm11, m_size, 150);
   }
   else{
     // do nothing

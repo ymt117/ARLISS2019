@@ -7,6 +7,8 @@
 static const float g_lng = 130.543375;
 static const float g_lat = 31.567613;
 
+double distance2goal = 0.0;
+
 /***************************************************************
  * Status of CanSat
  **************************************************************/
@@ -37,13 +39,14 @@ MyState s = State_init;
 #define RELEASE_COMPLETE  8
 #define DROP_COMPLETE     9
 #define GPS_POSITIONING  10
-#define DD_CALCLATION    11
+#define DD_CALCULATION    11
 
 static const uint8_t sp = PB12; // Pin connected to the Speaker
 
 /***************************************************************
  * TWE-Lite
  **************************************************************/
+//#define SLEEP_MODE
 static const uint8_t twe_lite_sleep_pin = PA15; // Pin connected to the TWE-Lite M3(LOW: Sleep)
 
 /***************************************************************

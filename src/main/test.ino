@@ -161,21 +161,6 @@ void read_write_test(){
   delay(100);
 }
 
-// 地磁気のキャリブレーション
-void heading_test(){
-  float m_max = -32760;
-  float m_min = 32760;
-
-  
-  while(1){
-    Read_Compass();
-
-    Serial.print(magnetom_x);
-    Serial.print("\t\t"); Serial.print(magnetom_y);
-    Serial.print("\t\t"); Serial.println(magnetom_z);
-  }
-}
-
 void sw_motor(){
   delay(2000);
   forward(255);// f

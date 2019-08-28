@@ -34,7 +34,7 @@ void setup() {
   sd_init();
   writeFile("/hello.txt", "Hello CanSat!!!\n");
   writeFile("/log.csv",
-            "millis,state,year,month,day,hour,minute,second,lat,lng,ax,ay,az,gx,gy,gz,mx,my,mz,pressure,altitude,temperature,cds,batt1,batt2\n");
+            "millis,state,year,month,day,hour,minute,second,lat,lng,ax,ay,az,gx,gy,gz,mx,my,mz,pressure,altitude,temperature,cds,batt1,batt2,distance2goal\n");
   writeFile("/system_log.txt", "[State: Initialization] ... Start CanSat Program!!!\n");
   
   // If the previous exit status is non-init or non-exit, the previous status is assigned to variable s.
@@ -91,6 +91,7 @@ void setup() {
   // Timer init
   //timer_start_3();
   //timer_start_4();
+  //timer_start_12();
 
   timer=millis();
   delay(20);
@@ -111,28 +112,52 @@ void loop() {
   switch(s){
 
     case State_launch_detect:
+      #ifdef SLEEP_MODE
+        twe_lite_wakeup();
+      #endif
       Serial.println("[State: Launch detection]");
+      #ifdef SLEEP_MODE
+        twe_lite_sleep();
+      #endif
       writeFile("/system_log.txt", "[State: Launch detection]\n");
       writeStatus();
       launch_detect();
       break;
 
     case State_release_detect:
+      #ifdef SLEEP_MODE
+        twe_lite_wakeup();
+      #endif
       Serial.println("[State: Release detection]");
+      #ifdef SLEEP_MODE
+        twe_lite_sleep();
+      #endif
       writeFile("/system_log.txt", "[State: Release detection]\n");
       writeStatus();
       release_detect();
       break;
 
     case State_drop_detect:
+      #ifdef SLEEP_MODE
+        twe_lite_wakeup();
+      #endif
       Serial.println("[State: Drop detection]");
+      #ifdef SLEEP_MODE
+        twe_lite_sleep();
+      #endif
       writeFile("/system_log.txt", "[State: Drop detection]\n");
       writeStatus();
       drop_detect();
       break;
 
     case State_first_fire:
+      #ifdef SLEEP_MODE
+        twe_lite_wakeup();
+      #endif
       Serial.println("[State: First fire]");
+      #ifdef SLEEP_MODE
+        twe_lite_sleep();
+      #endif
       writeFile("/system_log.txt", "[State: First fire]\n");
       writeStatus();
       delay(20000);
@@ -142,7 +167,13 @@ void loop() {
       break;
 
     case State_second_fire:
+      #ifdef SLEEP_MODE
+        twe_lite_wakeup();
+      #endif
       Serial.println("[State: Second fire]");
+      #ifdef SLEEP_MODE
+        twe_lite_sleep();
+      #endif
       writeFile("/system_log.txt", "[State: Second fire]\n");
       writeStatus();
       delay(20000);
@@ -156,35 +187,59 @@ void loop() {
       break;
 
     case State_run_to_goal:
+      #ifdef SLEEP_MODE
+        twe_lite_wakeup();
+      #endif
       Serial.println("[State: Run to GOAL]");
+      #ifdef SLEEP_MODE
+        twe_lite_sleep();
+      #endif
       writeFile("/system_log.txt", "[State: Run to GOAL]\n");
       writeStatus();
-      //run2goal_mag();
       run2goal();
       break;
 
     case State_goal:
-      writeStatus();
+      #ifdef SLEEP_MODE
+        twe_lite_wakeup();
+      #endif
       Serial.println("[State: GOAL] ... All done!!!");
+      #ifdef SLEEP_MODE
+        twe_lite_sleep();
+      #endif
       writeFile("/system_log.txt", "[State: GOAL] ... All done!!!\n");
-      beep(CLANNAD);
-      delay(1000);
-      while(1) blink();
+      writeStatus();
+      while(1){
+        beep(CLANNAD);
+        delay(1000);
+      }
+      //while(1) blink();
       break;
     
     case State_test:
       // test code
-      writeStatus();
+      #ifdef SLEEP_MODE
+        twe_lite_wakeup();
+      #endif
       Serial.println("[State: Test mode]");
+      #ifdef SLEEP_MODE
+        twe_lite_sleep();
+      #endif
       writeFile("/system_log.txt", "[State: Test mode]\n");
-      heading_test();
+      writeStatus();
       break;
 
     case State_exit:
-      writeStatus();
       // End processing and enter infinite loop...
+      #ifdef SLEEP_MODE
+        twe_lite_wakeup();
+      #endif
       Serial.println("[State: EXIT] ... Gooodbye~~");
+      #ifdef SLEEP_MODE
+        twe_lite_sleep();
+      #endif
       writeFile("/system_log.txt", "[State: EXIT] ... Gooodbye~~\n");
+      writeStatus();
       led_off();
       motor_stop();
       beep(SHUT_DOWN);
@@ -194,9 +249,15 @@ void loop() {
 
     default:
       // code block
-      writeStatus();
+      #ifdef SLEEP_MODE
+        twe_lite_wakeup();
+      #endif
       Serial.println("[State: default]");
+      #ifdef SLEEP_MODE
+        twe_lite_sleep();
+      #endif
       writeFile("/system_log.txt", "[State: default]\n");
+      writeStatus();
       break;
   }
 }

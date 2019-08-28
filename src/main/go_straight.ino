@@ -8,88 +8,76 @@
 #include "cansat_define.h"
 #include "cansat_prototype.h"
 
-int thz = 0;
+//#define GO_STRAIGHT_PRINT
 
-void go_straight(int m_second){
-  
-  unsigned int time_f = millis();
-  unsigned int time_loop = 0; 
-  float gz[3];
-  float th = 0;
-  int i, j = 0;
-  
-  thz = 0;
-  
-  forward(255);  //前進
+void go_straight(int end_time){
+  unsigned long start_time = millis();
+  float gyro_z_array[3];
+  float theta = 0;
+  float theta_z = 0;
 
-  while((millis() - time_f) < m_second){
-    
-    time_loop = millis();
-    for(i= 0; i< 3; i++){
+  Serial.print("Moving forward "); Serial.print(end_time); Serial.println(" ms");
+  forward(255);
+
+  while(millis() - start_time < end_time){
+
+    for(int i=0; i<3; i++){
       Read_Gyro();
-      gz[i] = gyro_z * 2000;
-      gz[i] = gz[i] / 32768;
+      gyro_z_array[i] = gyro_z * 0.07;
 
       if(i < 2) delay(5);
-
-    }
-    Serial.print("ForLoop:"); Serial.println(millis() - time_loop);
-    th += (gz[0] + 4 * gz[1] +gz[2]) / 600 * 1.5;        
-
-    if(th > 180)  th = -180;
-    if(th < -180)  th = 180;
-
-    thz = th;
-    Serial.print("thz[d]:"); Serial.println(thz);
-
-    //強強:255　強:200　中:175　弱:150　弱弱:100 
-
-    if (thz > 45) {
-      //右　弱弱　左　強強
-      right_cw(100);
-      left_ccw(255);
-    } else if (thz <= 45 && thz > 20) {
-      //右　強強　左　弱
-      right_cw(150);
-      left_ccw(255);
-    } else if (thz <= 20 && thz > 10) {
-      //右　強強　左　中
-      right_cw(175);
-      left_ccw(255);
-    } else if (thz <= 10 && thz > 2) {
-      //右　強強　左　強
-      right_cw(200);
-      left_ccw(255);
-    } 
-      
-    else if (thz < -45) {
-      //右　強強　左　弱弱
-      right_cw(255);
-      left_ccw(100);
-    } else if (thz >= -45 && thz < -20) {
-      //右　強強　左　弱
-      right_cw(255);
-      left_ccw(150);
-    } else if (thz >= -20 && thz < -10) {
-      //右　強強　左　中
-      right_cw(255);
-      left_ccw(175);
-    } else if (thz <= 10 && thz > 2) {
-      //右　強強　左　強
-      right_cw(255);
-      left_ccw(200);
-    } 
-      
-    else if (thz <= 2 && thz >= -2) {
-      //右　強強　左　強強
-      right_cw(255);
-      left_ccw(255);
     }
 
-    Serial.print("WhileLoop:"); Serial.println(millis() - time_loop);  
-    j++;
+    theta += (gyro_z_array[0] + 4 * gyro_z_array[1] + gyro_z_array[3]) / 600 * 1.5;
+
+    if(theta > 180) theta = -180;
+    if(theta < -180) theta = 180;
+
+    theta_z = theta;
+
+    // Motor strength: VeryHigh[255] High[200] Medium[175] Low[150] VeryLow[100]
+    if(theta_z > 45){
+      // right: VeryLow, left: VeryHigh
+      right_cw(100); left_ccw(255);
+    }
+    else if(theta_z <= 45 && theta_z > 20){
+      // right: Medium, left: VeryHigh
+      right_cw(150); left_ccw(255);
+    }
+    else if(theta_z <= 20 && theta_z > 10){
+      // right: Medium, left: VeryHigh
+      right_cw(175); left_ccw(255);
+    }
+    else if(theta_z <= 10 && theta_z > 2){
+      // right: High, left: VeryHigh
+      right_cw(200); left_ccw(255);
+    }
+
+    else if(theta_z < -45){
+      // right: VeryHigh, left: VeryLow
+      right_cw(255); left_ccw(100);
+    }
+    else if(theta_z >= -45 && theta_z < -20){
+      // right: VeryHigh, left: Low
+      right_cw(255); left_ccw(150);
+    }
+    else if(theta_z >= -20 && theta_z < -10){
+      // right: VeryHigh, left: Medium
+      right_cw(255); left_ccw(175);
+    }
+    else if(theta_z >= -10 && theta_z < -2){
+      // right: VeryHigh, left: High
+      right_cw(255); left_ccw(200);
+    }
+
+    else{
+      // do nothing
+    }
   }
 
-  motor_stop();//停止
-  
+  motor_stop();
+  Serial.println("Motor stop");
+
+  delay(500);
+  beep(PUSHED);
 }

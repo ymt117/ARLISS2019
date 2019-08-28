@@ -16,6 +16,7 @@
 LSM6 imu;
 LPS ps;
 LIS3MDL mag;
+LIS3MDL::vector<int16_t> running_min = {32767, 32767, 32767}, running_max = {-32768, -32768, -32768};
 
 char report[80];
 
@@ -156,53 +157,6 @@ float calc_g_force(float ax, float ay, float az){
 
 
 /***************************************************************
- * Geomagnetic sensor calibration
- **************************************************************/
-void compass_calibrate(){
-  char buf[1024];
-  unsigned long _millis = millis();
-
-  digitalWrite(led1, HIGH);
-
-  while(millis() - _millis < 30000){
-    mag.read();
-
-    turn_right(255);
-  
-    MAG_OFFSET[1] = _min(MAG_OFFSET[1], mag.m.x);
-    MAG_OFFSET[3] = _min(MAG_OFFSET[3], mag.m.y);
-    MAG_OFFSET[5] = _min(MAG_OFFSET[5], mag.m.z);
-
-    MAG_OFFSET[0] = _max(MAG_OFFSET[0], mag.m.x);
-    MAG_OFFSET[2] = _max(MAG_OFFSET[2], mag.m.y);
-    MAG_OFFSET[4] = _max(MAG_OFFSET[4], mag.m.z);
-  }
-
-  motor_stop();
-
-  MAG_OFFSET[6] = (MAG_OFFSET[0] + MAG_OFFSET[1]) * 0.5; // (mx_max + mx_min) / 2
-  MAG_OFFSET[7] = (MAG_OFFSET[2] + MAG_OFFSET[3]) * 0.5; // (my_max + my_min) / 2
-  MAG_OFFSET[8] = (MAG_OFFSET[4] + MAG_OFFSET[5]) * 0.5; // (my_max + my_min) / 2
-
-  String str = "";
-  str += MAG_OFFSET[0];   str += ",";
-  str += MAG_OFFSET[1];   str += ",";
-  str += MAG_OFFSET[2];   str += ",";
-  str += MAG_OFFSET[3];   str += ",";
-  str += MAG_OFFSET[4];   str += ",";
-  str += MAG_OFFSET[5];   str += ",";
-  str += "\n";
-
-  int len = str.length();
-  str.toCharArray(buf, len+1);
-
-  writeFile("mag_offset.csv", buf);
-
-  digitalWrite(led1, LOW);
-}
-
-
-/***************************************************************
  * IMU AHRS UPDATE
  * Runs at 50Hz(Called every 20ms)
  **************************************************************/
@@ -249,4 +203,89 @@ void imu_ahrs_update(){
     Serial.print(" ");
     Serial.println(ToDeg(roll));
   }
+}
+
+/***************************************************************
+ * Compass calibration 2D
+ **************************************************************/
+void compass_calibration_2d(){
+  unsigned long start_time = millis();
+  int calibration_time = 7500;
+  char buf[256];
+  String str = "";
+
+  // Calibration
+  Serial.print("[!] Compass calibration in xy coordinates ... ");
+  // Generate a character string to be recorded on the SD card
+  // microSDカードに記録する文字列を生成する
+  str += String("[!] Compass calibration in xy coordinates ... ");
+
+  right_cw(255);
+  digitalWrite(led1, HIGH);
+  while((millis() - start_time) < calibration_time){
+    Read_Compass();
+
+    running_min.x = _min(running_min.x, magnetom_x);
+    running_min.y = _min(running_min.y, magnetom_y);
+
+    running_max.x = _max(running_max.x, magnetom_x);
+    running_max.y = _max(running_max.y, magnetom_y);
+  }
+  digitalWrite(led1, LOW);
+  beep(PUSHED);
+
+  motor_stop();
+  delay(2000);
+
+  start_time = millis();
+
+  left_ccw(255);
+  digitalWrite(led1, HIGH);
+  while((millis() - start_time) < calibration_time){
+    Read_Compass();
+
+    running_min.x = _min(running_min.x, magnetom_x);
+    running_min.y = _min(running_min.y, magnetom_y);
+
+    running_max.x = _max(running_max.x, magnetom_x);
+    running_max.y = _max(running_max.y, magnetom_y);
+  }
+  digitalWrite(led1, LOW);
+  beep(PUSHED);
+
+  Serial.println("done");
+  str += String("done\n");
+  Serial.print("MAG_X_OFFSET: "); Serial.print((running_max.x + running_min.x) * 0.5);
+  Serial.print("\tMAG_Y_OFFSET: "); Serial.println((running_max.y + running_min.y) * 0.5);
+  str += String("MAG_X_OFFSET: "+String((running_max.x + running_max.x) * 0.5));
+  str += String("MAG_Y_OFFSET: "+String((running_max.y + running_max.y) * 0.5));
+
+  motor_stop();
+  delay(2000);
+
+  // Recoding to microSD card
+  // システムログをmicroSDカードに記録する
+  int len = str.length();
+  str.toCharArray(buf, len+1);
+  writeFile("/system_log.txt", buf);
+}
+
+/***************************************************************
+ * Compass Heading 2D
+ **************************************************************/
+void compass_heading_2d(){
+
+  // Calculation heading
+  // Recode your magnetom value 10 times
+  // 地磁気センサの値を10回記録して平均する
+  for(int i=0; i<10; i++){
+    Read_Compass();
+    c_magnetom_x += magnetom_x - ((running_max.x + running_min.x) * 0.5);
+    c_magnetom_y += magnetom_y - ((running_max.y + running_min.y) * 0.5);
+  }
+  c_magnetom_x = c_magnetom_x / 10;
+  c_magnetom_y = c_magnetom_y / 10;
+
+  MAG_Heading = atan2(-c_magnetom_y, c_magnetom_x);
+  Serial.print("Heading:\t"); Serial.println(ToDeg(MAG_Heading));
 }

@@ -41,8 +41,9 @@ void Read_Gyro();
 void Read_Accel();
 void Read_Compass();
 float calc_g_force(float, float, float);
-void compass_calibrate();
 void imu_ahrs_update();
+void compass_calibration_2d();
+void compass_heading_2d();
 
 // DCM.ino
 void Normalize(void);
@@ -75,6 +76,9 @@ void timer_start_3();
 void timer_stop_3();
 // TIM4
 void timer_start_4();
+// TIM12
+void timer_start_12();
+void timer_stop_12();
 
 /***************************************************************
  * GPS: gps.ino

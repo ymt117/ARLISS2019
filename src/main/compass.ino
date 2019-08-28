@@ -4,6 +4,7 @@
  */
 
 #include "cansat_define.h"
+#include "cansat_prototype.h"
 
 void Compass_Heading()
 {
