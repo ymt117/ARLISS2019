@@ -84,8 +84,6 @@ void setup() {
   imu_offset();
   altitude_offset();
 
-  madgwick_init();
-
   beep(BOOT_UP);
 
   // Timer init
@@ -97,6 +95,7 @@ void setup() {
   delay(20);
   counter=0;
 
+  madgwick_init();
   microsPerReading = 1000000 / 50;
   microsPrevious = micros();
 }
