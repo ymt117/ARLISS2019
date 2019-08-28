@@ -2,12 +2,31 @@
 #define __CANSAT_DEFINE__
 
 /***************************************************************
+ * ////////// MEMO //////////
+ * 競技開始前に設定する必要がある変数
+ * [cansat_define.h]
+ *   g_lng   :ゴールの経度
+ *   g_lat   :ゴールの緯度
+ * [launch.ino]
+ *   launch_altitude_threshold  :打ち上げ判定する高度
+ *   release_cds_threshold      :放出判定する照度センサの閾値
+ *   release_wait               :放出判定を終える最終的な時間
+ *   drop_altitude_threshold    :落下判定する高度
+ *   drop_wait                  :落下判定を終える最終的な時間
+ **************************************************************/
+
+/***************************************************************
  * GOAL Position
  **************************************************************/
 static const float g_lng = 130.543375;
 static const float g_lat = 31.567613;
 
 double distance2goal = 0.0;
+
+/***************************************************************
+ * Serial debug
+ **************************************************************/
+#define CANSAT_SERIAL_DEBUG
 
 /***************************************************************
  * Status of CanSat
@@ -39,14 +58,13 @@ MyState s = State_init;
 #define RELEASE_COMPLETE  8
 #define DROP_COMPLETE     9
 #define GPS_POSITIONING  10
-#define DD_CALCULATION    11
+#define DD_CALCULATION   11
 
 static const uint8_t sp = PB12; // Pin connected to the Speaker
 
 /***************************************************************
  * TWE-Lite
  **************************************************************/
-//#define SLEEP_MODE
 static const uint8_t twe_lite_sleep_pin = PA15; // Pin connected to the TWE-Lite M3(LOW: Sleep)
 
 /***************************************************************

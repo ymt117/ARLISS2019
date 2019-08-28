@@ -40,8 +40,13 @@ void run2goal(){
         old_lat = old_lat / 10;
         old_lng = old_lng / 10;
 
+        writeAll();
+
+#ifdef CANSAT_SERIAL_DEBUG
         Serial.print("old Lat: "); Serial.print(old_lat, 6);
         Serial.print("\told Lng: "); Serial.println(old_lng, 6);
+#endif
+
         // Generate a character string to be recorded on the SD card
         // microSDカードに記録する文字列を生成する
         str += String("old Lat: "+String(old_lat, 6)+" old Lng: "+String(old_lng, 6)+"\n");
@@ -52,8 +57,10 @@ void run2goal(){
         old_distance2goal = distance(g_lng, g_lat, old_lng, old_lat);
         old_direction2goal = direction(g_lng, g_lat, old_lng, old_lat);
 
+#ifdef CANSAT_SERIAL_DEBUG
         Serial.print("old Distance to GOAL: "); Serial.print(old_distance2goal);
         Serial.print("\told Direction to GOAL: "); Serial.println(old_direction2goal);
+#endif
         str += String("old Distance to GOAL: "+String(old_distance2goal, 2)+" old Direction to GOAL: "+String(old_direction2goal, 2)+"\n");
         //beep(DD_CALCULATION);
 
@@ -84,8 +91,12 @@ void run2goal(){
         new_lat = new_lat / 10;
         new_lng = new_lng / 10;
 
+        writeAll();
+
+#ifdef CANSAT_SERIAL_DEBUG
         Serial.print("new Lat: "); Serial.print(new_lat, 6);
         Serial.print("\tnew Lng: "); Serial.println(new_lng, 6);
+#endif
         str += String("new Lat: "+String(new_lat, 6)+" new Lng: "+String(new_lng, 6)+"\n");
         //beep(GPS_POSITIONING);
 
@@ -94,8 +105,10 @@ void run2goal(){
         new_distance2goal = distance(g_lng, g_lat, new_lng, new_lat);
         new_direction2goal = direction(g_lng, g_lat, new_lng, new_lat);
 
+#ifdef CANSAT_SERIAL_DEBUG
         Serial.print("new Distance to GOAL: "); Serial.print(new_distance2goal);
         Serial.print("\tnew Direction to GOAL: "); Serial.println(new_direction2goal);
+#endif
         str += String("new Distance to GOAL: "+String(new_distance2goal, 2)+" new Direction to GOAL: "+String(new_direction2goal, 2)+"\n");
         //beep(DD_CALCULATION);
 
@@ -103,20 +116,26 @@ void run2goal(){
         // 移動前後のゴールのある方位をもとにローバーの向きを調整する
         float diff_direction = old_direction2goal - new_direction2goal;
         if(diff_direction > 10){
+#ifdef CANSAT_SERIAL_DEBUG
             Serial.println("[!] Adjust the direction of the rover [Turn RIGHT]");
             Serial.print("direction_diff: "); Serial.println(diff_direction);
-            str += String("[!] Adjust the direction of the rover [Turn RIGHT]\n"+String(diff_direction, 2)+"\n");
+#endif
+            str += String("[!] Adjust the direction of the rover [Turn RIGHT]\ndiff_direction: "+String(diff_direction, 2)+"\n");
             turn_right(255);
             delay(100);
         }else if(diff_direction < -10){
+#ifdef CANSAT_SERIAL_DEBUG
             Serial.println("[!] Adjust the direction of the rover [Turn LEFT]");
             Serial.print("direction_diff: "); Serial.println(diff_direction);
-            str += String("[!] Adjust the direction of the rover [Turn LEFT]\n"+String(diff_direction, 2)+"\n");
+#endif
+            str += String("[!] Adjust the direction of the rover [Turn LEFT]\ndiff_direction: "+String(diff_direction, 2)+"\n");
             turn_left(255);
             delay(100);
         }else{
             // do nothing
+#ifdef CANSAT_SERIAL_DEBUG
             Serial.print("direction_diff: "); Serial.println(diff_direction);
+#endif
         }
         motor_stop();
         delay(1000);
@@ -128,8 +147,10 @@ void run2goal(){
             // ignore if the goal is near
             if(near_goal_flag == true) break;
 
+#ifdef CANSAT_SERIAL_DEBUG
             Serial.println("[!] Judgment Stack");
             Serial.print("diff_distance: "); Serial.println(diff_distance);
+#endif
             str += String("[!] Judgment Stack\ndiff_distance: "+String(diff_distance, 2)+"\n");
 
             // Moving back and turn
@@ -143,14 +164,13 @@ void run2goal(){
         // When moving away from the target point
         // ゴールから遠ざかっているとき
         if((new_distance2goal - old_distance2goal) > 5){
-                
+#ifdef CANSAT_SERIAL_DEBUG
             Serial.println("[!] Judgment Moving away from GOAL");
-            Serial.print("diff_distance: "); Serial.println(diff_distance);
+#endif
             str += String("[!] Judgment Moving away from GOAL\n");
             away_from_goal_count++;
 
         }else{
-            Serial.print("diff_distance: "); Serial.println(diff_distance);
             away_from_goal_count = 0;
         }
 
@@ -161,11 +181,9 @@ void run2goal(){
             return;
         }
 
-
         // Recoding to microSD card
         // システムログをmicroSDカードに記録する
         int len = str.length();
-        Serial.print("len+1: "); Serial.println(len+1);
         str.toCharArray(buf, len+1);
         writeFile("/system_log.txt", buf);
 

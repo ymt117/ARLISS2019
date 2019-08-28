@@ -8,15 +8,13 @@
 #include "cansat_define.h"
 #include "cansat_prototype.h"
 
-//#define GO_STRAIGHT_PRINT
-
 void go_straight(int end_time){
   unsigned long start_time = millis();
   float gyro_z_array[3];
   float theta = 0;
   float theta_z = 0;
 
-  Serial.print("Moving forward "); Serial.print(end_time); Serial.println(" ms");
+  //Serial.print("Moving forward "); Serial.print(end_time); Serial.println(" ms");
   forward(255);
 
   while(millis() - start_time < end_time){
@@ -76,8 +74,8 @@ void go_straight(int end_time){
   }
 
   motor_stop();
-  Serial.println("Motor stop");
+  //Serial.println("Motor stop");
 
   delay(500);
-  beep(PUSHED);
+  //beep(PUSHED);
 }

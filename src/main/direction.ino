@@ -29,7 +29,7 @@ double direction(double lng1, double lat1, double lng2, double lat2){
   phi = atan2(Y, X);
 
   phi = ToDeg(phi);
-  //if(phi < 0) phi += 360;
+  if(phi < 0) phi += 360;
 
   return phi;
 }
