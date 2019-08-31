@@ -5,8 +5,8 @@
  * ////////// MEMO //////////
  * 競技開始前に設定する必要がある変数
  * [cansat_define.h]
- *   g_lng   :ゴールの経度
- *   g_lat   :ゴールの緯度
+ *   g_lng                      :ゴールの経度
+ *   g_lat                      :ゴールの緯度
  * [launch.ino]
  *   launch_altitude_threshold  :打ち上げ判定する高度
  *   release_cds_threshold      :放出判定する照度センサの閾値
