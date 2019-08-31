@@ -35,20 +35,19 @@ void setup() {
   writeFile("/hello.txt", "Hello CanSat!!!\n");
   writeFile("/log.csv",
             "millis,state,year,month,day,hour,minute,second,lat,lng,ax,ay,az,gx,gy,gz,mx,my,mz,pressure,altitude,temperature,cds,batt1,batt2,distance2goal\n");
+  writeFile("/system_log.txt", "******************** start program ********************\n");
   writeFile("/system_log.txt", "[State: Initialization] ... Start CanSat Program!!!\n");
   
   // If the previous exit status is non-init or non-exit, the previous status is assigned to variable s.
-  /*
-  int old_status = readStatus("status.txt");
-  Serial.print("old_status: "); Serial.println(old_status);
-  if(old_status == (int)State_launch_detect) s = State_launch_detect;
-  else if(old_status == (int)State_release_detect) s = State_release_detect;
-  else if(old_status == (int)State_drop_detect) s = State_drop_detect;
-  else if(old_status == (int)State_test)  s = State_test;
-  else if(old_status == (int)State_exit)  s = State_exit;
-  else {                                  s = State_test; }
-  */
-  s = State_run_to_goal;
+  int old_status = readStatus();
+  if(old_status <= 0){
+    Serial.println("Reading status failed. Start program from state: State_launch_detect");
+    s = State_launch_detect;
+  }
+  else{
+    Serial.print("Start program from previous state: "); Serial.println(old_status);
+    s = (MyState)old_status;
+  }
   writeStatus();
 
   delay(20);
@@ -112,29 +111,33 @@ void loop() {
 
     case State_launch_detect:
       Serial.println("[State: Launch detection]");
-      writeFile("/system_log.txt", "[State: Launch detection]\n");
+      writeFile("/system_log.txt", "\n[State: Launch detection]\n");
       writeStatus();
+      writeAll();
       launch_detect();
       break;
 
     case State_release_detect:
       Serial.println("[State: Release detection]");
-      writeFile("/system_log.txt", "[State: Release detection]\n");
+      writeFile("/system_log.txt", "\n[State: Release detection]\n");
       writeStatus();
+      writeAll();
       release_detect();
       break;
 
     case State_drop_detect:
       Serial.println("[State: Drop detection]");
-      writeFile("/system_log.txt", "[State: Drop detection]\n");
+      writeFile("/system_log.txt", "\n[State: Drop detection]\n");
       writeStatus();
+      writeAll();
       drop_detect();
       break;
 
     case State_first_fire:
       Serial.println("[State: First fire]");
-      writeFile("/system_log.txt", "[State: First fire]\n");
+      writeFile("/system_log.txt", "\n[State: First fire]\n");
       writeStatus();
+      writeAll();
       delay(20000);
       _heat1();
       _heat1();
@@ -143,13 +146,14 @@ void loop() {
 
     case State_second_fire:
       Serial.println("[State: Second fire]");
-      writeFile("/system_log.txt", "[State: Second fire]\n");
+      writeFile("/system_log.txt", "\n[State: Second fire]\n");
       writeStatus();
+      writeAll();
       delay(20000);
       _heat2();
       _heat2();
       forward(255);
-      delay(500);
+      delay(2000);
       motor_stop();
       delay(500);
       s = State_run_to_goal;
@@ -157,15 +161,20 @@ void loop() {
 
     case State_run_to_goal:
       Serial.println("[State: Run to GOAL]");
-      writeFile("/system_log.txt", "[State: Run to GOAL]\n");
+      writeFile("/system_log.txt", "\n[State: Run to GOAL]\n");
       writeStatus();
+      writeAll();
       run2goal();
       break;
 
     case State_goal:
       Serial.println("[State: GOAL] ... All done!!!");
-      writeFile("/system_log.txt", "[State: GOAL] ... All done!!!\n");
+      writeFile("/system_log.txt", "\n[State: GOAL] ... All done!!!\n");
       writeStatus();
+      writeAll();
+      motor_stop();
+      digitalWrite(led2, HIGH);
+      delay(2000);
       while(1){
         beep(CLANNAD);
         delay(1000);
@@ -176,14 +185,16 @@ void loop() {
     case State_test:
       // test code
       Serial.println("[State: Test mode]");
-      writeFile("/system_log.txt", "[State: Test mode]\n");
+      writeFile("/system_log.txt", "\n[State: Test mode]\n");
       writeStatus();
+      writeAll();
+      gps_read();
       break;
 
     case State_exit:
       // End processing and enter infinite loop...
       Serial.println("[State: EXIT] ... Gooodbye~~");
-      writeFile("/system_log.txt", "[State: EXIT] ... Gooodbye~~\n");
+      writeFile("/system_log.txt", "\n[State: EXIT] ... Gooodbye~~\n");
       writeStatus();
       led_off();
       motor_stop();
@@ -195,7 +206,7 @@ void loop() {
     default:
       // code block
       Serial.println("[State: default]");
-      writeFile("/system_log.txt", "[State: default]\n");
+      writeFile("/system_log.txt", "\n[State: default]\n");
       writeStatus();
       break;
   }

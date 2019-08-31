@@ -25,6 +25,8 @@ char report[80];
  **************************************************************/
 void imu_init(){
   Wire.begin();
+
+  Serial.print("IMU initialization ... ");
   
   if(!imu.init()){
     Serial.println("Failed to detect and initialize IMU!");
@@ -45,6 +47,7 @@ void imu_init(){
   }
   mag.enableDefault();
 
+  Serial.println("done!");
   imu_status = 1;
 }
 

@@ -21,7 +21,7 @@ float calc_altitude(){
         delay(20);
     }
     altitude = altitude / NUM_MOVING_AVERAGE;
-    altitude -= altitude_offset_value;
+    altitude = altitude - altitude_offset_value;
 #ifdef CANSAT_SERIAL_DEBUG
     Serial.print("Altitude:\t\t"); Serial.print(altitude); Serial.println(" [m]");
 #endif
@@ -43,17 +43,21 @@ void altitude_offset(){
     char buf[64];
     String str = "";
 
+    altitude_offset_value = 0.0;
+
     // Measure altitude 50 times
     // 高度を50回求めて平均する
     for(int i=0; i<50; i++){
         altitude_offset_value += ps.pressureToAltitudeMeters(ps.readPressureMillibars());
+        Serial.println(altitude_offset_value);
         delay(20);
     }
+    Serial.print("altitude_offset_value: "); Serial.println(altitude_offset_value);
     altitude_offset_value = altitude_offset_value / 50;
 #ifdef CANSAT_SERIAL_DEBUG
     Serial.print("Altitude OFFSET value:\t\t"); Serial.println(altitude_offset_value);
 #endif
-    str = String("Altitude OFFSET value: "+String(altitude_offset_value, 2));
+    str = String("Altitude OFFSET value: "+String(altitude_offset_value, 2)+"\n");
 
     // Recoding to microSD card
     // システムログをmicroSDカードに記録する

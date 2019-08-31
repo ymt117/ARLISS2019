@@ -172,6 +172,7 @@ void writeAll(){
   str += String(analogRead(cds));        str += ",";
   str += String(battery_voltage(batt1)); str += ",";
   str += String(battery_voltage(batt2)); str += ",";
+  str += distance2goal;                  str += ",";
   str += "\n";
 
   int len = str.length();

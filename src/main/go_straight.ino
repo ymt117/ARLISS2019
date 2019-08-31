@@ -8,7 +8,9 @@
 #include "cansat_define.h"
 #include "cansat_prototype.h"
 
-void go_straight(int end_time){
+float global_theta_z = 0.0;
+
+void go_straight(int end_time, int diff_direction){
   unsigned long start_time = millis();
   float gyro_z_array[3];
   float theta = 0;
@@ -31,7 +33,7 @@ void go_straight(int end_time){
     if(theta > 180) theta = -180;
     if(theta < -180) theta = 180;
 
-    theta_z = theta;
+    theta_z = theta + diff_direction + global_theta_z;
 
     // Motor strength: VeryHigh[255] High[200] Medium[175] Low[150] VeryLow[100]
     if(theta_z > 45){
@@ -74,7 +76,20 @@ void go_straight(int end_time){
   }
 
   motor_stop();
-  //Serial.println("Motor stop");
+  
+  for(int i=0; i<3; i++){
+    Read_Gyro();
+    gyro_z_array[i] = gyro_z * 0.07;
+
+    if(i < 2) delay(5);
+  }
+
+  theta += (gyro_z_array[0] + 4 * gyro_z_array[1] + gyro_z_array[3]) / 600 * 1.5;
+
+  if(theta > 180) theta = -180;
+  if(theta < -180) theta = 180;
+
+  global_theta_z = theta + diff_direction + global_theta_z;
 
   delay(500);
   //beep(PUSHED);

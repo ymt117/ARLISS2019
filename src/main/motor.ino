@@ -54,13 +54,13 @@ void back(int pwm){
 }
 
 void turn_right(int pwm){
-  right_ccw(pwm);
-  left_ccw(pwm);
+  right_cw(pwm);
+  left_cw(pwm);
 }
 
 void turn_left(int pwm){
-  right_cw(pwm);
-  left_cw(pwm);
+  right_ccw(pwm);
+  left_ccw(pwm);
 }
 
 void motor_stop(){

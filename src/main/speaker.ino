@@ -16,10 +16,22 @@ float mm1[] = {mE*4, mA*4, mB*4, mA*4, mE*2, mE*4, mB*4};
 // SHUT_DOWN
 float mm2[] = {mA*4, mE*4, mA*2, mB*4};
 // Dango Big Family ♪だんご大家族
-float mm3[] = {mE*4, mD*4, mG*4, nn, mG*4, mG*4, mA*4, nn,
-               mA*4, mA*4, mB*4, nn, mG*4, mG*4, mD*4, nn,
-               mE*4, mD*4, mG*4, nn, mG*4, mG*4, mA*4, nn,
-               mA*4, mA*4, mB*4, mB*4, mG*4};
+float mm3[] = {mE*4, mD*4, mG*4, nn,   mG*4, mG*4, mA*4, nn,       // ミレソ ソッラ
+               mA*4, mA*4, mB*4, nn,   mG*4, mG*4, mD*4, nn,       // ラッシ ソッレ
+               mE*4, mD*4, mG*4, nn,   mG*4, mG*4, mA*4, nn,       // ミレソ ソッラ
+               mA*4, mA*4, mB*4, mB*4, mG*4, nn,                   // ラッシシソ
+               mE*4, mD*4, mG*4, nn,   mG*4, mG*4, mA*4, nn,       // ミレソ ソッラ
+               mA*4, mA*4, mB*4, nn,   mG*4, mG*4, mD*4, nn,       // ラッシ ソッレ
+               mE*4, mD*4, mG*4, nn,                               // ミレソ
+               mG*4, mG*4, mA*4, mA*4, mG*4, nn,   nn,             // ソッララソ
+               mE*4, mD*4, mG*4, nn,   mG*4, nn,   mA*4, nn,       // ミレソ ソーラ
+               mA*4, nn,   mB*4, nn,   mG*4, nn,   mA*4, nn,       // ラーシ ソーレ
+               mE*4, mD*4, mG*4, nn,   mG*4, nn,   mA*4, nn,       // ミレソ ソーラ
+               mA*4, nn,   mB*4, nn,   mA*4, nn,   nn,             // ラーシ ラ
+               mE*4, mD*4, mG*4, nn,   mG*4, nn,   mA*4, nn,       // ミレソ ソーラ
+               mA*4, nn,   mB*4, nn,   mG*4, nn,   mA*4, nn,       // ラーシ ソーレ
+               mE*4, mD*4, mG*4, nn,   mG*4, nn,   mA*4, mG*4, nn, // ミレソ ソーラ ソ
+               };
 // CANSAT_ERROR: Failed initialize SD Card ♪シシシシ
 float mm4[] = {mB*4, mB*4, mB*4, mB*4};
 // PUSHED
