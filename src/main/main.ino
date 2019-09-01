@@ -97,6 +97,12 @@ void setup() {
   madgwick_init();
   microsPerReading = 1000000 / 50;
   microsPrevious = micros();
+
+  twe_lite_sleep();
+  low_power();
+  twe_lite_wakeup();
+
+  beep(BOOT_UP);
 }
 
 
