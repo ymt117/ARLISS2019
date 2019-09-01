@@ -103,7 +103,7 @@ void release_detect(){
     int release_count = 0;
     const int release_cds_threshold = 50;
     unsigned long release_time = millis();
-    unsigned long release_wait = 18000;
+    unsigned long release_wait = 180000;
 
     while(release_count < 10){
 
@@ -154,7 +154,7 @@ void drop_detect(){
     int gyro_flag = 0;
     int altitude_flag = 0;
     unsigned long drop_time = millis();
-    unsigned long drop_wait = 18000;
+    unsigned long drop_wait = 180000;
 
     while(gyro_flag == 0 || altitude_flag == 0){
         
