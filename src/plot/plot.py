@@ -30,8 +30,6 @@ def plot_lat_lng():
         end_x = (math.cos(df['control'][i]*0.01745329252)*0.00005 + df['lng'][i]) # cosθ + 経度
         end_y = (math.sin(df['control'][i]*0.01745329252)*0.00005 + df['lat'][i]) # sinθ + 緯度
 
-        print(end_x)
-
         # 矢印の開始点と終了点
         point = {
             'start': [df['lng'][i], df['lat'][i]],
@@ -39,7 +37,13 @@ def plot_lat_lng():
         }
 
         # 矢印の設定
-        ax.annotate('', xy=point['end'], xytext=point['start'],
+        if i == 0:
+            plot_str = "  Control start point\n  "+str(df['lat'][i])+"\n  "+str(df['lng'][i])
+        elif i == len(df)-1:
+            plot_str = "  Control finish point\n  "+str(df['lat'][i])+"\n  "+str(df['lng'][i])
+        else:
+            plot_str = ""
+        ax.annotate(plot_str, xy=point['end'], xytext=point['start'],
                     arrowprops=dict(shrink=0, width=1, headwidth=8,
                                     headlength=10, connectionstyle='arc3',
                                     facecolor='red', edgecolor='red')
