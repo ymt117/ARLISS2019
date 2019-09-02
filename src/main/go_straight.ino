@@ -16,7 +16,6 @@ void go_straight(int end_time, int diff_direction){
   float theta = 0;
   float theta_z = 0;
 
-  //Serial.print("Moving forward "); Serial.print(end_time); Serial.println(" ms");
   forward(255);
 
   while(millis() - start_time < end_time){
