@@ -7,7 +7,7 @@ import math
 def plot_lat_lng():
 
     # csvファイルを読み込む
-    # データは4列で構成される
+    # データは3列で構成される
     # |緯度|経度|制御量（角度）|
     df = pd.read_csv("control.csv")
     df.describe()
