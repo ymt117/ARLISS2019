@@ -98,9 +98,15 @@ void setup() {
   microsPerReading = 1000000 / 50;
   microsPrevious = micros();
 
-  twe_lite_sleep();
-  low_power();
-  twe_lite_wakeup();
+  if(s == State_launch_detect){
+    Serial.print("Sleep ... ");
+    writeFile("/system_log.txt", "Sleep ... ");
+    twe_lite_sleep();
+    low_power();
+    twe_lite_wakeup();
+    Serial.println("Wake up!!!");
+    writeFile("/system_log.txt", "Wake up!!!\n");
+  }
 
   beep(BOOT_UP);
 }
@@ -120,6 +126,9 @@ void loop() {
       writeFile("/system_log.txt", "\n[State: Launch detection]\n");
       writeStatus();
       writeAll();
+      // Turn off the radio in launch detection mode
+      // 打上検知モードでは無線機をオフにする
+      twe_lite_sleep();
       launch_detect();
       break;
 
@@ -170,6 +179,9 @@ void loop() {
       writeFile("/system_log.txt", "\n[State: Run to GOAL]\n");
       writeStatus();
       writeAll();
+      // Turn on the radio
+      // 無線機をオンにする
+      twe_lite_wakeup();
       run2goal();
       break;
 
