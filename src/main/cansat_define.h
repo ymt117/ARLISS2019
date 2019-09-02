@@ -19,11 +19,11 @@
  * GOAL Position
  **************************************************************/
 // グラウンド真ん中
-//static const double g_lng = 130.543375;
-//static const double g_lat = 31.567613;
+static const double g_lng = 130.543375;
+static const double g_lat = 31.567613;
 // 油そば専門店兎
-static const double g_lng = 130.553506;
-static const double g_lat = 31.573600;
+//static const double g_lng = 130.553506;
+//static const double g_lat = 31.573600;
 
 double distance2goal = 0.0;
 
