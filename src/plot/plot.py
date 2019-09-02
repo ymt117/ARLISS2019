@@ -5,6 +5,9 @@ from pandas.plotting import scatter_matrix
 import math
 
 def plot_lat_lng():
+    # GOALの緯度・経度
+    g_lat = 31.567613
+    g_lng = 130.543375
 
     # csvファイルを読み込む
     # データは3列で構成される
@@ -12,7 +15,7 @@ def plot_lat_lng():
     df = pd.read_csv("control.csv")
     df.describe()
 
-    fig=plt.figure(figsize=(10, 10))
+    fig=plt.figure(figsize=(15, 15))
 
     ax = fig.add_subplot(111)
 
@@ -22,8 +25,8 @@ def plot_lat_lng():
 
     # 軸の下限と上限を設定する
     # x軸は経度，y軸は緯度
-    ax.set_xlim(lng_min-0.0001, lng_max+0.0001)
-    ax.set_ylim(lat_min-0.0001, lat_max+0.0001)
+    ax.set_xlim(lng_min-0.0002, lng_max+0.0002)
+    ax.set_ylim(lat_min-0.0002, lat_max+0.0002)
 
     # 矢印を描画する
     for i in range(len(df)):
@@ -50,7 +53,9 @@ def plot_lat_lng():
                    )
 
     # 折れ線を描画する
-    plt.plot(df['lng'], df['lat'], '-o')
+    plt.plot(g_lng, g_lat, '^')
+    ax.annotate("  Target point\n  "+str(g_lat)+"\n  "+str(g_lng), (g_lng, g_lat))
+    plt.plot(df['lng'], df['lat'], '-o', linestyle='dashed', color='black')
     plt.xlabel('longtitude')
     plt.ylabel('latitude')
     plt.show()
