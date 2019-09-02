@@ -37,6 +37,7 @@ void setup() {
             "millis,state,year,month,day,hour,minute,second,lat,lng,ax,ay,az,gx,gy,gz,mx,my,mz,pressure,altitude,temperature,cds,batt1,batt2,distance2goal\n");
   writeFile("/system_log.txt", "******************** start program ********************\n");
   writeFile("/system_log.txt", "[State: Initialization] ... Start CanSat Program!!!\n");
+  writeFile("/control.csv", "lat,lng,control\n");
   
   // If the previous exit status is non-init or non-exit, the previous status is assigned to variable s.
   int old_status = readStatus();
