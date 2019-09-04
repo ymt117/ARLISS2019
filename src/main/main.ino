@@ -207,7 +207,7 @@ void loop() {
       writeFile("/system_log.txt", "\n[State: Test mode]\n");
       writeStatus();
       writeAll();
-      gps_read();
+      go_straight(10000, 0);
       break;
 
     case State_exit:

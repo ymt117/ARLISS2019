@@ -12,12 +12,13 @@ void run2goal(){
     double new_lat = 0.0;               // 移動した後のローバの緯度
     double new_lng = 0.0;               // 移動した後のローバの経度
     double old_distance2goal = 10000.0; // 移動する前のローバとゴールの距離
+    double old_direction2goal = 0.0;    // 移動する前のローバから見て，ゴールのある方角
     double new_distance2goal = 10000.0; // 移動した後のローバとゴールの距離
     double direction_theta = 0.0;       // 移動した後のローバから見て，ゴールのある方角(真北を0°)
     double direction_phi = 0.0;         // 移動した後のローバから見て，移動する前のローバのある方角(真北を0°)
     int turn_angle = 0;                 // 旋回時の旋回角度
-    int turn_time = 8000;               // 旋回時のモータの制御量(delayの時間[ms])
-    int forward_time = 15000;           // 直進時のモータの制御量(delayの時間[ms])
+    int turn_time = 7500;               // 旋回時のモータの制御量(時間，delay[ms])
+    int forward_time = 15000;           // 直進時のモータの制御量(時間，delay[ms])
     double diff_direction = 0.0;        // 直進の向き修正角度
 
     char buf[1024];
@@ -44,8 +45,8 @@ void run2goal(){
                 delay(100);
             }
         }
-        old_lat = old_lat / 10;
-        old_lng = old_lng / 10;
+        old_lat = old_lat * 0.1;
+        old_lng = old_lng * 0.1;
 
         writeAll();
 
@@ -62,30 +63,33 @@ void run2goal(){
         // ゴールまでの距離を計算する
         old_distance2goal = 0.0;
         old_distance2goal = distance(g_lng, g_lat, old_lng, old_lat);
+        old_direction2goal = direction(g_lng, g_lat, old_lng, old_lat);
         distance2goal = old_distance2goal;
 
 #ifdef CANSAT_SERIAL_DEBUG
         Serial.print("old Distance to GOAL: "); Serial.println(old_distance2goal);
 #endif
         str += String("old Distance to GOAL: "+String(old_distance2goal, 2)+"\n");
+        str_control += String(String(old_lat, 6)+","+String(old_lng, 6)+","+String(old_direction2goal)+"\n");
         //beep(DD_CALCULATION);
 
         // When approaching a target point of 10 m or less
         // ゴールとの距離が10m以内のとき
         if(old_distance2goal < 10){
+            str_control += String(String(old_lat, 6)+","+String(old_lng, 6)+",00\n");
             s = State_goal;
-            return;
+            break;
         }
 
         // Move forward [forward_time] ms
         // [forward_time]ミリ秒だけ直進する
         Serial.print("Moving forward "); Serial.print(forward_time); Serial.println(" [ms]");
         str += String("Moving forward "+String(forward_time)+" [ms]\n");
-        diff_direction = 0.0;
         go_straight(forward_time, 0);
         Serial.println("Motor stop");
         str += "Motor stop\n";
         delay(2000);
+        //str_control += String(String(old_lat, 6)+","+String(old_lng, 6)+","+String(0)+"\n");
 
         new_lat = 0.0;
         new_lng = 0.0;
@@ -100,8 +104,8 @@ void run2goal(){
                 delay(100);
             }
         }
-        new_lat = new_lat / 10;
-        new_lng = new_lng / 10;
+        new_lat = new_lat * 0.1; // 10分の1にする
+        new_lng = new_lng * 0.1;
 
         writeAll();
 
@@ -127,7 +131,7 @@ void run2goal(){
         Serial.print("direction_phi: "); Serial.println(direction_phi);
 #endif
         str += String("new Distance to GOAL: "+String(new_distance2goal, 2)+"\n");
-        str += String("direction_tehta: "+String(direction_theta, 2)+"\n");
+        str += String("direction_theta: "+String(direction_theta, 2)+"\n");
         str += String("direction_phi: "+String(direction_phi, 2)+"\n");
         //beep(DD_CALCULATION);
 
@@ -139,6 +143,7 @@ void run2goal(){
         Serial.print("diff_direction: "); Serial.println(diff_direction);
         #endif
         str += String("diff_direction: "+String(diff_direction, 2)+"\n");
+        //str_control += String(String(new_lat, 6)+","+String(new_lng, 6)+","+String(diff_direction)+"\n");
         if(diff_direction >= -360 && diff_direction <= -180){
             turn_angle = (int)(-180-diff_direction);
 
@@ -147,7 +152,7 @@ void run2goal(){
             Serial.print(turn_angle); Serial.println(" [deg]");
             #endif
             str += String("[!] Adjust the direction of the rover [Turn LEFT] "+String(turn_angle)+" [deg]\n");
-            str_control += String(String(old_lat, 6)+","+String(old_lng, 6)+","+String(turn_angle)+"\n");
+            str_control += String(String(new_lat, 6)+","+String(new_lng, 6)+","+String(turn_angle)+"\n");
         
             go_straight(turn_time, turn_angle);
 
@@ -159,7 +164,7 @@ void run2goal(){
             Serial.print(turn_angle); Serial.println(" [deg]");
             #endif
             str += String("[!] Adjust the direction of the rover [Turn RIGHT] "+String(-turn_angle)+" [deg]\n");
-            str_control += String(String(old_lat, 6)+","+String(old_lng, 6)+","+String(-turn_angle)+"\n");
+            str_control += String(String(new_lat, 6)+","+String(new_lng, 6)+","+String(turn_angle)+"\n");
             
             go_straight(turn_time, -turn_angle);
 
@@ -171,7 +176,7 @@ void run2goal(){
             Serial.print(turn_angle); Serial.println(" [deg]");
             #endif
             str += String("[!] Adjust the direction of the rover [Turn LEFT] "+String(turn_angle)+" [deg]\n");
-            str_control += String(String(old_lat, 6)+","+String(old_lng, 6)+","+String(turn_angle)+"\n");
+            str_control += String(String(new_lat, 6)+","+String(new_lng, 6)+","+String(turn_angle)+"\n");
             
             go_straight(turn_time, turn_angle);
 
@@ -183,7 +188,7 @@ void run2goal(){
             Serial.print(turn_angle); Serial.println(" [deg]");
             #endif
             str += String("[!] Adjust the direction of the rover [Turn RIGHT]"+String(-turn_angle)+" [deg]\n");
-            str_control += String(String(old_lat, 6)+","+String(old_lng, 6)+","+String(-turn_angle)+"\n");
+            str_control += String(String(new_lat, 6)+","+String(new_lng, 6)+","+String(turn_angle)+"\n");
             
             go_straight(turn_time, -turn_angle);
 
@@ -237,21 +242,17 @@ void run2goal(){
         }
 
         // When approaching a target point of 20 m or less
-        // ゴールとの距離が20m以内のとき，直進時間と旋回時間を短くする
+        // ゴールとの距離が20m以内のとき，直進時間を短くする
         if(new_distance2goal < 20){
             forward_time = 7000;
-            turn_time = 5500;
-        }
-        else{
-            forward_time = 15000;
-            turn_time = 8000;
         }
 
         // When approaching a target point of 10 m or less
         // ゴールとの距離が10m以内のとき
         if(new_distance2goal < 10){
+            str_control += String(String(new_lat, 6)+","+String(new_lng, 6)+",00\n");
             s = State_goal;
-            return;
+            break;
         }
 
         // Recoding to microSD card
@@ -263,12 +264,26 @@ void run2goal(){
         // control.csv
         len = str_control.length();
         str_control.toCharArray(buf_control, len+1);
-        writeFile("/control.csv", buf);
+        writeFile("/control.csv", buf_control);
 
         // Initialize variable with zero
         // 変数を初期化する
-        old_lat, old_lng, new_lat, new_lng = 0.0;
+        old_lat = 0.0; old_lng = 0.0; new_lat = 0.0; new_lng = 0.0;
         str = "";
         str_control = "";
     }
+
+
+    // Recoding to microSD card
+    // システムログをmicroSDカードに記録する
+    // system_log.txt
+    int len = str.length();
+    str.toCharArray(buf, len+1);
+    writeFile("/system_log.txt", buf);
+    // control.csv
+    len = str_control.length();
+    str_control.toCharArray(buf_control, len+1);
+    writeFile("/control.csv", buf_control);
+
+    return;
 }

@@ -10,32 +10,39 @@
 
 float global_theta_z = 0.0;
 
-void go_straight(int end_time, int diff_direction){
+
+void go_straight(int end_time, int turn_angle){
   unsigned long start_time = millis();
   float gyro_z_array[3];
-  float theta = 0;
-  float theta_z = 0;
+  float theta = 0.0;
+  float theta_z = 0.0;
 
   forward(255);
 
   while(millis() - start_time < end_time){
 
+    volatile unsigned long s_time = millis();
     for(int i=0; i<3; i++){
       Read_Gyro();
-      gyro_z_array[i] = gyro_z * 0.07;
+      gyro_z_array[i] = gyro_z * 2000;
+      gyro_z_array[i] /= 32768;
 
-      if(i < 2) delay(5);
+      delay(5);
     }
+    volatile unsigned long e_time = millis() - s_time;
+    Serial.print("for loop time:\t"); Serial.print(e_time);
 
-    theta += (gyro_z_array[0] + 4 * gyro_z_array[1] + gyro_z_array[3]) / 600 * 1.5;
+    theta += (gyro_z_array[0] + 4 * gyro_z_array[1] + gyro_z_array[2]) / 600 * (e_time * 0.1);
 
-    if(theta > 180) theta = -180;
+    
     if(theta < -180) theta = 180;
+    if(theta > 180) theta = -180;
 
-    theta_z = theta + diff_direction + global_theta_z;
+    theta_z = theta + turn_angle + global_theta_z;
+    Serial.print("^ttheta_z:\t"); Serial.println(theta_z);
 
     // Motor strength: VeryHigh[255] High[200] Medium[175] Low[150] VeryLow[100]
-    if(theta_z > 45){
+    if(theta_z > 45+turn_angle){
       // right: VeryLow, left: VeryHigh
       right_cw(100); left_ccw(255);
     }
@@ -71,25 +78,29 @@ void go_straight(int end_time, int diff_direction){
 
     else{
       // do nothing
+      forward(255);
     }
   }
 
   motor_stop();
   
+  volatile unsigned long s_time = millis();
   for(int i=0; i<3; i++){
     Read_Gyro();
-    gyro_z_array[i] = gyro_z * 0.07;
-
-    if(i < 2) delay(5);
+    gyro_z_array[i] = gyro_z * 2000;
+    gyro_z_array[i] /= 32768;
+    
+    delay(5);
   }
+  volatile unsigned long e_time = millis() - s_time;
+  //Serial.println(e_time);
 
-  theta += (gyro_z_array[0] + 4 * gyro_z_array[1] + gyro_z_array[3]) / 600 * 1.5;
+  theta += (gyro_z_array[0] + 4 * gyro_z_array[1] + gyro_z_array[2]) / 600 * (e_time * 0.1);
 
   if(theta > 180) theta = -180;
   if(theta < -180) theta = 180;
 
-  global_theta_z = theta + diff_direction + global_theta_z;
+  global_theta_z = theta + turn_angle + global_theta_z;
 
   delay(500);
-  //beep(PUSHED);
 }
