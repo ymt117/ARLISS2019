@@ -74,9 +74,9 @@ void altitude_offset(){
 //
 void launch_detect_A(){
     int launch_count = 0;
-    int launch_altitude_threshold = 10; // 10 = 10[meter]
+    int launch_altitude_threshold = 10;         // 10 = 10[meter]
     unsigned long launch_start_time = millis();
-    unsigned long launch_end_time = 4200000; //70[min] = 60000(=1[min]) * 70 = 4200000[ms]
+    unsigned long launch_end_time = 4200000;    //70[min] = 60000(=1[min]) * 70 = 4200000[ms]
     
     while(launch_count < 10){// 10 times or more until reaching [launch_altitude] meters
 
@@ -116,9 +116,9 @@ void launch_detect_A(){
 // 
 void launch_detect_B(){
     int launch_count = 0;
-    int launch_altitude_threshold = 11; // 10 = 10[meter]
+    int launch_altitude_threshold = 11;         // 10 = 10[meter]
     unsigned long launch_start_time = millis();
-    unsigned long launch_end_time = 4200000; //70[min] = 60000(=1[min]) * 70 = 4200000[ms]
+    unsigned long launch_end_time = 4200000;    //70[min] = 60000(=1[min]) * 70 = 4200000[ms]
     
     while(launch_count < 10){// 10 times or more until reaching [launch_altitude] meters
 
