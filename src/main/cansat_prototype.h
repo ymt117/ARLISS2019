@@ -116,9 +116,11 @@ double direction(double, double, double, double);
  **************************************************************/
 float calc_altitude();
 void altitude_offset();
-void launch_detect();
+void launch_detect_A();
+void launch_detect_B();
 void release_detect();
-void drop_detect();
+void drop_detect_A();
+void drop_detect_B();
 
 /***************************************************************
  * Heating: heat.ino

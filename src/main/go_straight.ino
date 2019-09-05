@@ -39,7 +39,7 @@ void go_straight(int end_time, int turn_angle){
     if(theta > 180) theta = -180;
 
     theta_z = theta + turn_angle + global_theta_z;
-    Serial.print("^ttheta_z:\t"); Serial.println(theta_z);
+    Serial.print("\ttheta_z:\t"); Serial.println(theta_z);
 
     // Motor strength: VeryHigh[255] High[200] Medium[175] Low[150] VeryLow[100]
     if(theta_z > 45+turn_angle){

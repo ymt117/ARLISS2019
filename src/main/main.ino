@@ -11,6 +11,8 @@
 #include "cansat_define.h"
 #include "cansat_prototype.h"
 
+#define LAUNCH_MODE 0 // 0のときモードA, 1のときモードB
+
 // Intterupt function called when the button is pressed.
 void _sw_pushed(){
 
@@ -99,6 +101,7 @@ void setup() {
   microsPerReading = 1000000 / 50;
   microsPrevious = micros();
 
+  // 打ち上げ前(ロケット搭載時)にスリープに入る
   if(s == State_launch_detect){
     Serial.print("Sleep ... ");
     writeFile("/system_log.txt", "Sleep ... ");
@@ -130,7 +133,12 @@ void loop() {
       // Turn off the radio in launch detection mode
       // 打上検知モードでは無線機をオフにする
       twe_lite_sleep();
-      launch_detect();
+      if(0 == LAUNCH_MODE){// 0
+        launch_detect_A();
+      }
+      else{// 1
+        launch_detect_B();
+      }
       break;
 
     case State_release_detect:
@@ -146,7 +154,12 @@ void loop() {
       writeFile("/system_log.txt", "\n[State: Drop detection]\n");
       writeStatus();
       writeAll();
-      drop_detect();
+      if(0 == LAUNCH_MODE){// 0
+        drop_detect_A();
+      }
+      else{// 1
+        drop_detect_B();
+      }
       break;
 
     case State_first_fire:
@@ -154,7 +167,7 @@ void loop() {
       writeFile("/system_log.txt", "\n[State: First fire]\n");
       writeStatus();
       writeAll();
-      delay(20000);
+      delay(500);
       _heat1();
       _heat1();
       s = State_second_fire;
@@ -165,13 +178,13 @@ void loop() {
       writeFile("/system_log.txt", "\n[State: Second fire]\n");
       writeStatus();
       writeAll();
-      delay(20000);
+      if(0 == LAUNCH_MODE) delay(500);
       _heat2();
       _heat2();
       forward(255);
-      delay(2000);
+      delay(10000);
       motor_stop();
-      delay(500);
+      delay(1000);
       s = State_run_to_goal;
       break;
 
@@ -207,7 +220,8 @@ void loop() {
       writeFile("/system_log.txt", "\n[State: Test mode]\n");
       writeStatus();
       writeAll();
-      go_straight(10000, 0);
+      //go_straight(10000, 0);
+      sw_motor();
       break;
 
     case State_exit:
