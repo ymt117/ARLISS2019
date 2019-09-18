@@ -20,6 +20,7 @@ void run2goal(){
     int turn_time = 7500;               // 旋回時のモータの制御量(時間，delay[ms])
     int forward_time = 15000;           // 直進時のモータの制御量(時間，delay[ms])
     double diff_direction = 0.0;        // 直進の向き修正角度
+    int count_trig_offset = 0;          // IMUセンサのキャリブレーション用カウンタ
 
     char buf[1024];
     String str = "";
@@ -38,6 +39,7 @@ void run2goal(){
             while(hs.available() > 0)
                 gps.encode(hs.read());
 
+
             if(gps.location.isUpdated()){
                 old_lat += gps.location.lat();
                 old_lng += gps.location.lng();
@@ -47,6 +49,8 @@ void run2goal(){
         }
         old_lat = old_lat * 0.1;
         old_lng = old_lng * 0.1;
+
+        imu_offset();
 
         writeAll();
 
@@ -222,6 +226,12 @@ void run2goal(){
             turn_right(255);
             delay(2000);
             motor_stop();
+            delay(1000);
+            forward(255);
+            delay(2000);
+            motor_stop();
+            delay(1000);
+            imu_offset();
             diff_direction = 0.0;
         }
         else{

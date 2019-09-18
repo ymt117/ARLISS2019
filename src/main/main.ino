@@ -28,7 +28,7 @@ void _sw_pushed(){
  * 
  **************************************************************/
 void setup() {
-  delay(1000);
+  //delay(1000);
   Serial.begin(115200);
   Serial.println("[State: Initialization] ... Start CanSat Program!!!");
 
@@ -102,6 +102,7 @@ void setup() {
   microsPrevious = micros();
 
   // 打ち上げ前(ロケット搭載時)にスリープに入る
+  
   if(s == State_launch_detect){
     Serial.print("Sleep ... ");
     writeFile("/system_log.txt", "Sleep ... ");
@@ -111,6 +112,7 @@ void setup() {
     Serial.println("Wake up!!!");
     writeFile("/system_log.txt", "Wake up!!!\n");
   }
+  
 
   beep(BOOT_UP);
 }
@@ -132,7 +134,7 @@ void loop() {
       writeAll();
       // Turn off the radio in launch detection mode
       // 打上検知モードでは無線機をオフにする
-      twe_lite_sleep();
+      //twe_lite_sleep();
       if(0 == LAUNCH_MODE){// 0
         launch_detect_A();
       }
@@ -220,7 +222,13 @@ void loop() {
       writeFile("/system_log.txt", "\n[State: Test mode]\n");
       writeStatus();
       writeAll();
-      //go_straight(10000, 0);
+      delay(1000);
+      beep(PUSHED);
+      _heat1();
+      delay(1000);
+      beep(PUSHED);
+      beep(PUSHED);
+      _heat2();
       sw_motor();
       break;
 

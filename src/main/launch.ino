@@ -74,7 +74,7 @@ void altitude_offset(){
 //
 void launch_detect_A(){
     int launch_count = 0;
-    int launch_altitude_threshold = 10;         // 10 = 10[meter]
+    int launch_altitude_threshold = 1000;         // 10 = 10[meter]
     unsigned long launch_start_time = millis();
     unsigned long launch_end_time = 4200000;    //70[min] = 60000(=1[min]) * 70 = 4200000[ms]
     
@@ -116,7 +116,7 @@ void launch_detect_A(){
 // 
 void launch_detect_B(){
     int launch_count = 0;
-    int launch_altitude_threshold = 11;         // 10 = 10[meter]
+    int launch_altitude_threshold = 1000;         // 10 = 10[meter]
     unsigned long launch_start_time = millis();
     unsigned long launch_end_time = 4200000;    //70[min] = 60000(=1[min]) * 70 = 4200000[ms]
     
@@ -160,8 +160,8 @@ void launch_detect_B(){
 void release_detect(){
     int release_count = 0;
     const int release_cds_threshold = 100;
-    unsigned long release_time = millis();
-    unsigned long release_wait = 180000;
+    unsigned long release_start_time = millis();
+    unsigned long release_end_time = 300000;
 
     while(release_count < 10){
 
@@ -179,7 +179,7 @@ void release_detect(){
         }
 
         // Judge based on Time
-        if((millis() - release_time) > release_wait){// When [release_wait] minutes have passed
+        if((millis() - release_start_time) > release_end_time){// When [release_wait] minutes have passed
 #ifdef CANSAT_SERIAL_DEBUG
             Serial.println("[!] release detection judged by time");
 #endif
@@ -211,11 +211,11 @@ void drop_detect_A(){
 
     int drop_count_gyro = 0;                  // ジャイロセンサで判定された回数
     int drop_count_altitude = 0;              // 気圧センサで判定された回数
-    int drop_altitude_threshold = 3;          // 落下を検知する高度[m]
+    int drop_altitude_threshold = 7;          // 落下を検知する高度[m]
     int gyro_flag = 0;                        // ジャイロセンサ判定用フラグ
     int altitude_flag = 0;                    // 気圧センサ判定用フラグ
     unsigned long drop_start_time = millis(); // 開始時間
-    unsigned long drop_end_time = 180000;     // 終了時間
+    unsigned long drop_end_time = 900000;     // 終了時間 1000[ms] = 1[s], 60000 = 60[s], 60[s] * 15 = 900[s] = 900000[ms]
 
     while(gyro_flag == 0 || altitude_flag == 0){
         
@@ -281,7 +281,7 @@ void drop_detect_B(){
     int drop_altitude_threshold = 9;          // 落下を検知する高度[m]
     int altitude_flag = 0;                    // 気圧センサ判定用フラグ
     unsigned long drop_start_time = millis(); // 開始時間
-    unsigned long drop_end_time = 180000;     // 終了時間
+    unsigned long drop_end_time = 900000;     // 終了時間
 
     while(altitude_flag == 0){
         
@@ -306,7 +306,7 @@ void drop_detect_B(){
             Serial.println("[!] drop detection judged by time");
 #endif
             writeFile("/system_log.txt", "[!] drop detection judged by time\n");
-            beep(DROP_COMPLETE);
+            //beep(DROP_COMPLETE);
             s = State_second_fire;
             return;
         }
@@ -318,7 +318,7 @@ void drop_detect_B(){
     Serial.println("[$] drop detection judged by gyro and altitude");
 #endif
     writeFile("/system_log.txt", "[!] drop detection judged by gyro and altitude");
-    beep(DROP_COMPLETE);
+    //beep(DROP_COMPLETE);
     s = State_second_fire;
     return;
 }

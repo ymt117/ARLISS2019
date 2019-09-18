@@ -1,7 +1,7 @@
 #include "cansat_define.h"
 #include "cansat_prototype.h"
 
-#define HEATING_TIME 3000
+#define HEATING_TIME 5000
 
 void heat_init(){
   
@@ -13,7 +13,7 @@ void heat_init(){
 }
 
 void _heat1(){
-  beep(PUSHED);
+  //beep(PUSHED);
   digitalWrite(heat1, HIGH);
   delay(HEATING_TIME);
   digitalWrite(heat1, LOW);
@@ -21,8 +21,8 @@ void _heat1(){
 }
 
 void _heat2(){
-  beep(PUSHED);
-  beep(PUSHED);
+  //beep(PUSHED);
+  //beep(PUSHED);
   digitalWrite(heat2, HIGH);
   delay(HEATING_TIME);
   digitalWrite(heat2, LOW);

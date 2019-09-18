@@ -25,11 +25,15 @@
 //static const double g_lng = 130.543038;
 //static const double g_lat = 31.567389;
 // 競技場端っこ
-static const double g_lng = 130.542346;
-static const double g_lat = 31.568467;
+//static const double g_lng = 130.542346;
+//static const double g_lat = 31.568467;
 // 油そば専門店兎
 //static const double g_lng = 130.553506;
 //static const double g_lat = 31.573600;
+
+// ARLISS砂漠
+static const double g_lng = -119.111608;
+static const double g_lat = 40.884307;
 
 double distance2goal = 0.0;
 

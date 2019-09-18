@@ -6,8 +6,8 @@ import math
 
 def plot_lat_lng():
     # GOALの緯度・経度
-    g_lat = 31.567389
-    g_lng = 130.543038
+    g_lat = 40.869971
+    g_lng = -119.106299
 
     # csvファイルを読み込む
     # データは3列で構成される
